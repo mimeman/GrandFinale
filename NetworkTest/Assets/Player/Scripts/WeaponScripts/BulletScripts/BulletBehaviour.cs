@@ -8,6 +8,11 @@ public abstract class BulletBehaviour : MonoBehaviour, IPoolable
     private ParticleSystem[] _particleSystems;
     private Rigidbody _rigidbody;
 
+    [Header("총알 능력치")]
+    [Tooltip("총알이 가하는 데미지")]
+    public float damage = 10f;
+    public string hittableTag = "HitBox"; // 태그 이름 확인 ("Entity" 사용 중)
+
     protected virtual void Awake()
     {
         // 비활성화된 상태에서도 GetComponentInChildren를 호출하기 위해 true를 사용합니다.
@@ -45,7 +50,5 @@ public abstract class BulletBehaviour : MonoBehaviour, IPoolable
             }
         }
 
-        // 여기에 추가적인 총알 상태 초기화 로직을 넣을 수 있습니다.
-        // 예: 체력, 데미지, 타이머 등
     }
 }

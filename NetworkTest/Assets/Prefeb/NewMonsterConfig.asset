@@ -39,5 +39,5 @@ MonoBehaviour:
   dieSound: {fileID: 0}
   hitEffect: {fileID: 0}
   dieEffect: {fileID: 0}
-  lootTable: {fileID: 0}
+  lootTable: {fileID: 11400000, guid: 392694b03d32ef442ac51d42c547fb5f, type: 2}
   corpseDestroyDelay: 5

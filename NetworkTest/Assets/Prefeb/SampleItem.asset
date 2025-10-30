@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SampleItem
   m_EditorClassIdentifier: 
   items:
-  - item: {fileID: 11400000, guid: d8181bc275d09ee4c951f8f6a899e07b, type: 2}
+  - item: {fileID: 11400000, guid: b8290487f748f6048afcb78d4015aac5, type: 2}
     dropChance: 100
-  - item: {fileID: 11400000, guid: bf036df0fc82e05418418ccffa38181f, type: 2}
+  - item: {fileID: 0}
     dropChance: 100

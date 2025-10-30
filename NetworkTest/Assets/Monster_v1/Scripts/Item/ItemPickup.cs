@@ -1,57 +1,59 @@
-// ItemPickup.cs
+// Assets/Monster_v1/Scripts/Items/ItemPickup.cs
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class ItemPickup : MonoBehaviour
 {
     [Header("이 아이템의 데이터")]
     [Tooltip("여기에 RelicData ScriptableObject를 끌어다 놓으세요.")]
-    public RelicData itemData;
+    public RelicData itemData; 
 
-    private void OnTriggerEnter(Collider other)
+    [Header("시각 효과 (선택 사항)")]
+    public GameObject visualModel; 
+    public float rotationSpeed = 50f; 
+
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
+        GetComponent<SphereCollider>().isTrigger = true; 
+    }
+
+    void Update()
+    {
+        // 아이템이 빙글빙글 돌도록
+        if (visualModel != null) 
         {
-            if (itemData == null) return; // 데이터가 없으면 실행 안 함
-
-            Debug.Log(itemData.itemName + "을(를) 획득!");
-
-            // ★★★ RelicData의 AbilityData를 사용하는 로직 (예시) ★★★
-            ApplyRelicEffect(other.gameObject, itemData.grantedAbility);
-
-            Destroy(gameObject);
+            visualModel.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime); 
         }
     }
 
-    // RelicData/AbilityData를 처리하는 새 함수 (예시)
-    private void ApplyRelicEffect(GameObject player, AbilityData ability)
+    private void OnTriggerEnter(Collider other)
     {
-        if (ability == null)
+        // 1. 플레이어 태그 확인
+        if (other.CompareTag("Player")) 
         {
-            Debug.Log($"[{itemData.itemName}] 획득. 특별한 능력 없음.");
-            return;
-        }
+            // 2. ItemData가 할당되었는지 확인
+            if (itemData == null) 
+            {
+                Debug.LogWarning("ItemPickup에 itemData가 할당되지 않았습니다!", this);
+                return;
+            }
 
-        Debug.Log($"[{itemData.itemName}] 획득. 능력: {ability.abilityName} 적용!");
+            // 3. 플레이어의 PlayerAbilityManager 찾기
+            PlayerAbilityManager manager = other.GetComponentInParent<PlayerAbilityManager>();
 
-        // 예: 능력 로직 ID에 따라 플레이어 스탯 변경
-        if (ability.abilityLogicID == "Stat_Add" && ability.param_Key == "MaxHealth")
-        {
-            // PlayerStats stats = player.GetComponent<PlayerStats>();
-            // if (stats != null)
-            // {
-            //     float healthBonus = float.Parse(ability.param_ValueA); // "25" -> 25f
-            //     stats.AddMaxHealth(healthBonus);
-            // }
-            Debug.Log($"임시 효과: 최대 체력 +{ability.param_ValueA}");
-        }
-        else if (ability.abilityLogicID == "Projectile")
-        {
-            // PlayerSkillManager skills = player.GetComponent<PlayerSkillManager>();
-            // if (skills != null)
-            // {
-            //     skills.EquipSkill(ability); // AbilityData를 장착
-            // }
-            Debug.Log($"임시 효과: {ability.abilityName} 스킬 획득!");
+            if (manager != null)
+            {
+                // (이 함수가 스탯 재계산을 트리거합니다)
+                Debug.Log($"[ItemPickup] {itemData.itemName} 획득 시도...");
+                manager.AddRelic(itemData.itemID);
+
+                // 5. 픽업 아이템 파괴
+                Destroy(gameObject); 
+            }
+            else
+            {
+                Debug.LogWarning($"플레이어에게 {itemData.itemName}를 획득할 PlayerAbilityManager가 없습니다.", other);
+            }
         }
     }
 }

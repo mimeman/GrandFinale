@@ -28,7 +28,7 @@ public class Weapon : MonoBehaviour
     [Header("Ammo")]
     [SerializeField] private int maxAmmo = 30;
     public int MaxAmmo => maxAmmo;
-    private int currentAmmo;
+    public int currentAmmo;
     public int CurrentAmmo => currentAmmo;
 
     [Header("Shotgun Parameters")]

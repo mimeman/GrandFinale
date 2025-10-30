@@ -11,8 +11,8 @@ public class StatBoostItemData : ItemData
 
     // 방어력, 쿨다운 감소 등 원하는 스탯 추가
 
-    public override ItemType GetItemType()
+/*    public override ItemType GetItemType()
     {
         return ItemType.StatBoost;
-    }
+    }*/
 }

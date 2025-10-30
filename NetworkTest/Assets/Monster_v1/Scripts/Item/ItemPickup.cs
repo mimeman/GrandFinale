@@ -1,52 +1,57 @@
+// ItemPickup.cs
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
     [Header("이 아이템의 데이터")]
-    [Tooltip("여기에 아이템 ScriptableObject를 끌어다 놓으세요.")]
-    public ItemData itemData;
+    [Tooltip("여기에 RelicData ScriptableObject를 끌어다 놓으세요.")]
+    public RelicData itemData;
 
     private void OnTriggerEnter(Collider other)
     {
-        // 1. 플레이어만 주울 수 있음
         if (other.CompareTag("Player"))
         {
-            // 2. 플레이어의 인벤토리나 아이템 관리자에게 아이템 전달
-            // (지금은 인벤토리가 없으니, 플레이어의 스탯/스킬 시스템에 바로 전달)
-            Debug.Log(itemData.itemName + "을(를) 획득!");
-            ApplyItemEffect(other.gameObject);
+            if (itemData == null) return; // 데이터가 없으면 실행 안 함
 
-            // 3. 줍고 나면 아이템 파괴
+            Debug.Log(itemData.itemName + "을(를) 획득!");
+
+            // ★★★ RelicData의 AbilityData를 사용하는 로직 (예시) ★★★
+            ApplyRelicEffect(other.gameObject, itemData.grantedAbility);
+
             Destroy(gameObject);
         }
     }
 
-    // "인벤토리 시스템 : 일단 대기" 요청을 반영한 임시 함수.
-    // 인벤토리가 생기면 이 함수는 "AddItemToInventory"로 바뀌어야 합니다.
-    private void ApplyItemEffect(GameObject player)
+    // RelicData/AbilityData를 처리하는 새 함수 (예시)
+    private void ApplyRelicEffect(GameObject player, AbilityData ability)
     {
-        // 1. 스탯 아이템인지 확인
-        if (itemData is StatBoostItemData statItem)
+        if (ability == null)
         {
-            // (예시) 플레이어의 스탯 시스템을 찾아 스탯 적용
+            Debug.Log($"[{itemData.itemName}] 획득. 특별한 능력 없음.");
+            return;
+        }
+
+        Debug.Log($"[{itemData.itemName}] 획득. 능력: {ability.abilityName} 적용!");
+
+        // 예: 능력 로직 ID에 따라 플레이어 스탯 변경
+        if (ability.abilityLogicID == "Stat_Add" && ability.param_Key == "MaxHealth")
+        {
             // PlayerStats stats = player.GetComponent<PlayerStats>();
             // if (stats != null)
             // {
-            //     stats.AddAttack(statItem.attackPowerIncrease);
-            //     stats.AddHealth(statItem.maxHealthIncrease);
+            //     float healthBonus = float.Parse(ability.param_ValueA); // "25" -> 25f
+            //     stats.AddMaxHealth(healthBonus);
             // }
-            Debug.Log($"임시 효과: 공격력 +{statItem.attackPowerIncrease}");
+            Debug.Log($"임시 효과: 최대 체력 +{ability.param_ValueA}");
         }
-        // 2. 스킬 아이템인지 확인
-        else if (itemData is SkillItemData skillItem)
+        else if (ability.abilityLogicID == "Projectile")
         {
-            // (예시) 플레이어의 스킬 시스템을 찾아 스킬 장착
             // PlayerSkillManager skills = player.GetComponent<PlayerSkillManager>();
             // if (skills != null)
             // {
-            //     skills.EquipSkill(skillItem);
+            //     skills.EquipSkill(ability); // AbilityData를 장착
             // }
-            Debug.Log($"임시 효과: {skillItem.itemName} 스킬 획득!");
+            Debug.Log($"임시 효과: {ability.abilityName} 스킬 획득!");
         }
     }
 }

@@ -11,8 +11,8 @@ public class SkillItemData : ItemData
     public float cooldown;
     public float manaCost;
 
-    public override ItemType GetItemType()
+/*    public override ItemType GetItemType()
     {
         return ItemType.Skill;
-    }
+    }*/
 }

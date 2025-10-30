@@ -9,17 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aa353a860001fe4788c32ee532592d4, type: 3}
-  m_Name: NewZombieConfig
-  m_EditorClassIdentifier: Assembly-CSharp::ZombieConfig
-  maxHP: 100
+  m_Script: {fileID: 11500000, guid: 6a70dcaec5c914f4699a7a04ff9b0a89, type: 3}
+  m_Name: NewMonsterConfig
+  m_EditorClassIdentifier: 
+  maxHP: 1000
   attackDamage: 10
-  defense: 0
+  defense: 10
   fovRange: 10
   fovAngle: 120
+  soundRange: 15
   attackRange: 2
   stoppingDistance: 1.5
-  soundRange: 15
+  persistenceTime: 5
   patrolRadiusMin: 5
   patrolRadiusMax: 10
   idleTimeMin: 2
@@ -28,6 +29,15 @@ MonoBehaviour:
   lookAroundTurnInterval: 1.5
   walkSpeed: 1.5
   runSpeed: 3
-  turnSpeed: 5
+  turnSpeed: 5000
   attackDelay: 0.5
   attackCooldown: 2
+  idleSound: {fileID: 0}
+  chaseSound: {fileID: 0}
+  attackSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}
+  hitEffect: {fileID: 0}
+  dieEffect: {fileID: 0}
+  lootTable: {fileID: 0}
+  corpseDestroyDelay: 5

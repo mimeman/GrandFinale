@@ -8,22 +8,10 @@ public class ItemPickup : MonoBehaviour
     [Tooltip("여기에 RelicData ScriptableObject를 끌어다 놓으세요.")]
     public RelicData itemData; 
 
-    [Header("시각 효과 (선택 사항)")]
-    public GameObject visualModel; 
-    public float rotationSpeed = 50f; 
 
     private void Awake()
     {
         GetComponent<SphereCollider>().isTrigger = true; 
-    }
-
-    void Update()
-    {
-        // 아이템이 빙글빙글 돌도록
-        if (visualModel != null) 
-        {
-            visualModel.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime); 
-        }
     }
 
     private void OnTriggerEnter(Collider other)

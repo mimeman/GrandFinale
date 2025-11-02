@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a70dcaec5c914f4699a7a04ff9b0a89, type: 3}
   m_Name: NewMonsterConfig
   m_EditorClassIdentifier: 
-  maxHP: 1000
+  maxHP: 300
   attackDamage: 10
   defense: 10
   fovRange: 10
@@ -40,4 +40,4 @@ MonoBehaviour:
   hitEffect: {fileID: 0}
   dieEffect: {fileID: 0}
   lootTable: {fileID: 11400000, guid: 392694b03d32ef442ac51d42c547fb5f, type: 2}
-  corpseDestroyDelay: 5
+  corpseDestroyDelay: 12.71

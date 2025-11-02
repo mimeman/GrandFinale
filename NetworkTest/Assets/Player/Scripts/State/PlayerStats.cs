@@ -7,10 +7,10 @@ using System; // 'Action' 이벤트를 사용하기 위함
 public class PlayerStats : MonoBehaviour
 {
     [Header("기본 능력치 (Base Stats)")]
-    public float baseMaxHealth = 100f; //
-    public float baseMoveSpeed = 5f; //
-    public float baseDamageModifier = 1.0f; //
-    public float baseCooldownReduction = 0f; //
+    public float baseMaxHealth = 100f; 
+    public float baseMoveSpeed = 5f; 
+    public float baseDamageModifier = 1.0f; 
+    public float baseCooldownReduction = 0f; 
 
     [Header("현재 상태 (실시간 디버그용)")]
     [SerializeField] private float currentHealth;
@@ -32,7 +32,7 @@ public class PlayerStats : MonoBehaviour
 
     void Awake()
     {
-        ResetToBaseStats(); //
+        ResetToBaseStats(); 
         CurrentHealth = CurrentMaxHealth; // 체력 꽉 채움
     }
 
@@ -40,50 +40,50 @@ public class PlayerStats : MonoBehaviour
     // 1. 데미지 및 회복 처리 (기존 코드와 동일)
     // ====================================================================
 
-    public void TakeDamage(float damage) //
+    public void TakeDamage(float damage) 
     {
         float damageToTake = damage;
 
-        if (CurrentShield > 0) //
+        if (CurrentShield > 0) 
         {
             if (CurrentShield >= damageToTake)
             {
-                CurrentShield -= damageToTake; //
-                damageToTake = 0; //
+                CurrentShield -= damageToTake; 
+                damageToTake = 0; 
             }
             else
             {
-                damageToTake -= CurrentShield; //
-                CurrentShield = 0; //
+                damageToTake -= CurrentShield; 
+                CurrentShield = 0; 
             }
         }
 
         if (damageToTake > 0)
         {
-            CurrentHealth -= damageToTake; //
+            CurrentHealth -= damageToTake; 
         }
 
         Debug.Log($"데미지 {damage} 받음. 현재 체력: {CurrentHealth}, 현재 실드: {CurrentShield}"); //
 
-        if (CurrentHealth <= 0) //
+        if (CurrentHealth <= 0) 
         {
-            CurrentHealth = 0; //
-            Die(); //
+            CurrentHealth = 0; 
+            Die(); 
         }
     }
 
-    public void Heal(float amount) //
+    public void Heal(float amount) 
     {
-        CurrentHealth += amount; //
-        if (CurrentHealth > CurrentMaxHealth) //
+        CurrentHealth += amount; 
+        if (CurrentHealth > CurrentMaxHealth) 
         {
-            CurrentHealth = CurrentMaxHealth; //
+            CurrentHealth = CurrentMaxHealth; 
         }
     }
 
-    private void Die() //
+    private void Die() 
     {
-        Debug.Log("플레이어가 사망했습니다."); //
+        Debug.Log("플레이어가 사망했습니다."); 
     }
 
     // ====================================================================
@@ -119,17 +119,17 @@ public class PlayerStats : MonoBehaviour
     /// <summary>
     /// (ABIL_001) 합연산 스탯을 적용합니다. (예: 최대 체력 +50)
     /// </summary>
-    public void AddStat(string statName, float value) //
+    public void AddStat(string statName, float value) 
     {
         switch (statName)
         {
             case "MaxHealth":
-                CurrentMaxHealth += value; //
-                CurrentHealth += value; //
-                Debug.Log($"MaxHealth 증가: +{value} (총 {CurrentMaxHealth})"); //
+                CurrentMaxHealth += value; 
+                CurrentHealth += value; 
+                Debug.Log($"MaxHealth 증가: +{value} (총 {CurrentMaxHealth})"); 
                 break;
             case "BaseDamage":
-                Debug.Log($"BaseDamage 증가: +{value} (구현 필요)"); //
+                Debug.Log($"BaseDamage 증가: +{value} (구현 필요)"); 
                 break;
         }
     }
@@ -137,16 +137,16 @@ public class PlayerStats : MonoBehaviour
     /// <summary>
     /// (ABIL_002) 곱연산(%) 스탯을 적용합니다. (예: 이동 속도 +10%)
     /// </summary>
-    public void AddStatPercent(string statName, float value) //
+    public void AddStatPercent(string statName, float value) 
     {
         switch (statName)
         {
             case "MoveSpeed":
-                CurrentMoveSpeed *= (1 + value / 100.0f); //
-                Debug.Log($"MoveSpeed 증가: +{value}% (총 {CurrentMoveSpeed})"); //
+                CurrentMoveSpeed *= (1 + value / 100.0f); 
+                Debug.Log($"MoveSpeed 증가: +{value}% (총 {CurrentMoveSpeed})"); 
                 break;
             case "CooldownReduction":
-                CurrentCooldownReduction += value; //
+                CurrentCooldownReduction += value; 
                 Debug.Log($"CooldownReduction 증가: +{value}% (총 {CurrentCooldownReduction}%)"); //
                 break;
         }
@@ -155,20 +155,20 @@ public class PlayerStats : MonoBehaviour
     /// <summary>
     /// (ABIL_006) 지정된 시간 동안 실드를 추가합니다.
     /// </summary>
-    public void AddTemporaryShield(float amount, float duration) //
+    public void AddTemporaryShield(float amount, float duration) 
     {
-        StartCoroutine(ShieldRoutine(amount, duration)); //
+        StartCoroutine(ShieldRoutine(amount, duration)); 
     }
 
-    private IEnumerator ShieldRoutine(float amount, float duration) //
+    private IEnumerator ShieldRoutine(float amount, float duration) 
     {
-        CurrentShield += amount; //
-        Debug.Log($"실드 {amount} 획득! (총 {CurrentShield})"); //
+        CurrentShield += amount; 
+        Debug.Log($"실드 {amount} 획득! (총 {CurrentShield})"); 
 
-        yield return new WaitForSeconds(duration); //
+        yield return new WaitForSeconds(duration); 
 
-        CurrentShield -= amount; //
-        if (CurrentShield < 0) CurrentShield = 0; //
-        Debug.Log($"실드 {amount} 종료. (남은 실드 {CurrentShield})"); //
+        CurrentShield -= amount; 
+        if (CurrentShield < 0) CurrentShield = 0; 
+        Debug.Log($"실드 {amount} 종료. (남은 실드 {CurrentShield})"); 
     }
 }

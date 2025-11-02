@@ -3,20 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 이 스크립트는 PlayerStats, WeaponController와 같은 오브젝트에 있다고 가정합니다.
 [RequireComponent(typeof(WeaponController))]
-[RequireComponent(typeof(PlayerStats))] // ★ PlayerStats도 필수로 요구
+[RequireComponent(typeof(PlayerStats))]
 public class PlayerAbilityManager : MonoBehaviour
 {
     // --- 필수 컴포넌트 참조 ---
     private WeaponController weaponController;
-    private PlayerStats playerStats; // ★ 주석 해제
+    private PlayerStats playerStats;
 
     // --- 스킬 상태 관리 ---
     private Dictionary<string, Coroutine> runningSkillCoroutines = new Dictionary<string, Coroutine>();
     private Dictionary<string, bool> skillCooldowns = new Dictionary<string, bool>();
 
-    // ★★★ 1. (추가) 현재 보유한 유물(패시브) 리스트 ★★★
+    //  1. (추가) 현재 보유한 유물(패시브) 리스트 
     private List<RelicData> equippedRelics = new List<RelicData>();
     // (Aura 같은 패시브 이펙트 관리를 위한 리스트)
     private List<GameObject> passiveEffectInstances = new List<GameObject>();
@@ -26,16 +25,12 @@ public class PlayerAbilityManager : MonoBehaviour
     {
         // 필수 컴포넌트 찾아오기
         weaponController = GetComponent<WeaponController>();
-        playerStats = GetComponent<PlayerStats>(); // ★ 주석 해제
+        playerStats = GetComponent<PlayerStats>(); 
 
         if (playerStats == null) Debug.LogError("PlayerStats가 없습니다. (패시브 적용 불가)");
     }
 
-    void Start()
-    {
-        // (테스트용)
-        // ApplyPassiveAbility("ABIL_001"); // (이 함수는 이제 RecalculateAllPassiveStats로 대체됨)
-    }
+
 
     // [테스트용] 키 입력
     void Update()
@@ -43,28 +38,32 @@ public class PlayerAbilityManager : MonoBehaviour
         // ★★★ (추가) G/H 키로 아이템 추가/제거 테스트 ★★★
         if (Input.GetKeyDown(KeyCode.G))
         {
+            Debug.Log("REL_001 실행");
             AddRelic("REL_001"); // (본인) 최대 체력 증가
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
+            Debug.Log("REL_001 해제");
             RemoveRelic("REL_001"); // (본인) 최대 체력 증가 (제거)
         }
 
         // K키로 '무한 탄창' 발동 테스트
         if (Input.GetKeyDown(KeyCode.K))
         {
+            Debug.Log("ABIL_007 실행");
             TryActivateAbility("ABIL_007");
         }
 
         // L키로 '에너지 실드' 발동 테스트
         if (Input.GetKeyDown(KeyCode.L))
         {
+            Debug.Log("ABIL_006 실행");
             TryActivateAbility("ABIL_006");
         }
     }
 
     // ====================================================================
-    // ★★★ 2. (신규) 아이템 추가 / 제거 (공용 함수) ★★★
+    // ★★★ 2. (신규) 아이템 추가 / 제거 (공용 함수) ★
     // ====================================================================
 
     /// <summary>
@@ -196,6 +195,9 @@ public class PlayerAbilityManager : MonoBehaviour
     // ====================================================================
     public void TryActivateAbility(string abilityID)
     {
+        Debug.Log("ABIL_007 '무한탄창' 스킬 시작");
+
+
         // 1. 쿨타임 확인
         if (skillCooldowns.TryGetValue(abilityID, out bool onCooldown) && onCooldown)
         {

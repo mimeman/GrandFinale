@@ -211,22 +211,40 @@ namespace NormalZombieStates
     {
         public override void EnterState(MonsterAIController monster)
         {
-            monster.StopMoving(); // NavMeshAgent 경로 중지
+            monster.StopMoving();
             monster.StopAllCoroutines();
-            monster.SetAnimation(monster.hashDie, true); // Die 애니메이션 재생
+            //monster.SetAnimation(monster.hashDie, true); // Die 애니메이션 재생 -> Any State에서 처리
 
+            // 1. 콜라이더 끄기 (다른 몬스터나 총알에 안 맞게)
+            if (monster.TryGetComponent<Collider>(out var collider))
+            {
+                collider.enabled = false;
+            }
 
-            // 1. NavMeshAgent 끄기
+            // 2. NavMeshAgent 끄기
             if (monster.TryGetComponent<UnityEngine.AI.NavMeshAgent>(out var agent))
             {
                 agent.enabled = false;
             }
 
-            // 2. Rigidbody 켜서 중력 받기
+/*            // 3. Rigidbody 켜서 중력 받기
             if (monster.TryGetComponent<Rigidbody>(out var rb))
             {
-                rb.isKinematic = false;
-                rb.useGravity = true;
+                rb.isKinematic = false; 
+                rb.useGravity = true; 
+            }*/
+
+            MonsterHealth health = monster.GetComponent<MonsterHealth>();
+
+            if (health != null && monster.config.lootTable != null)
+            {
+
+                health.SpawnLoot(monster.config.lootTable);
+            }
+
+            if (MonsterManager.Instance != null)
+            {
+                MonsterManager.Instance.RegisterMonsterDied();
             }
 
             Object.Destroy(monster.gameObject, monster.config.corpseDestroyDelay);

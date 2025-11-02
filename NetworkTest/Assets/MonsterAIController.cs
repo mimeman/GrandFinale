@@ -97,6 +97,15 @@ public class MonsterAIController : MonoBehaviour
         ChangeState(idleState);
     }
 
+    void OnDisable()
+    {
+        if (health != null)
+        {
+            health.OnHit.RemoveListener(HandleHit);
+            health.OnDeath.RemoveListener(HandleDeath);
+        }
+    }
+
     void Update()
     {
         if (CurrentState == null || health.IsDead) return;
@@ -123,7 +132,6 @@ public class MonsterAIController : MonoBehaviour
         // 최종 목적지를 이동 시스템에 전달합니다.
         movement.Move(destination, speed);
 
-        // ★★★★★ 이 부분을 추가하세요! ★★★★★
         // NavMeshAgent가 없는 몬스터(거미)는 수동으로 회전시켜 줍니다.
         if (agent == null)
         {
@@ -153,10 +161,13 @@ public class MonsterAIController : MonoBehaviour
     public IEnumerator AttackRoutine() { WaitForSeconds attackCooldown = new WaitForSeconds(config.attackCooldown); while (GetDistanceToPlayer() <= config.attackRange) { Debug.Log("몬스터 공격!"); yield return attackCooldown; } }
     public void StopAttackRoutine() { if (attackRoutineCor != null) { StopCoroutine(attackRoutineCor); attackRoutineCor = null; } }
     private void HandleHit() { if (!health.IsDead) { ChangeState(hitState); } }
-    private void HandleDeath() { StopAllCoroutines(); ChangeState(dieState); } // 죽었을 때 모든 코루틴 정지
+    private void HandleDeath() { StopAllCoroutines(); ChangeState(dieState); SetAnimation(hashDieBool, true); } // 죽었을 때 모든 코루틴 정지
     #endregion
 
     #region 애니메이션
+
+    private readonly int hashDieBool = Animator.StringToHash("Die");
+
     public void SetAnimation(int animHash, bool value) { if (animator == null) return; animator.SetBool(animHash, value); }
     #endregion
 
@@ -202,7 +213,7 @@ public class MonsterAIController : MonoBehaviour
         Gizmos.color = Color.gray;
         Gizmos.DrawWireSphere(transform.position, config.stoppingDistance);
 
-        // 3. 소리 감지 범위 (Sound Range) - <<<< 이 부분이 추가되었습니다.
+        // 3. 소리 감지 범위 (Sound Range)
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, config.soundRange);
 

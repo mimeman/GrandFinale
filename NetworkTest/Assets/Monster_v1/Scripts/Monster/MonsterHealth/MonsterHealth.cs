@@ -104,11 +104,11 @@ public class MonsterHealth : MonoBehaviour
             OnDeath?.Invoke();
             Debug.Log("<color=red>사망 신호 발생!</color>");
 
-            MonsterAIController ai = GetComponent<MonsterAIController>();
+/*            MonsterAIController ai = GetComponent<MonsterAIController>();
 
             if (ai != null && ai.config.lootTable != null) { SpawnLoot(ai.config.lootTable); }
 
-            if (MonsterManager.Instance != null) { MonsterManager.Instance.RegisterMonsterDied(); }
+            if (MonsterManager.Instance != null) { MonsterManager.Instance.RegisterMonsterDied(); }*/
   
         }
         else
@@ -118,7 +118,7 @@ public class MonsterHealth : MonoBehaviour
         }
     }
 
-    private void SpawnLoot(LootTable lootTable)
+    public void SpawnLoot(LootTable lootTable)
     {
         if (itemPickupPrefab == null) // <-- 대신 이 변수를 체크
         {

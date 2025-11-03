@@ -9,7 +9,9 @@ public class CharacterMove : MonoBehaviour
     public Animator animator;
     public Transform directionOrienter;
     private PlayerInputs playerInputs;
+    private PlayerStats playerStats;
     public PlayerInputs Inputs { get { return playerInputs; } }
+
 
     [Header("Colider values")]
     public float crouchColliderHeight = 1f;
@@ -42,13 +44,15 @@ public class CharacterMove : MonoBehaviour
 
 
     [Header("Move values")]
+
     public float gravity = -9.81f;
-    public float walkSpeed = 2;
-    public float runSpeed = 3;
-    public float sprintSpeed = 5;
+
     public float crouchSpeed = 1;
 
     public float jumpHeight = 1f;
+    public float walkSpeed => playerStats.CurrentWalkSpeed;
+    public float runSpeed => playerStats.CurrentRunSpeed;
+    public float sprintSpeed => playerStats.CurrentSprintSpeed;
 
     [Header("Velocity values")]
     public Vector3 moveVelocity;
@@ -80,6 +84,7 @@ public class CharacterMove : MonoBehaviour
         AssighAnimatorIDs();
         colliderSizeChangeCor = ColliderSizeChangeSmooth(false);
         characterController = GetComponent<CharacterController>();
+        playerStats = GetComponent<PlayerStats>();
         normalColliderHeight = characterController.height;
         GameManager.Instance.TryGetComponent<PlayerInputs>(out playerInputs);
 

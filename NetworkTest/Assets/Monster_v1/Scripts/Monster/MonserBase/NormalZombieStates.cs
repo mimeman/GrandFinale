@@ -227,13 +227,6 @@ namespace NormalZombieStates
                 agent.enabled = false;
             }
 
-/*            // 3. Rigidbody 켜서 중력 받기
-            if (monster.TryGetComponent<Rigidbody>(out var rb))
-            {
-                rb.isKinematic = false; 
-                rb.useGravity = true; 
-            }*/
-
             MonsterHealth health = monster.GetComponent<MonsterHealth>();
 
             if (health != null && monster.config.lootTable != null)

@@ -120,19 +120,31 @@ public class MonsterHealth : MonoBehaviour
 
     public void SpawnLoot(LootTable lootTable)
     {
-        if (itemPickupPrefab == null) // <-- 대신 이 변수를 체크
-        {
-            Debug.LogError("MonsterHealth 스크립트에 ItemPickup 프리팹이 할당되지 않았습니다!", this);
-            return;
-        }
-
         foreach (var entry in lootTable.items)
         {
+            if (entry.item == null)
+            {
+                Debug.LogWarning("LootTable에 비어있는 아이템 슬롯이 있습니다.", this);
+                continue;
+            }
+
             if (Random.Range(0f, 100f) <= entry.dropChance)
             {
-                GameObject spawnedItem = Instantiate(itemPickupPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
-                spawnedItem.GetComponent<ItemPickup>().itemData = entry.item;
-                Debug.Log($"{entry.item.itemName} 드랍! (확률: {entry.dropChance}%)");
+                //아이템 데이터에서 '전용 프리팹'을 가져옵니다.
+                GameObject prefabToSpawn = entry.item.dropPrefab;
+
+                // 전용 프리팹이 등록되어 있는지 확인
+                if (prefabToSpawn != null)
+                {
+                    //전용 프리팹(prefabToSpawn)을 생성합니다.
+                    GameObject spawnedItem = Instantiate(prefabToSpawn, transform.position + Vector3.up * 1f, Quaternion.identity);
+
+                    Debug.Log($"{entry.item.itemName} 드랍! (확률: {entry.dropChance}%)");
+                }
+                else
+                {
+                    Debug.LogWarning($"{entry.item.itemName}은(는) 드랍되었지만, RelicData에 dropPrefab이 할당되지 않았습니다.", this);
+                }
             }
         }
     }

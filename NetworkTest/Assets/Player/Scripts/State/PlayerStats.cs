@@ -7,26 +7,32 @@ using System; // 'Action' 이벤트를 사용하기 위함
 public class PlayerStats : MonoBehaviour
 {
     [Header("기본 능력치 (Base Stats)")]
-    public float baseMaxHealth = 100f; 
-    public float baseMoveSpeed = 5f; 
-    public float baseDamageModifier = 1.0f; 
-    public float baseCooldownReduction = 0f; 
+    public float baseWalkSpeed = 2f;
+    public float baseRunSpeed = 3f;
+    public float baseSprintSpeed = 5f;
+    public float baseCooldownReduction = 0f;
+    public float baseMaxHealth = 100f;
+    public float baseDamageModifier = 1.0f;
 
     [Header("현재 상태 (실시간 디버그용)")]
     [SerializeField] private float currentHealth;
     [SerializeField] private float currentMaxHealth;
-    [SerializeField] private float currentMoveSpeed;
+    [SerializeField] private float currentShield;
+    [SerializeField] private float currentWalkSpeed;
+    [SerializeField] private float currentRunSpeed;
+    [SerializeField] private float currentSprintSpeed;
     [SerializeField] private float currentDamageModifier;
     [SerializeField] private float currentCooldownReduction;
-    [SerializeField] private float currentShield;
+
 
     public float CurrentHealth { get { return currentHealth; } private set { currentHealth = value; } }
     public float CurrentMaxHealth { get { return currentMaxHealth; } private set { currentMaxHealth = value; } }
-    public float CurrentMoveSpeed { get { return currentMoveSpeed; } private set { currentMoveSpeed = value; } }
+    public float CurrentShield { get { return currentShield; } private set { currentShield = value; } }
+    public float CurrentWalkSpeed { get { return currentWalkSpeed; } private set { currentWalkSpeed = value; } }
+    public float CurrentRunSpeed { get { return currentRunSpeed; } private set { currentRunSpeed = value; } }
+    public float CurrentSprintSpeed { get { return currentSprintSpeed; } private set { currentSprintSpeed = value; } }
     public float CurrentDamageModifier { get { return currentDamageModifier; } private set { currentDamageModifier = value; } }
     public float CurrentCooldownReduction { get { return currentCooldownReduction; } private set { currentCooldownReduction = value; } }
-    public float CurrentShield { get { return currentShield; } private set { currentShield = value; } }
-
     // UI 업데이트를 위한 이벤트 (옵션)
     // 예: public event Action<string> OnStatChanged;
 
@@ -98,9 +104,11 @@ public class PlayerStats : MonoBehaviour
     public void ResetToBaseStats()
     {
         currentMaxHealth = baseMaxHealth;
-        currentMoveSpeed = baseMoveSpeed;
         currentDamageModifier = baseDamageModifier;
         currentCooldownReduction = baseCooldownReduction;
+        currentWalkSpeed = baseWalkSpeed;
+        currentRunSpeed = baseRunSpeed;
+        currentSprintSpeed = baseSprintSpeed;
     }
 
     // ★★★ (신규) 2. 체력 보정 함수 ★★★
@@ -134,20 +142,25 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// (ABIL_002) 곱연산(%) 스탯을 적용합니다. (예: 이동 속도 +10%)
     /// </summary>
-    public void AddStatPercent(string statName, float value) 
+    public void AddStatPercent(string statName, float value)
     {
         switch (statName)
         {
             case "MoveSpeed":
-                CurrentMoveSpeed *= (1 + value / 100.0f); 
-                Debug.Log($"MoveSpeed 증가: +{value}% (총 {CurrentMoveSpeed})"); 
+                float multiplier = (1 + value / 100.0f);
+                CurrentWalkSpeed *= multiplier;
+                CurrentRunSpeed *= multiplier;
+                CurrentSprintSpeed *= multiplier;
+                Debug.Log($"모든 MoveSpeed 증가: +{value}% (현재 스프린트: {CurrentSprintSpeed})");
                 break;
+
             case "CooldownReduction":
-                CurrentCooldownReduction += value; 
-                Debug.Log($"CooldownReduction 증가: +{value}% (총 {CurrentCooldownReduction}%)"); //
+                CurrentCooldownReduction += value;
+                Debug.Log($"CooldownReduction 증가: +{value}% (총 {CurrentCooldownReduction}%)");
                 break;
         }
     }

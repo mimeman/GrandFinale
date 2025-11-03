@@ -21,3 +21,4 @@ MonoBehaviour:
     \uC2AC\uB86F \uB2A5\uB825 \uAC1C\uBC29. (\uD50C\uB77C\uC988\uB9C8\uD0C4)"
   iconPath: Icons/Relics/Spellstone
   grantedAbility: {fileID: 11400000, guid: 83bb426d741cdc545a3da71c4129786b, type: 2}
+  dropPrefab: {fileID: 8512130858803666336, guid: 0c90db8fea3862442b559c97aca37ba7, type: 3}

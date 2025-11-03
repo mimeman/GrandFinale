@@ -10,6 +10,7 @@ public class PlayerAbilityManager : MonoBehaviour
     // --- 필수 컴포넌트 참조 ---
     private WeaponController weaponController;
     private PlayerStats playerStats;
+    private CharacterMove characterMove;
 
     // --- 스킬 상태 관리 ---
     private Dictionary<string, Coroutine> runningSkillCoroutines = new Dictionary<string, Coroutine>();
@@ -25,7 +26,9 @@ public class PlayerAbilityManager : MonoBehaviour
     {
         // 필수 컴포넌트 찾아오기
         weaponController = GetComponent<WeaponController>();
-        playerStats = GetComponent<PlayerStats>(); 
+        playerStats = GetComponent<PlayerStats>();
+        characterMove = GetComponent<CharacterMove>();
+
 
         if (playerStats == null) Debug.LogError("PlayerStats가 없습니다. (패시브 적용 불가)");
     }
@@ -81,6 +84,7 @@ public class PlayerAbilityManager : MonoBehaviour
         // (중복 획득 방지 로직 등... )
         if (equippedRelics.Contains(relic))
         {
+            equippedRelics.Add(relic);
             Debug.Log($"[AbilityManager] {relic.itemName}는(은) 이미 보유 중입니다.");
             return;
         }

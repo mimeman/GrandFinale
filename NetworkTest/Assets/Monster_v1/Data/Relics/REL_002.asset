@@ -22,3 +22,4 @@ MonoBehaviour:
     \uC99D\uAC00)"
   iconPath: Icons/Relics/CyberLegs
   grantedAbility: {fileID: 11400000, guid: e8a79c80584477d4880e016f7f5d2a14, type: 2}
+  dropPrefab: {fileID: 100018019714611367, guid: 3441d49fa3ca7744a95e9dfd2aba3f54, type: 3}

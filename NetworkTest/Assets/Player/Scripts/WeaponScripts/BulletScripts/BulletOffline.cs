@@ -7,8 +7,9 @@ public class BulletOffline : BulletBehaviour
     public float force = 10f; // 충돌 시 가하는 힘 (Weapon에서 설정됨)
     public GameObject decalPrefab; // 벽 등에 생성될 데칼 프리팹
     public GameObject bloodPrefab; // 몬스터 피격 시 생성될 혈흔 프리팹
-    [Tooltip("Linecast가 무시할 레이어 (예: 총알 자신, 플레이어 등)")]
-    public LayerMask ignoreMask; // 이름 변경: mask -> ignoreMask (의미 명확화)
+
+    [Tooltip("Linecast가 충돌할 레이어 (예: Environment, Monster 등)")]
+    public LayerMask mask;
 
     private Rigidbody rb;
     private Vector3 _startPoint; // Linecast 시작점
@@ -80,7 +81,7 @@ public class BulletOffline : BulletBehaviour
         Vector3 currentPosition = transform.position;
 
         // Linecast 수행 (ignoreMask 제외)
-        if (Physics.Linecast(_startPoint, currentPosition, out RaycastHit hit, ~ignoreMask))
+        if (Physics.Linecast(_startPoint, currentPosition, out RaycastHit hit, mask))
         {
             bool hitProcessed = false; // 충돌 처리 여부
 

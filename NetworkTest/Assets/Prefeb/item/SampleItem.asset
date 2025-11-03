@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - item: {fileID: 11400000, guid: b8290487f748f6048afcb78d4015aac5, type: 2}
-    dropChance: 100
+    dropChance: 16.4
   - item: {fileID: 11400000, guid: 01f1ed04483bc8841972f497724be2fc, type: 2}
-    dropChance: 32.5
+    dropChance: 23.6
+  - item: {fileID: 11400000, guid: 2c3c2fae90ed5c5418dfb69073e2abfb, type: 2}
+    dropChance: 18.5

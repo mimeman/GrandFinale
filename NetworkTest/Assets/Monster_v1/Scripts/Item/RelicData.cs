@@ -18,7 +18,9 @@ public class RelicData : ScriptableObject
     public string iconPath; // Icons/Relics/AuxHeart
 
     [Header("★핵심 연동★")]
-    // 시트의 'grantedAbilityID' (예: "ABIL_001") 문자열을 기반으로
-    // 파서가 'ABIL_001.asset' 파일을 찾아 이 변수에 연결해줍니다.
     public AbilityData grantedAbility;
+
+    [Header("월드 드랍 설정")]
+    [Tooltip("땅에 떨어질 때 생성될 3D 모델 프리팹 (ItemPickup.cs 포함)")]
+    public GameObject dropPrefab;
 }

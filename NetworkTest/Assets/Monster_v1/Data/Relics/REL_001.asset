@@ -21,3 +21,4 @@ MonoBehaviour:
     \uC99D\uD3ED\uC2DC\uD0B5\uB2C8\uB2E4. (\uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00)"
   iconPath: Icons/Relics/AuxHeart
   grantedAbility: {fileID: 11400000, guid: ce00df0cc125c4b45a192fde1571fe69, type: 2}
+  dropPrefab: {fileID: 3771452789413926460, guid: 589b0e358669b3d48a16ab26d6f3e8a8, type: 3}

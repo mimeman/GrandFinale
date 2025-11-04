@@ -49,10 +49,10 @@ public class MonsterConfig : ScriptableObject
     public GameObject hitEffect;
     public GameObject dieEffect;
 
-/*    [Header("보상 (SpiderConfig에서 가져옴)")]
-    public int experiencePoints = 50;
-    public GameObject[] lootItems;
-*/
+    /*    [Header("보상 (SpiderConfig에서 가져옴)")]
+        public int experiencePoints = 50;
+        public GameObject[] lootItems;
+    */
     [Header("보상 (LootTable 가져옴)")]
     public LootTable lootTable;
 

@@ -1,6 +1,9 @@
 using Michsky.MUIP;
 using UnityEngine;
 using System;
+using TMPro;
+using System.Text;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -28,6 +31,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject[] optionUIs;
     [SerializeField] private ModalWindowManager shortcutModal;
 
+
+
+    
     private GameState uiState;
     private PlayerInputs input;
 
@@ -159,4 +165,5 @@ public class UIManager : MonoBehaviour
         }
         return -1;
     }
+
 }

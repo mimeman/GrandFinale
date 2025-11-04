@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a70dcaec5c914f4699a7a04ff9b0a89, type: 3}
-  m_Name: NewMonsterConfig
+  m_Script: {fileID: 11500000, guid: 0479241a028cf0a4493aaf310892c01f, type: 3}
+  m_Name: vffdfd
   m_EditorClassIdentifier: 
-  maxHP: 300
+  maxHP: 100
   attackDamage: 10
-  defense: 10
+  defense: 0
   fovRange: 10
   fovAngle: 120
   soundRange: 15
@@ -29,7 +29,7 @@ MonoBehaviour:
   lookAroundTurnInterval: 1.5
   walkSpeed: 1.5
   runSpeed: 3
-  turnSpeed: 5000
+  turnSpeed: 5
   attackDelay: 0.5
   attackCooldown: 2
   idleSound: {fileID: 0}
@@ -40,4 +40,4 @@ MonoBehaviour:
   hitEffect: {fileID: 0}
   dieEffect: {fileID: 0}
   lootTable: {fileID: 11400000, guid: 392694b03d32ef442ac51d42c547fb5f, type: 2}
-  corpseDestroyDelay: 12.71
+  corpseDestroyDelay: 5

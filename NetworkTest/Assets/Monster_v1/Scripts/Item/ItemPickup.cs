@@ -1,4 +1,3 @@
-// Assets/Monster_v1/Scripts/Items/ItemPickup.cs
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -6,37 +5,51 @@ public class ItemPickup : MonoBehaviour
 {
     [Header("이 아이템의 데이터")]
     [Tooltip("여기에 RelicData ScriptableObject를 끌어다 놓으세요.")]
-    public RelicData itemData; 
+    public RelicData itemData;
 
+    [Header("픽업 방식 설정")]
+    [Tooltip("체크하면 8칸 인벤토리로, 체크 해제하면 PlayerAbilityManager로 즉시 등록됩니다.")]
+    public bool addToInventoryInstead = false; // 기본값은 '즉시 등록'
+    // ------------------------------------
 
     private void Awake()
     {
-        GetComponent<SphereCollider>().isTrigger = true; 
+        GetComponent<SphereCollider>().isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // 1. 플레이어 태그 확인
-        if (other.CompareTag("Player")) 
+        if (!other.CompareTag("Player")) return;
+        if (itemData == null)
         {
-            // 2. ItemData가 할당되었는지 확인
-            if (itemData == null) 
+            Debug.LogWarning("ItemPickup에 itemData가 할당되지 않았습니다!", this);
+            return;
+        }
+
+        // 2-1. [인벤토리로 보내기]가 체크되어 있다면
+        if (addToInventoryInstead)
+        {
+            // InventoryManager에 아이템 추가를 시도
+            bool success = InventoryManager.Instance.AddItem(itemData);
+
+            if (success)
             {
-                Debug.LogWarning("ItemPickup에 itemData가 할당되지 않았습니다!", this);
-                return;
+                Destroy(gameObject); // 줍기 성공!
             }
-
-            // 3. 플레이어의 PlayerAbilityManager 찾기
+            else
+            {
+                Debug.Log("인벤토리가 꽉 찼습니다!"); // 줍기 실패 (꽉 참)
+            }
+        }
+        // 2-2. [인벤토리로 보내기]가 체크 해제되어 있다면 (기존 로직)
+        else
+        {
+            // PlayerAbilityManager를 찾아서 즉시 등록
             PlayerAbilityManager manager = other.GetComponentInParent<PlayerAbilityManager>();
-
             if (manager != null)
             {
-                // (이 함수가 스탯 재계산을 트리거합니다)
-                Debug.Log($"[ItemPickup] {itemData.itemName} 획득 시도...");
                 manager.AddRelic(itemData.itemID);
-
-                // 5. 픽업 아이템 파괴
-                Destroy(gameObject); 
+                Destroy(gameObject); // 줍기 성공!
             }
             else
             {

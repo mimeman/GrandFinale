@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Cinemachine;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -19,9 +20,8 @@ public class InventoryManager : MonoBehaviour
     [Header("Player Control References")]
     [SerializeField] private PlayerInputs playerInput;     // PlayerInputs.cs
     [SerializeField] private CharacterMove characterMove;   // CharacterMove.cs (이동 제어)
-    [SerializeField] private MonoBehaviour cameraController; // 카메라 회전 제어 (CameraController, InputHandler 등)
-    [SerializeField] private MonoBehaviour CinemachineCameras; // 카메라 회전 제어 (CameraController, InputHandler 등)
-    [SerializeField] private MonoBehaviour inputHandler; 
+    [SerializeField] private CameraController cameraController; // 카메라 회전 제어 (CameraController, InputHandler 등)
+    [SerializeField] private InputHandler inputHandler; 
     [SerializeField] private WeaponController weaponController; // 무기 발사 제어
 
 
@@ -74,8 +74,8 @@ public class InventoryManager : MonoBehaviour
         if (characterMove != null) characterMove.enabled = !shouldBeActive;
         if (cameraController != null) cameraController.enabled = !shouldBeActive;
         if (inputHandler != null) inputHandler.enabled = !shouldBeActive;
-        if (CinemachineCameras != null) CinemachineCameras.enabled = !shouldBeActive;
-        if (weaponController != null) weaponController.enabled = !shouldBeActive;
+/*        if (CinemachineCameras != null) CinemachineCameras.enabled = !shouldBeActive;
+*/        if (weaponController != null) weaponController.enabled = !shouldBeActive;
 
 
         // 3. 커서 제어 (시간 정지 없이 커서만 해제/잠금)

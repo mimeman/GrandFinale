@@ -15,7 +15,7 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI statsText;
     [SerializeField] private GameObject statsBoxObject; // ½ºÅÈ ¹Ú½º (Stats_Text_Image)
-
+        
     void Awake()
     {
         // 1-1. ½Ì±ÛÅæ ¼³Á¤

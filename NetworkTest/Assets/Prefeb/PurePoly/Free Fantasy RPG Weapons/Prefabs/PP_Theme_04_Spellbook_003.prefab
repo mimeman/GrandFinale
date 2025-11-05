@@ -142,3 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 2c3c2fae90ed5c5418dfb69073e2abfb, type: 2}
+  addToInventoryInstead: 1

@@ -100,43 +100,32 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         EquipmentSlot_UI sourceEquipSlot = eventData.pointerDrag.GetComponent<EquipmentSlot_UI>();
         if (sourceEquipSlot != null && sourceEquipSlot.currentItem != null)
         {
-            // [장비 -> 인벤토리] 장착 해제 시도
-            // (UnequipItem 함수가 인벤토리가 꽉 찼는지 확인하고 아이템을 이동시킴)
             bool success = EquipmentManager.Instance.UnequipItem(sourceEquipSlot.currentItem, sourceEquipSlot.equipmentSlotIndex);
 
             if (success)
             {
-                sourceEquipSlot.dropSuccessful = true;
+                // 성공했음을 Source 슬롯에 알려서 OnEndDrag가 복구하지 않도록 막습니다.
+                sourceEquipSlot.MarkDropSuccessful();
             }
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        InventoryUIManager.Instance.EndDrag();
+        InventoryUIManager.Instance.EndDrag(); // 유령 아이콘은 무조건 끔
 
-        if (currentItem == null) return; // (아이템이 null이면 종료)
-
-        // 5. 드롭에 성공했다면 (다른 슬롯에 감)
-        if (dropSuccessful)
+        // 1. 드롭이 성공했거나 (dropSuccessful == true)
+        // 2. UI 밖으로 버렸다면 (eventData.pointerEnter == null)
+        if (dropSuccessful || eventData.pointerEnter == null)
         {
-            // OnInventoryChanged가 어차피 아이콘을 갱신하므로 아무것도 안함
+            // InventoryManager.DropItem이 OnInventoryChanged를 호출하여 갱신할 때까지 대기.
+            // 아이템 버리기는 DropItem에서 처리되므로 별도 로직 불필요.
         }
-        // 6. 드롭에 실패했다면
         else
         {
-            // 7. (핵심!) 마우스가 UI 밖(게임 월드)에 있는지 확인
-            if (eventData.pointerEnter == null)
-            {
-                // UI 밖 = 아이템 버리기
-                InventoryManager.Instance.DropItem(this.slotIndex);
-            }
-            else
-            {
-                // UI 안 (하지만 유효한 슬롯이 아님. 예: Details_Panel)
-                // -> 아이템을 제자리로 복귀
-                slotIcon.enabled = true;
-            }
+            // 3. UI 안의 유효하지 않은 곳에 놓았을 경우
+            // 원본 슬롯 아이콘을 즉시 복구합니다.
+            slotIcon.enabled = true;
         }
 
         dropSuccessful = false; // 플래그 리셋

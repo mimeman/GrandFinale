@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
     private void InitGameUI()
     {
         mobile_UI.SetActive(true);
-        inventoryUI.SetActive(false);
+        inventoryUI.SetActive(true);
         pauseUI.SetActive(false);
         optionUI.SetActive(false);
         foreach (GameObject obj in optionUIs)

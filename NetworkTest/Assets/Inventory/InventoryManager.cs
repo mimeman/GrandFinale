@@ -11,6 +11,19 @@ public class InventoryManager : MonoBehaviour
     public List<RelicData> inventorySlots;
 
     public static event Action OnInventoryChanged;
+    public static event Action<bool> OnInventoryToggle;
+
+    [Header("UI Reference")]
+    [SerializeField] private GameObject inventoryUI; // 'Inventory info' 오브젝트를 연결할 곳
+
+    [Header("Player Control References")]
+    [SerializeField] private PlayerInputs playerInput;     // PlayerInputs.cs
+    [SerializeField] private CharacterMove characterMove;   // CharacterMove.cs (이동 제어)
+    [SerializeField] private MonoBehaviour cameraController; // 카메라 회전 제어 (CameraController, InputHandler 등)
+    [SerializeField] private MonoBehaviour CinemachineCameras; // 카메라 회전 제어 (CameraController, InputHandler 등)
+    [SerializeField] private MonoBehaviour inputHandler; 
+    [SerializeField] private WeaponController weaponController; // 무기 발사 제어
+
 
     void Awake()
     {
@@ -33,9 +46,54 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// RelicData 아이템을 인벤토리에 추가합니다.
-    /// </summary>
+    void Update()
+    {
+        // 'i' 키가 눌렸는지 확인
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Debug.Log("인벤토리 오픈");
+            ToggleInventory();
+        }
+    }
+    public void ToggleInventory()
+    {
+        if (inventoryUI == null)
+        {
+            Debug.LogError("InventoryManager에 inventoryUI가 연결되지 않았습니다!");
+            return;
+        }
+
+        bool shouldBeActive = !inventoryUI.activeSelf;
+
+        // 1. 인벤토리 UI 활성화/비활성화
+        inventoryUI.SetActive(shouldBeActive);
+
+        // 2. (핵심!) 플레이어 입력 및 제어 스크립트 활성화/비활성화
+        // 인벤토리가 켜지면 (= shouldBeActive == true) 스크립트들은 꺼집니다 (!shouldBeActive)
+        if (playerInput != null) playerInput.enabled = !shouldBeActive;
+        if (characterMove != null) characterMove.enabled = !shouldBeActive;
+        if (cameraController != null) cameraController.enabled = !shouldBeActive;
+        if (inputHandler != null) inputHandler.enabled = !shouldBeActive;
+        if (CinemachineCameras != null) CinemachineCameras.enabled = !shouldBeActive;
+        if (weaponController != null) weaponController.enabled = !shouldBeActive;
+
+
+        // 3. 커서 제어 (시간 정지 없이 커서만 해제/잠금)
+        if (shouldBeActive)
+        {
+            Cursor.lockState = CursorLockMode.None; // 커서 잠금 해제
+            Cursor.visible = true; // 커서 보이기 (드래그 앤 드롭 가능)
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked; // 커서 잠금 (게임 입력 상태로 복귀)
+            Cursor.visible = false; // 커서 숨기기
+        }
+    }
+
+        /// <summary>
+        /// RelicData 아이템을 인벤토리에 추가합니다.
+        /// </summary>
     public bool AddItem(RelicData itemToAdd) // 3. ItemData -> RelicData
     {
         int emptySlotIndex = FindNextEmptySlot();

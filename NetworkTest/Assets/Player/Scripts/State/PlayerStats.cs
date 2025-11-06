@@ -95,8 +95,6 @@ public class PlayerStats : MonoBehaviour
     // ====================================================================
     // 2. 스탯 적용 (AbilityManager가 호출)
     // ====================================================================
-
-    // ★★★ (신규) 1. 스탯 리셋 함수 ★★★
     /// <summary>
     /// 모든 '현재 스탯'을 '기본 스탯'으로 되돌립니다.
     /// (AbilityManager가 스탯 재계산 전 호출)
@@ -151,10 +149,13 @@ public class PlayerStats : MonoBehaviour
         switch (statName)
         {
             case "MoveSpeed":
-                float multiplier = (1 + value / 100.0f);
-                CurrentWalkSpeed *= multiplier;
-                CurrentRunSpeed *= multiplier;
-                CurrentSprintSpeed *= multiplier;
+                float walkBonus = baseWalkSpeed * (value / 100.0f);
+                float runBonus = baseRunSpeed * (value / 100.0f);
+                float sprintBonus = baseSprintSpeed * (value / 100.0f);
+
+                CurrentWalkSpeed += walkBonus;
+                CurrentRunSpeed += runBonus;
+                CurrentSprintSpeed += sprintBonus;
                 Debug.Log($"모든 MoveSpeed 증가: +{value}% (현재 스프린트: {CurrentSprintSpeed})");
                 break;
 

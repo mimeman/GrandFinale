@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems; // 드롭 감지!
 
 public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
-    IBeginDragHandler, IDragHandler, IEndDragHandler
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     // 1. 이 슬롯이 받을 수 있는 아이템 타입 (RelicData.itemType과 비교할 문자열)
     [Tooltip("이 슬롯이 받을 itemType 문자열 (예: Relic, Artifact, Skill...)")]
@@ -121,5 +121,30 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
     public void MarkDropSuccessful()
     {
         dropSuccessful = true;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (currentItem == null) return; // 슬롯이 비어있으면 아무것도 안 함
+
+        if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 1)
+        {
+            Debug.Log("장비 상세정보 표시");
+            InventoryUIManager.Instance.UpdateDetails(currentItem);
+        }
+
+        // 좌 더블클릭 (두 번 클릭) -> 장착 해제 시도
+        if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+        {
+            Debug.Log("더블 클릭으로 장착 해제 시도...");
+
+            // (UnequipItem 함수가 알아서 빈 인벤토리 슬롯을 찾고, 스탯을 제거함)
+            bool success = EquipmentManager.Instance.UnequipItem(currentItem, this.equipmentSlotIndex);
+
+            if (!success)
+            {
+                Debug.Log("인벤토리가 꽉 차서 장비를 해제할 수 없습니다.");
+            }
+        }
     }
 }

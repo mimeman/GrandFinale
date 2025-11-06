@@ -57,9 +57,25 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left && currentItem != null)
+        if (currentItem == null) return; // 아이템이 없으면 아무것도 안 함
+
+        // 1. 좌클릭 (한 번 클릭) -> 상세 정보 표시
+        if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 1)
         {
             InventoryUIManager.Instance.UpdateDetails(currentItem);
+        }
+
+        // 2. 좌 더블클릭 (두 번 클릭) -> 장착 시도
+        if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+        {
+            Debug.Log("더블 클릭으로 장착 시도...");
+            AttemptEquip();
+        }
+
+        // 3. (미래 기능) 우클릭
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // TODO: 여기에 우클릭 메뉴(버리기, 착용하기) 띄우는 로직
         }
     }
 
@@ -142,5 +158,32 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     public void MarkDropSuccessful()
     {
         dropSuccessful = true;
+    }
+
+    private void AttemptEquip()
+    {
+        // 1. 이 아이템이 장착 가능한 타입인지 확인
+        // (주의: "Relic" 문자열은 EquipmentSlot_UI의 requiredType과 일치해야 함)
+        string requiredType = "Relic";
+
+        if (currentItem.itemType == requiredType)
+        {
+            // 2. EquipmentManager에게 장착 요청
+            // (EquipItem 함수가 알아서 빈 장비 슬롯을 찾고, 가방에서 이 아이템을 제거함)
+            bool success = EquipmentManager.Instance.EquipItem(currentItem, this.slotIndex);
+
+            if (success)
+            {
+                // 장착 성공
+            }
+            else
+            {
+                Debug.Log("장비 슬롯이 꽉 찼습니다.");
+            }
+        }
+        else
+        {
+            Debug.Log($"이 아이템({currentItem.itemName})은 장착할 수 없습니다.");
+        }
     }
 }

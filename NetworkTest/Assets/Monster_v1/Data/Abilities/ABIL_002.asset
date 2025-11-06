@@ -17,7 +17,7 @@ MonoBehaviour:
   activationType: Passive
   abilityLogicID: Stat_Percent
   param_Key: MoveSpeed
-  param_ValueA: 10
+  param_ValueA: 1000
   param_ValueB: 
   param_ValueC: 
   resourcePath: 

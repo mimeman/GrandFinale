@@ -29,7 +29,14 @@ public class InventoryUIManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    void Update()
+    {
+        // 'i' 키가 눌렸는지 확인 (또는 PlayerInputs의 GetInventory() 사용)
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ToggleInventory();
+        }
+    }
 
 
     #region Drag & Drop Functions
@@ -100,12 +107,24 @@ public class InventoryUIManager : MonoBehaviour
     /// <summary>
     /// 상세정보 창을 비웁니다.
     /// </summary>
-    private void ClearDetails()
+    public void ClearDetails()
     {
         titleText.text = "인벤토리";
-        descriptionText.text = "아이템을 선택하세요.";
+        descriptionText.text = "";
         statsBoxObject.SetActive(false);
     }
 
     #endregion
+
+    public void ToggleInventory()
+    {
+        // 1. 끄기 전에(현재 켜져있다면) 상세정보창을 초기화합니다.
+        if (gameObject.activeSelf)
+        {
+            ClearDetails();
+        }
+
+        // 2. 이 스크립트가 붙어있는 GameObject (Inventory info)를 껐다 켰다 함
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
 }

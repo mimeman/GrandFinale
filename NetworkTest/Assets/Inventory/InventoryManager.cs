@@ -48,10 +48,9 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        // 'i' 키가 눌렸는지 확인
-        if (Input.GetKeyDown(KeyCode.O))
+        if (playerInput != null && playerInput.GetInventory())
         {
-            Debug.Log("인벤토리 오픈");
+            Debug.Log("인벤토리 키 입력 감지 (by PlayerInputs)!");
             ToggleInventory();
         }
     }

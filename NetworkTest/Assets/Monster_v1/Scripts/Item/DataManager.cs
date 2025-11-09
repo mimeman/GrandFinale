@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             // 씬이 바뀌어도 이 매니저는 파괴되지 않고 유지됩니다.
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
             // ★★★ 4. LoadAllData -> BuildDictionaries 함수 호출로 변경 ★★★
             BuildDictionaries();

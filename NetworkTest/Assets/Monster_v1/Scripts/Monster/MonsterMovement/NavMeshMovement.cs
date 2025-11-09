@@ -40,7 +40,7 @@ public class NavMeshMovement : MonoBehaviour, IMonsterMovement
 
         // 에이전트의 '실제' 속도를 애니메이터에 전달합니다.
         // (0 -> 1.5 -> 3.2 -> 5.0 처럼 부드럽게 변하는 값이 들어감)
-        animator.SetFloat("Speed", agent.velocity.magnitude);
+        //animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 
     // AI에게 받은 최종 목적지를 NavMeshAgent에 설정

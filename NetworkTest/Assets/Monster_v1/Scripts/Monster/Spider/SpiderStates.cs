@@ -9,7 +9,6 @@ namespace SpiderStates
         private float timer;
         public override void EnterState(MonsterAIController monster)
         {
-            // 이동만 멈추고 애니메이션 제어는 하지 않습니다.
             monster.StopMoving();
             idleTime = Random.Range(monster.config.idleTimeMin, monster.config.idleTimeMax);
             timer = 0f;
@@ -18,12 +17,14 @@ namespace SpiderStates
         {
             if (monster.sensor.CanSeePlayer)
             {
-                return monster.traceState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.TraceState;
             }
             timer += Time.deltaTime;
             if (timer >= idleTime)
             {
-                return monster.patrolState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.PatrolState;
             }
             return this;
         }
@@ -41,12 +42,14 @@ namespace SpiderStates
         {
             if (monster.sensor.CanSeePlayer)
             {
-                return monster.traceState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.TraceState;
             }
             monster.MoveTo(patrolDestination);
             if (monster.arrivedAtDestination)
             {
-                return monster.idleState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.IdleState;
             }
             return this;
         }
@@ -64,13 +67,15 @@ namespace SpiderStates
         {
             if (monster.GetDistanceToPlayer() <= monster.config.attackRange)
             {
-                return monster.attackState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.AttackState;
             }
             Vector3 targetPosition = monster.sensor.CanSeePlayer ? monster.player.transform.position : monster.sensor.TargetLastPosition;
             monster.MoveTo(targetPosition);
             if (!monster.sensor.CanSeePlayer && monster.arrivedAtDestination)
             {
-                return monster.patrolState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.PatrolState; // (거미는 LookAround 대신 Patrol로 바로 감)
             }
             return this;
         }
@@ -83,6 +88,7 @@ namespace SpiderStates
     public class Attack : ZombieBaseState<MonsterAIController>
     {
         private float attackTimer;
+        // (참고) 이 값은 나중에 Config로 빼는 것이 좋습니다.
         private float attackAnimationLength = 1.5f;
 
         public override void EnterState(MonsterAIController monster)
@@ -91,8 +97,14 @@ namespace SpiderStates
             monster.StopMoving();
             monster.SetProceduralMovement(false); // IK 비활성화
 
-            if (Random.value > 0.5f) { monster.SetTrigger(monster.hashDoAttack); }
-            
+            if (Random.value > 0.5f)
+            {
+                monster.SetAnimTrigger(monster.hashAttack1);
+            }
+            // (참고) 거미의 2번째 공격 해시(hashAttack2)도 Config에 정의하고
+            // else { monster.SetAnimTrigger(monster.hashAttack2); }
+            // 처럼 사용하는 것을 권장합니다.
+
 
             if (monster.player != null) { monster.LookAt(monster.player.transform.position); }
         }
@@ -101,7 +113,8 @@ namespace SpiderStates
             attackTimer += Time.deltaTime;
             if (attackTimer >= attackAnimationLength)
             {
-                return monster.traceState;
+                // (수정) monster.fsm 사용
+                return monster.fsm.TraceState;
             }
             return this;
         }
@@ -118,12 +131,16 @@ namespace SpiderStates
             monster.StopMoving();
             monster.StopAllCoroutines();
             monster.SetProceduralMovement(false);
-            monster.SetTrigger(monster.hashDie);
+
+            // (참고) 거미 사망 애니메이션 해시
+            // monster.SetAnimTrigger(monster.hashDie);
 
             if (monster.TryGetComponent<Collider>(out var collider))
             {
                 collider.enabled = false;
             }
+
+            // (참고) 거미는 NavMeshAgent가 없으므로 체크할 필요 없음
         }
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster) { return this; }
         public override void ExitState(MonsterAIController monster) { }

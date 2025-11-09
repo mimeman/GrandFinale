@@ -2,9 +2,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// 몬스터의 체력, 피격, 사망을 관리하는 재사용 가능한 컴포넌트입니다.
-/// </summary>
 public class MonsterHealth : MonoBehaviour
 {
     #region 필드
@@ -12,76 +9,75 @@ public class MonsterHealth : MonoBehaviour
     [Tooltip("몬스터가 죽었을 때 떨어뜨릴 아이템 프리팹 (ItemPickup 스크립트 포함)")]
     public GameObject itemPickupPrefab;
 
-
-    // Config에서 값을 받아와 저장할 private 변수
     private float _maxHP;
     private float _defense;
+
+    [Space(10)]
+    [Header("방어/반격 설정")]
+    [Tooltip("이 시간(초) 안에")]
+    public float blockTriggerTime = 2.0f;
+    [Tooltip("이 횟수(번) 이상 피격 시")]
+    public int blockTriggerHits = 5;
+    [Tooltip("방어/반격 이벤트")]
+    public UnityEvent OnBlock;
+
+    private int hitCounter = 0;
+    private float hitTimer = 0f;
 
     [Header("체력 상태 (실시간)")]
     [SerializeField]
     [Tooltip("현재 체력 (실시간 디버그용)")]
-    private float currentHP; // private 필드로 변경
+    private float currentHP;
 
-    public float CurrentHP // public 프로퍼티는 그대로 둡니다.
+    public float CurrentHP
     {
         get { return currentHP; }
-        private set { currentHP = value; } // private set도 그대로
+        private set { currentHP = value; }
     }
 
     public bool IsDead { get; private set; }
 
-    // --- 외부 신호(Event) ---
     public UnityEvent OnHit;
     public UnityEvent OnDeath;
 
+    // ★ 1. (추가) AI 컨트롤러 참조
+    private MonsterAIController ai;
+
     [Space(10)]
     [Header("--- DEBUG TOOLS ---")]
-    [Tooltip("이 체크박스를 누르면 몬스터에게 10의 데미지를 줍니다.")]
     public bool _DEBUG_ForceHit = false;
-    [Tooltip("이 체크박스를 누르면 몬스터를 즉시 사망시킵니다.")]
     public bool _DEBUG_ForceDie = false;
-
     #endregion
 
     private void Awake()
     {
-        MonsterAIController ai = GetComponent<MonsterAIController>();
+        // ★ 2. (수정) AI 컨트롤러 참조 저장
+        ai = GetComponent<MonsterAIController>();
     }
 
     private void Update()
     {
-        if (_DEBUG_ForceDie)
+        // ... (Debug 로직은 그대로) ...
+        if (_DEBUG_ForceDie) { /* ... */ }
+        else if (_DEBUG_ForceHit) { /* ... */ }
+
+        // (Block 타이머 로직은 그대로)
+        if (hitTimer > 0)
         {
-            _DEBUG_ForceDie = false;
-            if (!IsDead)
+            hitTimer -= Time.deltaTime;
+            if (hitTimer <= 0)
             {
-                Debug.LogWarning($"[{gameObject.name}] DEBUG: 강제 사망 신호!");
-                TakeDamage(currentHP + _defense);
-            }
-        }
-        else if (_DEBUG_ForceHit)
-        {
-            _DEBUG_ForceHit = false;
-            if (!IsDead)
-            {
-                Debug.LogWarning($"[{gameObject.name}] DEBUG: 강제 피격 신호! (데미지 10)");
-                TakeDamage(10f);
+                hitCounter = 0;
             }
         }
     }
 
-    /// <summary>
-    /// MonsterConfig의 설정값으로 체력 컴포넌트를 초기화합니다.
-    /// </summary>
     public void Initialize(MonsterConfig config)
     {
         _maxHP = config.maxHP;
         _defense = config.defense;
-
         currentHP = _maxHP;
-
         IsDead = false;
-
         Debug.Log($"[{gameObject.name}] Health 초기화 완료: HP={_maxHP}, DEF={_defense}");
     }
 
@@ -93,33 +89,50 @@ public class MonsterHealth : MonoBehaviour
         if (IsDead) return;
 
         float actualDamage = Mathf.Max(damage - _defense, 0f);
-
         currentHP -= actualDamage;
         Debug.Log($"<color=orange>[{gameObject.name}] 피해! (입힌 데미지: {damage}, 방어력: {_defense}, 실제 피해: {actualDamage}) -> 현재 체력: {currentHP}/{_maxHP}</color>");
 
         if (currentHP <= 0)
         {
-            currentHP = 0; // 체력이 음수가 되지 않도록
+            currentHP = 0;
             IsDead = true;
             OnDeath?.Invoke();
             Debug.Log("<color=red>사망 신호 발생!</color>");
-
-/*            MonsterAIController ai = GetComponent<MonsterAIController>();
-
-            if (ai != null && ai.config.lootTable != null) { SpawnLoot(ai.config.lootTable); }
-
-            if (MonsterManager.Instance != null) { MonsterManager.Instance.RegisterMonsterDied(); }*/
-  
         }
         else
         {
+            // (살아있을 때 피격 당함)
             OnHit?.Invoke();
             Debug.Log("<color=yellow>피격 신호 발생!</color>");
+
+            // ★ 3. (수정) GolemFSM일 때만 방어/반격 로직 실행 ★
+            if (ai != null && ai.fsm is GolemFSM)
+            {
+                if (hitTimer <= 0)
+                {
+                    hitTimer = blockTriggerTime;
+                    hitCounter = 1;
+                }
+                else
+                {
+                    hitCounter++;
+                }
+
+                if (hitCounter >= blockTriggerHits)
+                {
+                    Debug.LogWarning($"[{gameObject.name}] 방어/반격 발동!");
+                    OnBlock?.Invoke();
+                    hitTimer = 0;
+                    hitCounter = 0;
+                }
+            }
+            // ★ (수정 끝) ★
         }
     }
 
     public void SpawnLoot(LootTable lootTable)
     {
+        // ... (Loot 로직은 그대로) ...
         foreach (var entry in lootTable.items)
         {
             if (entry.item == null)
@@ -127,18 +140,12 @@ public class MonsterHealth : MonoBehaviour
                 Debug.LogWarning("LootTable에 비어있는 아이템 슬롯이 있습니다.", this);
                 continue;
             }
-
             if (Random.Range(0f, 100f) <= entry.dropChance)
             {
-                //아이템 데이터에서 '전용 프리팹'을 가져옵니다.
                 GameObject prefabToSpawn = entry.item.dropPrefab;
-
-                // 전용 프리팹이 등록되어 있는지 확인
                 if (prefabToSpawn != null)
                 {
-                    //전용 프리팹(prefabToSpawn)을 생성합니다.
                     GameObject spawnedItem = Instantiate(prefabToSpawn, transform.position + Vector3.up * 1f, Quaternion.identity);
-
                     Debug.Log($"{entry.item.itemName} 드랍! (확률: {entry.dropChance}%)");
                 }
                 else

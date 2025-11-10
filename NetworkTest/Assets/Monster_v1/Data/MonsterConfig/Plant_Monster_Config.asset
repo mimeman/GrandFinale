@@ -47,5 +47,10 @@ MonoBehaviour:
   castTime: 1.2
   timeBetweenShots: 1.2
   projectilePrefab: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
+  impactDamage: 20
+  poisonAreaPrefab: {fileID: 1644561725666258, guid: 0443ed12a25c9b742b1287696d82d646, type: 3}
+  tickDamage: 5
+  poisonDuration: 15
+  poisonTickRate: 1
   projectileArcHeight: 5
-  projectileSpeed: 15
+  projectileSpeed: 5

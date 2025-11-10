@@ -9,7 +9,6 @@ public class GazerFSM : MonsterFSM
     private float strafeCooldownTimer = 0f;
     private float hitCooldownTimer = 0f;
 
-    // ★★★ 아래 3줄 (HP 임계점 플래그) 추가 ★★★
     private bool canTriggerHit90 = true;
     private bool canTriggerHit60 = true;
     private bool canTriggerHit30 = true;

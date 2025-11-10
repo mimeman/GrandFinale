@@ -162,6 +162,7 @@ namespace PlantMonsterStates
     public class Plant_MeleeAttackState : ZombieBaseState<MonsterAIController>
     {
         private float timer;
+        private bool hasAppliedDamage;
         public override void EnterState(MonsterAIController monster)
         {
             monster.StopMoving();
@@ -176,10 +177,18 @@ namespace PlantMonsterStates
             if (monster.player != null)
                 monster.LookAt(monster.player.transform.position);
             timer = 0f;
+            hasAppliedDamage = false;
         }
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
             timer += Time.deltaTime;
+
+            if (!hasAppliedDamage && timer >= monster.config.attackDelay)
+            {
+                hasAppliedDamage = true;
+                monster.ApplyDamageToPlayer();
+            }
+
             if (timer >= monster.config.attackCooldown)
             {
                 return monster.fsm.TraceState; // -> Plant_AliveState
@@ -265,6 +274,8 @@ namespace PlantMonsterStates
 
             if (arcScript != null)
             {
+                arcScript.Setup(plantConfig);
+
                 arcScript.Initialize(
                     targetPosition,
                     plantConfig.projectileArcHeight,

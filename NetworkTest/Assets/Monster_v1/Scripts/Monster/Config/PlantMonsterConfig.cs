@@ -21,11 +21,21 @@ public class PlantMonsterConfig : MonsterConfig
     [Header("Projectile")]
     [Tooltip("원거리 공격 시 발사할 투사체 프리팹")]
     public GameObject projectilePrefab;
-
+    [Header("Poison Attack (투사체 독 공격)")]
+    [Tooltip("투사체 또는 충돌 이펙트(Impact Effect)에 의한 단발 피해량")]
+    public float impactDamage = 20f;
+    [Tooltip("바닥에 은은하게 깔리는 독 장판 프리팹 (PoisonArea.cs 스크립트 포함)")]
+    public GameObject poisonAreaPrefab;
+    [Tooltip("독 장판에 의한 틱 피해량")]
+    public float tickDamage = 5f;
+    [Tooltip("독 장판의 지속 시간 (초)")]
+    public float poisonDuration = 5.0f;
+    [Tooltip("독 장판 틱 피해 적용 간격 (초)")]
+    public float poisonTickRate = 1.0f; // 1초마다 피해를 준다고 가정
     [Header("Projectile Arc")]
     [Tooltip("포물선의 최대 높이")]
     public float projectileArcHeight = 5.0f;
     [Tooltip("포물선 투사체의 속도")]
-    public float projectileSpeed = 15.0f;
+    public float projectileSpeed = 6.0f;
 
 }

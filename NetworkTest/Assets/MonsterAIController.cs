@@ -164,8 +164,11 @@ public class MonsterAIController : MonoBehaviour
         CurrentState?.ExitState(this);
         CurrentState = newState;
         CurrentState.EnterState(this);
+
+
     }
     #endregion
+
 
     #region 이동 제어
     public void MoveTo(Vector3 destination)
@@ -184,6 +187,10 @@ public class MonsterAIController : MonoBehaviour
 
     public void StopMoving() { movement.Stop();  }
     public void LookAt(Vector3 target) { movement.TurnTowards(target, config.turnSpeed); }
+    public void LookAt(Vector3 target, float customTurnSpeed)
+    {
+        movement.TurnTowards(target, customTurnSpeed);
+    }
     public Vector3 GetRandomPatrolDestination()
     {
         float distance = Random.Range(config.patrolRadiusMin, config.patrolRadiusMax);
@@ -208,7 +215,6 @@ public class MonsterAIController : MonoBehaviour
         Vector3 playerPos = new Vector3(player.transform.position.x, 0, player.transform.position.z);
         return Vector3.Distance(monsterPos, playerPos);
     }
-
     public IEnumerator AttackRoutine() { WaitForSeconds attackCooldown = new WaitForSeconds(config.attackCooldown); while (GetDistanceToPlayer() <= config.attackRange) { Debug.Log("몬스터 공격!"); yield return attackCooldown; } }
     public void StopAttackRoutine() { if (attackRoutineCor != null) { StopCoroutine(attackRoutineCor); attackRoutineCor = null; } }
     // MonsterAIController.cs -> HandleHit (만약 1대만 맞아도 Block 하길 원한다면)
@@ -217,52 +223,117 @@ public class MonsterAIController : MonoBehaviour
     {
         if (health.IsDead) return;
 
-        // 1. GazerFSM인지 확인합니다.
         if (fsm is GazerFSM gazerFSM)
         {
-            // --- 몬스터가 Gazer일 경우 ---
+            // ★ (신규) 1-1. 플레이어를 감지 못했을 때(Idle/Patrol) 맞았는가?
+            // (요청사항 1: 감지 안됐는데 맞으면)
+            if (CurrentState == fsm.IdleState || CurrentState == fsm.PatrolState)
+            {
+                Debug.Log("GAZER HIT: (Idle/Patrol) 중 피격! 강제 감지 및 추적 시작.");
+                if (player != null)
+                {
+                    sensor.ForceDetection(player.transform.position); // (요청: 쫒아오기)
+                }
+                SetAnimTrigger(hashHit);     // (요청: hit애니메이션)
+                ChangeState(fsm.HitState); // Hit 상태로 전환 (이후 Trace로 감)
+                return; // (중요) 기존 HP 임계점 로직을 스킵
+            }
 
-            // 2. (요청) Gazer의 10초 쿨다운이 돌고 있는지 확인
+            // ★ (기존) 1-2. (Trace/Attack 등) 전투 중에 맞았는가?
+            // (기존 HP 임계점 로직)
             if (gazerFSM.IsHitOnCooldown)
             {
                 Debug.Log("Gazer Hit: 쿨다운 중... 경직 무시.");
-                return; // 쿨다운 중이면 경직(Hit 상태)에 걸리지 않음
+                return;
             }
-
-            // 3. (요청) Gazer의 HP 임계점을 확인
             float hpPercent = health.CurrentHP / health._maxHP;
             bool thresholdCrossed = gazerFSM.CheckAndTriggerThreshold(hpPercent);
 
             if (thresholdCrossed)
             {
-                // 4. (경직 발동) HP 임계점에 도달했습니다!
-
-                // (요청) 플레이어를 감지 못했어도 강제로 쫒아가도록 설정
                 if (!sensor.CanSeePlayer && player != null)
                 {
                     sensor.ForceDetection(player.transform.position);
                 }
-
-                // (요청) Hit1 / Hit2 랜덤 호출
                 if (Random.value > 0.5f)
                     SetAnimTrigger(hashHit);
                 else
                     SetAnimTrigger(hashHit2);
-
-                // Hit 상태로 전환 (GazerStates.Hit가 쿨다운을 10초로 설정할 것임)
                 ChangeState(fsm.HitState);
             }
             else
             {
-                // (경직 무시) HP 임계점이 아닌 일반 데미지
-                // Gazer는 임계점에만 반응하므로, 일반 데미지는 무시합니다.
                 Debug.Log("Gazer Hit: HP 임계점이 아니므로 경직 무시.");
             }
         }
+        // ★ 2. (수정) GOLEM 피격 로직 ★
+        else if (fsm is GolemFSM golemFSM)
+        {
+            // --- (우선순위 1: Block 중) ---
+            // (요구사항 4: Block 중인가?)
+            if (CurrentState == fsm.BlockState)
+            {
+                var blockState = CurrentState as GolemStates.Block;
+
+                // (요구사항 3: Block이 풀리는 1초의 취약한 타이밍인가?)
+                if (blockState != null && blockState.CurrentPhase == GolemStates.Block.Phase.VulnerableCheck)
+                {
+                    Debug.Log("GOLEM HIT: 취약(Vulnerable) 상태에서 피격! HitState 전환.");
+                    SetAnimTrigger(hashHit); // Hit 애니메이션 재생
+                    ChangeState(fsm.HitState); // Hit 상태(속도저하)로 전환
+                }
+                else
+                {
+                    // 'Blocking' 단계이므로 모든 데미지 무시 (Hit 애니메이션 없음)
+                    Debug.Log("GOLEM HIT: 방어(Blocking) 중! 피격 무시.");
+                }
+                return; // 방어 중이므로 아래 로직 실행 안 함
+            }
+
+            // --- (우선순위 2: Block 발동 직전) ---
+            // (요구사항 4: Block 해야 해!)
+            // OnBlock 이벤트가 OnHit보다 늦게 오므로, Health의 카운터를 직접 체크
+            if (health.hitCounter >= health.blockTriggerHits)
+            {
+                Debug.Log("GOLEM HIT: Block 발동 조건 충족! Hit 애니메이션 무시.");
+                // 곧 HandleBlock이 호출되어 BlockState로 바꿀 것이므로 HitState로 가지 않음
+                // (속도 저하도 없음)
+                return;
+            }
+
+            // --- (우선순위 3: 원거리 피격) ---
+            // (요구사항 2, 5: 멀리서 쏘면 한번만)
+            float distance = GetDistanceToPlayer();
+            // (예: 공격 사거리의 2배보다 멀고, 아직 원거리 Hit 애니를 안했을 때)
+            if (distance > (config.attackRange * 2) && !golemFSM.HasPlayedRangedHitAnim)
+            {
+                Debug.Log("GOLEM HIT: 원거리 피격! HitState 전환 (애니메이션 포함).");
+                golemFSM.SetRangedHitAnimPlayed(); // 플래그 설정 (다시 안하게)
+                SetAnimTrigger(hashHit); // Hit 애니메이션 재생
+                ChangeState(fsm.HitState); // Hit 상태(속도저하)로 전환
+                return;
+            }
+
+            // --- (우선순위 4: 그 외 모든 피격) ---
+            // (요구사항 1: 그냥 속도만 느리게)
+            // (예: 가까이서 맞았을 때, 또는 원거리에서 두 번째 이상 맞았을 때)
+            Debug.Log("GOLEM HIT: 일반 피격. HitState 전환 (애니메이션 없음).");
+            // SetAnimTrigger(hashHit) 호출 안 함
+            ChangeState(fsm.HitState); // Hit 상태(속도저하)로만 전환
+        }
+
+        else if (fsm is MinotaurFSM)
+        {
+            // Minotaur는 애니메이션(SetAnimTrigger)을 재생하지 않고
+            // HitState(속도 저하)로만 즉시 전환합니다.
+            Debug.Log("MINOTAUR HIT: HitState 전환 (애니메이션 없음).");
+            ChangeState(fsm.HitState); //
+        }
+        // 4. 그 외 몬스터 (좀비, 슬라임 등)
         else
         {
-            // --- 몬스터가 Gazer가 아닐 경우 (예: 좀비, 골렘 등) ---
-            // 2. 다른 몬스터들은 기존 로직대로 매번 피격당합니다.
+            // 기존 로직 (애니메이션 재생 + HitState)
+            Debug.Log("DEFAULT HIT: HitState 전환 (애니메이션 포함).");
             SetAnimTrigger(hashHit);
             ChangeState(fsm.HitState);
         }
@@ -274,16 +345,13 @@ public class MonsterAIController : MonoBehaviour
         // 1. GolemFSM인지 확인
         var golemFSM = fsm as GolemFSM;
 
-        // 2. (수정) GolemFSM이 아니면 (예: 좀비, 슬라임) 방어/반격 안 함
+        // 2. GolemFSM이 아니면 (예: 좀비, 슬라임) 방어/반격 안 함
         if (golemFSM == null)
         {
             return;
         }
 
-        // --- (이하는 GolemFSM일 때만 실행) ---
-
-        // 3. 이미 Block/Hit 중이면 무시
-        if (CurrentState == fsm.BlockState || CurrentState == fsm.HitState)
+        if (CurrentState == fsm.BlockState)
         {
             return;
         }
@@ -318,7 +386,9 @@ public class MonsterAIController : MonoBehaviour
         }
         ChangeState(fsm.DieState);
     }
+
     #endregion
+
 
     #region 애니메이션
 
@@ -376,7 +446,33 @@ public class MonsterAIController : MonoBehaviour
             spiderStepManager.enabled = isActive;
         }
     }
- 
+
+    /// <summary>
+    /// (신규) Attack 상태에서 호출되어 플레이어에게 데미지를 적용합니다.
+    /// </summary>
+    public void ApplyDamageToPlayer()
+    {
+        if (player == null || health.IsDead) return;
+
+        // 1. 공격 딜레이(attackDelay) 후에도 플레이어가 사거리 안에 있는지 다시 체크
+        if (GetDistanceToPlayer() <= config.attackRange)
+        {
+            // 2. ★ (수정) 'PlayerHealth' -> 'PlayerStats'로 변경 ★
+            if (player.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+            {
+                Debug.Log($"[Golem] 플레이어 공격! 데미지: {config.attackDamage}");
+                playerStats.TakeDamage(config.attackDamage);
+            }
+            else
+            {
+                Debug.LogWarning($"[Golem] 플레이어({player.name})에게 'PlayerStats' 스크립트가 없습니다!");
+            }
+        }
+        else
+        {
+            Debug.Log("[Golem] 플레이어가 사거리를 벗어나서 공격이 빗나갔습니다.");
+        }
+    }
 
 
 #if UNITY_EDITOR
@@ -406,4 +502,8 @@ public class MonsterAIController : MonoBehaviour
         }
     }
 #endif
+
 }
+
+
+

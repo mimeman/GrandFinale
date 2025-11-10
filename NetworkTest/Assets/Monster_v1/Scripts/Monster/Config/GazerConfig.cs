@@ -11,8 +11,11 @@ public class GazerConfig : MonsterConfig
     public float beamCastTime = 3.5f;
     [Tooltip("빔 공격의 쿨다운")]
     public float beamCooldown = 20f;
+    [Tooltip("Cast3Start 애니메이션 후, 빔이 실제로 발사될 때까지의 딜레이")]
+    public float beamFireDelay = 0.3f;
     [Tooltip("빔 프리팹 (액션빔)")]
     public GameObject beamPrefab;
+
 
     [Header("Gazer (Evasion)")]
     [Tooltip("이 거리보다 가까우면 회피(Strafe)를 시도합니다.")]

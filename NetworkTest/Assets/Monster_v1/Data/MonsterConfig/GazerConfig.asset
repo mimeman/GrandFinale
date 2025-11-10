@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc467e07605d114e81ca0962154e865, type: 3}
   m_Name: GazerConfig
   m_EditorClassIdentifier: 
-  maxHP: 100
+  maxHP: 1000
   attackDamage: 10
   defense: 0
   fovRange: 10
@@ -42,9 +42,10 @@ MonoBehaviour:
   lootTable: {fileID: 11400000, guid: 392694b03d32ef442ac51d42c547fb5f, type: 2}
   corpseDestroyDelay: 5
   beamRange: 15
-  beamCastTime: 1.5
+  beamCastTime: 10
   beamCooldown: 10
-  beamPrefab: {fileID: 0}
+  beamFireDelay: 0.3
+  beamPrefab: {fileID: 1062685050423962, guid: 7f38f60a173ec7e4cacc9b7af686d87b, type: 3}
   strafeRange: 8
   strafeCooldown: 5
   strafeDuration: 1

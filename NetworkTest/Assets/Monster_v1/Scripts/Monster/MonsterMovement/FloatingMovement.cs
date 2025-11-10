@@ -31,9 +31,14 @@ public class FloatingMovement : MonoBehaviour, IMonsterMovement
         controller = GetComponent<MonsterAIController>();
 
         rb.useGravity = false;
-        rb.isKinematic = false;
 
-        // ★ 2. (추가) Rigidbody가 물리적으로 회전하는 것을 막습니다. (스크립트로만 제어)
+        // ★ 1. (수정) Rigidbody를 Kinematic으로 변경합니다.
+        // 이렇게 하면 외부 물리력(총알)에 밀려나지 않고,
+        // rb.MovePosition()이 안정적으로 작동합니다.
+        rb.isKinematic = true;
+
+        // ★ 2. (원본 복귀) 회전만 고정합니다.
+        // (isKinematic = true이므로 FreezePosition은 더 이상 필요 없습니다.)
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         // ★ 3. (수정) 초기 회전값을 현재 방향으로 설정
@@ -41,7 +46,6 @@ public class FloatingMovement : MonoBehaviour, IMonsterMovement
         targetRotation = transform.rotation;
         targetSpeed = 0f;
     }
-
     private void Start()
     {
         if (controller.animConfig != null)

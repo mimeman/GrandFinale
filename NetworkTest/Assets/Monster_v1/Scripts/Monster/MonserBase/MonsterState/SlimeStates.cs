@@ -101,6 +101,7 @@ namespace SlimeStates
     public class Attack : ZombieBaseState<MonsterAIController>
     {
         private float timer;
+        private bool hasAppliedDamage;
 
         public override void EnterState(MonsterAIController monster)
         {
@@ -121,21 +122,25 @@ namespace SlimeStates
                 monster.SetAnimTrigger(monster.hashAttack3);
 
             timer = 0f;
+            hasAppliedDamage = false;
         }
 
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
             timer += Time.deltaTime;
 
-            // 공격 애니메이션이 끝나면
+            if (!hasAppliedDamage && timer >= monster.config.attackDelay)
+            {
+                hasAppliedDamage = true;
+                monster.ApplyDamageToPlayer();
+            }
+
             if (timer >= monster.config.attackCooldown)
             {
                 if (Random.value > 0.5f)
                 {
-                    return monster.fsm.TauntState; // (TauntState 슬롯 = DodgeState)
+                    return monster.fsm.TauntState; // (DodgeState)
                 }
-
-                // 50% 확률로 Trace 상태로 복귀
                 return monster.fsm.TraceState;
             }
 

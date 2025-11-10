@@ -103,7 +103,7 @@ namespace GolemStates
     public class Attack : ZombieBaseState<MonsterAIController>
     {
         private float timer;
-
+        private bool hasAppliedDamage;
         public override void EnterState(MonsterAIController monster)
         {
             monster.StopMoving();
@@ -125,19 +125,23 @@ namespace GolemStates
                 monster.SetAnimTrigger(monster.hashAttack4);
 
             timer = 0f; // 공격 애니메이션 타이머
+
+            hasAppliedDamage = false;
         }
 
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
             timer += Time.deltaTime;
-
-            // 1. 공격 애니메이션이 끝날 때까지 기다립니다.
-            if (timer < monster.config.attackCooldown)
+            if (!hasAppliedDamage && timer >= monster.config.attackDelay)
             {
-                return this; // 애니메이션 재생 중에는 이 상태에 머무릅니다.
+                hasAppliedDamage = true;
+                monster.ApplyDamageToPlayer(); 
             }
 
-            // --- 2. 애니메이션이 끝난 후 ---
+            if (timer < monster.config.attackCooldown)
+            {
+                return this; // 상태 유지
+            }
 
             // 쿨다운이 지났으므로 Trace 상태로 복귀
             return monster.fsm.TraceState;

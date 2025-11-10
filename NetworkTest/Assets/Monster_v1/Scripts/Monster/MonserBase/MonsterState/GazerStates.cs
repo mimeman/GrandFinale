@@ -23,6 +23,8 @@ namespace GazerStates
 
             idleTime = Random.Range(monster.config.idleTimeMin, monster.config.idleTimeMax);
             timer = 0f;
+
+            (monster.fsm as GolemFSM)?.ResetRangedHitAnim();
         }
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
@@ -117,6 +119,7 @@ namespace GazerStates
     public class MeleeAttack : ZombieBaseState<MonsterAIController>
     {
         private float timer;
+        private bool hasAppliedDamage;
         public override void EnterState(MonsterAIController monster)
         {
             monster.StopMoving();
@@ -130,10 +133,18 @@ namespace GazerStates
             else monster.SetAnimTrigger(monster.hashAttack4);
 
             timer = 0f;
+            hasAppliedDamage = false;
         }
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
             timer += Time.deltaTime;
+
+            if (!hasAppliedDamage && timer >= monster.config.attackDelay)
+            {
+                hasAppliedDamage = true;
+                monster.ApplyDamageToPlayer();
+            }
+
             if (timer >= monster.config.attackCooldown)
             {
                 return monster.fsm.TraceState;
@@ -150,6 +161,11 @@ namespace GazerStates
         private GazerFSM gazerFSM;
         private float timer;
         private bool hasFired;
+        private bool hasStoppedBeam;
+        private GameObject currentBeamInstance;
+
+        // ★ (추가) 빔이 끝난 후, 상태를 종료하기까지의 추가 대기 시간 (애니 후딜레이)
+        private const float beamExitDelay = 0.5f;
 
         public override void EnterState(MonsterAIController monster)
         {
@@ -161,34 +177,89 @@ namespace GazerStates
 
             monster.SetAnimTrigger(GazerAnimHashes.Cast3Start);
             timer = 0f;
+            currentBeamInstance = null;
             hasFired = false;
+            hasStoppedBeam = false;
         }
 
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {
-            if (gazerConfig == null || gazerFSM == null) return this;
+            if (monster.player != null && !hasStoppedBeam)
+            {
+                if (monster.player != null) monster.LookAt(monster.player.transform.position, 1.5f);
+            }
+
 
             timer += Time.deltaTime;
 
-            if (!hasFired && timer >= gazerConfig.beamCastTime)
+            timer += Time.deltaTime;
+
+            // 1. (변경 없음) 빔 발사 (e.g., GazerConfig의 beamFireDelay)
+            if (!hasFired && timer >= gazerConfig.beamFireDelay)
             {
                 hasFired = true;
-                monster.SetAnimTrigger(GazerAnimHashes.Cast3End);
-
-                // ★ 여기에 빔(gazerConfig.beamPrefab) 생성 로직 ★
-                Debug.Log("액션빔 발사!");
-                // Object.Instantiate(gazerConfig.beamPrefab, monster.firePoint.position, monster.firePoint.rotation);
+                InstantiateBeam(monster);
             }
 
-            // 빔 쿨다운(공격 애니메이션 길이)이 끝나면 복귀
-            if (timer >= monster.config.attackCooldown)
+            // 2. (변경 없음) 빔 정지 (e.g., GazerConfig의 beamCastTime)
+            if (hasFired && !hasStoppedBeam && timer >= gazerConfig.beamCastTime)
             {
-                gazerFSM.StartBeamCooldown(gazerConfig.beamCooldown); // 10초 쿨다운 시작
+                hasStoppedBeam = true;
+                StopBeam();
+                monster.SetAnimTrigger(GazerAnimHashes.Cast3End);
+            }
+
+            // 'attackCooldown' 대신 'beamCastTime + beamExitDelay'를 사용합니다.
+            // (빔 애니메이션이 완전히 끝나고 Trace로 복귀하도록)
+            if (hasStoppedBeam && timer >= (gazerConfig.beamCastTime + beamExitDelay))
+            {
+                gazerFSM.StartBeamCooldown(gazerConfig.beamCooldown); // 빔 쿨다운 시작
                 return monster.fsm.TraceState;
             }
-            return this;
+
+            return this; // 상태 유지
         }
-        public override void ExitState(MonsterAIController monster) { }
+
+        public override void ExitState(MonsterAIController monster)
+        {
+            // 상태가 강제로 종료될 경우(e.g., 피격) 빔 즉시 정지
+            StopBeam();
+        }
+
+        /// <summary>
+        /// 빔 프리팹을 생성하고 firePoint에 부착합니다.
+        /// </summary>
+        private void InstantiateBeam(MonsterAIController monster)
+        {
+            if (gazerConfig.beamPrefab == null)
+            {
+                Debug.LogError("GazerConfig에 beamPrefab이 없습니다!");
+                return;
+            }
+            if (monster.firePoint == null)
+            {
+                Debug.LogError("MonsterAIController에 firePoint가 없습니다!");
+                return;
+            }
+
+            currentBeamInstance = Object.Instantiate(gazerConfig.beamPrefab, monster.firePoint.position, monster.firePoint.rotation);
+            currentBeamInstance.transform.SetParent(monster.firePoint, true);
+
+            Debug.LogWarning($"액션빔 발사! (딜레이: {gazerConfig.beamFireDelay}초)");
+        }
+
+        /// <summary>
+        /// 현재 발사 중인 빔이 있다면 파괴합니다.
+        /// </summary>
+        private void StopBeam()
+        {
+            if (currentBeamInstance != null)
+            {
+                Object.Destroy(currentBeamInstance);
+                currentBeamInstance = null;
+                Debug.LogWarning($"액션빔 정지! (시간: {gazerConfig.beamCastTime}초)");
+            }
+        }
     }
 
     // --- 6. 회피 (FSM의 Taunt 슬롯) ---

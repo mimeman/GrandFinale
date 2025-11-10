@@ -38,7 +38,7 @@ public class MonsterConfig : ScriptableObject
 
     [Header("공격 패턴")]
     public float attackDelay = 0.5f;
-    public float attackCooldown = 2f;
+    public float attackCooldown = 10f;
 
     [Header("사운드 및 이펙트 (SpiderConfig에서 가져옴)")]
     public AudioClip idleSound;

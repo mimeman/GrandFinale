@@ -11,11 +11,22 @@ public class GolemFSM : MonsterFSM
 
     private float blockCooldownTimer = 0f;
 
+    private bool hasPlayedRangedHitAnim = false;
+
+    public bool HasPlayedRangedHitAnim => hasPlayedRangedHitAnim;
     public bool IsBlockOnCooldown => blockCooldownTimer > 0;
 
     public void StartBlockCooldown(float duration)
     {
         blockCooldownTimer = duration;
+    }
+    public void SetRangedHitAnimPlayed()
+    {
+        hasPlayedRangedHitAnim = true;
+    }
+    public void ResetRangedHitAnim()
+    {
+        hasPlayedRangedHitAnim = false;
     }
 
     private void Update()

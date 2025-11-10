@@ -141,6 +141,7 @@ namespace MinotaurStates
     {
         // 1. Hit 상태처럼, 공격이 지속되는 시간을 잴 타이머를 추가합니다.
         private float timer;
+        private bool hasAppliedDamage;
 
         public override void EnterState(MonsterAIController monster)
         {
@@ -166,6 +167,7 @@ namespace MinotaurStates
                 monster.LookAt(monster.player.transform.position);
             }
             timer = 0f;
+            hasAppliedDamage = false;
         }
 
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
@@ -180,9 +182,12 @@ namespace MinotaurStates
             // 6. (추가) 타이머를 증가시킵니다.
             timer += Time.deltaTime;
 
-            // 7. (추가) MonsterConfig에 설정된 '공격 쿨다운' 시간이
-            //    (애니메이션 재생 시간 + 대기 시간)이므로,
-            //    이 시간이 지나면 공격이 끝난 것으로 간주하고 Trace 상태로 돌아갑니다.
+            if (!hasAppliedDamage && timer >= monster.config.attackDelay)
+            {
+                hasAppliedDamage = true;
+                monster.ApplyDamageToPlayer();
+            }
+
             if (timer >= monster.config.attackCooldown)
             {
                 return monster.fsm.TraceState;

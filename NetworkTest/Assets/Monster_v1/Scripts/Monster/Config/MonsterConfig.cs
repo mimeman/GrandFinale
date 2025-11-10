@@ -24,8 +24,8 @@ public class MonsterConfig : ScriptableObject
     [Header("순찰 및 대기")]
     public float patrolRadiusMin = 5f;
     public float patrolRadiusMax = 10f;
-    public float idleTimeMin = 2f;
-    public float idleTimeMax = 4f;
+    public float idleTimeMin = 10f;
+    public float idleTimeMax = 15f;
 
     [Header("주변 둘러보기")]
     public float lookAroundTime = 3f; // looktime 대신 lookAroundTime으로 통일

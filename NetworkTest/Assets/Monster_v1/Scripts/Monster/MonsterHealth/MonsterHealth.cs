@@ -9,7 +9,7 @@ public class MonsterHealth : MonoBehaviour
     [Tooltip("몬스터가 죽었을 때 떨어뜨릴 아이템 프리팹 (ItemPickup 스크립트 포함)")]
     public GameObject itemPickupPrefab;
 
-    private float _maxHP;
+    public float _maxHP { get; private set; }
     private float _defense;
 
     [Space(10)]
@@ -132,7 +132,12 @@ public class MonsterHealth : MonoBehaviour
 
     public void SpawnLoot(LootTable lootTable)
     {
-        // ... (Loot 로직은 그대로) ...
+        if (lootTable == null || lootTable.items == null)
+        {
+            Debug.LogWarning("LootTable이 비어있습니다.", this);
+            return;
+        }
+
         foreach (var entry in lootTable.items)
         {
             if (entry.item == null)
@@ -140,12 +145,19 @@ public class MonsterHealth : MonoBehaviour
                 Debug.LogWarning("LootTable에 비어있는 아이템 슬롯이 있습니다.", this);
                 continue;
             }
+
+            // 1. 드랍 확률 체크 (LootTable.cs 기반)
             if (Random.Range(0f, 100f) <= entry.dropChance)
             {
+                // 2. RelicData에서 드랍 프리팹 가져오기 (RelicData.cs 기반)
                 GameObject prefabToSpawn = entry.item.dropPrefab;
                 if (prefabToSpawn != null)
                 {
-                    GameObject spawnedItem = Instantiate(prefabToSpawn, transform.position + Vector3.up * 1f, Quaternion.identity);
+                    // 3. 몬스터 위치 (공중일 수 있음)에 생성
+                    //    -> Rigidbody가 중력으로 떨어뜨릴 것입니다.
+                    Vector3 spawnPos = transform.position + Vector3.up * 1f;
+                    GameObject spawnedItem = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+
                     Debug.Log($"{entry.item.itemName} 드랍! (확률: {entry.dropChance}%)");
                 }
                 else

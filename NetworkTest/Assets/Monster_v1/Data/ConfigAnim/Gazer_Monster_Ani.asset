@@ -21,8 +21,9 @@ MonoBehaviour:
   attackTrigger3: Attack3
   attackTrigger4: Attack4
   hitTrigger: GotHit1
+  hitTrigger2: GotHit2
   dieTrigger: Death
-  dieTrigger2: GotHit2
+  dieTrigger2: 
   blockStartTrigger: 
   blockEndTrigger: 
   lookAroundTrigger: StrafeLeft

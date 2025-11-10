@@ -1,40 +1,49 @@
-using UnityEngine;
-using UnityEngine.AI;
+// FloatingMovement.cs (수정된 최종본)
 
-[RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody), typeof(Animator))]
 [RequireComponent(typeof(MonsterAIController))]
-// ★ 1. 클래스 이름 변경
 public class FloatingMovement : MonoBehaviour, IMonsterMovement
 {
-    private NavMeshAgent agent;
+    private Rigidbody rb;
     private Animator animator;
     private MonsterAIController controller;
+
+    private Vector3 targetDestination;
     private float targetSpeed;
+    private float turnSpeed;
+    private float currentSpeed = 0f;
+
+    // ★ 1. (추가) 회전 목표를 독립적으로 저장합니다.
+    private Quaternion targetRotation;
 
     [Header("--- 가속/감속 설정 ---")]
     [SerializeField] private float accelerationRate = 5f;
     [SerializeField] private float decelerationRate = 10f;
 
-    [Header("--- 부유 설정 ---")]
-    [Tooltip("지면(NavMesh)으로부터 얼마나 높이 뜰지 설정")]
-    public float hoverHeight = 3.0f;
-
     private int animSpeedHash;
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         controller = GetComponent<MonsterAIController>();
-        agent.updateRotation = true;
 
-        // ★ 3. (추가) NavMeshAgent의 기본 높이를 설정
-        agent.baseOffset = hoverHeight;
+        rb.useGravity = false;
+        rb.isKinematic = false;
+
+        // ★ 2. (추가) Rigidbody가 물리적으로 회전하는 것을 막습니다. (스크립트로만 제어)
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        // ★ 3. (수정) 초기 회전값을 현재 방향으로 설정
+        targetDestination = transform.position;
+        targetRotation = transform.rotation;
+        targetSpeed = 0f;
     }
 
     private void Start()
     {
-        // Golem과 동일하게 AnimConfig에서 해시를 가져옴
         if (controller.animConfig != null)
         {
             this.animSpeedHash = controller.hashMoveSpeed;
@@ -43,38 +52,71 @@ public class FloatingMovement : MonoBehaviour, IMonsterMovement
         {
             Debug.LogError("FloatingMovement: animConfig가 없습니다!");
         }
+
+        // (FSM이 시작하기 전에 초기화)
+        if (animator != null && this.animSpeedHash != 0)
+        {
+            animator.SetFloat(this.animSpeedHash, 0f);
+        }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        // (수정) Golem과 동일하게 Locomotion은 FSM이 제어하므로 주석 처리
-        float currentSpeed = agent.speed;
+        // --- 1. 속도 계산 ---
         float rate = (currentSpeed < targetSpeed) ? accelerationRate : decelerationRate;
-        agent.speed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.deltaTime * rate);
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, Time.fixedDeltaTime * rate);
 
-        // Gazer도 Locomotion(Float) 파라미터를 쓴다면, FSM이 제어해야 함
-        // animator.SetFloat(this.animSpeedHash, agent.velocity.magnitude);
+        // --- 2. 이동 처리 (물리) ---
+        if (currentSpeed > 0.01f)
+        {
+            Vector3 direction = (targetDestination - rb.position).normalized;
+            rb.MovePosition(rb.position + direction * currentSpeed * Time.fixedDeltaTime);
+        }
+
+        // --- 3. 회전 처리 (물리) ★★★
+        // (속도와 관계없이 항상 부드럽게 목표 지점을 바라봅니다)
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
+
+        // --- 4. 애니메이션 처리 ---
+        // (속도와 관계없이 항상 현재 속도를 전달합니다)
+        if (animator != null && this.animSpeedHash != 0)
+        {
+            animator.SetFloat(this.animSpeedHash, currentSpeed);
+        }
     }
 
-    // (이하 Move, TurnTowards, Stop 함수는 수정할 필요 없음)
+    // Move 함수: 이동 방향으로 targetRotation을 설정
     public void Move(Vector3 destination, float speed)
     {
+        this.targetDestination = destination;
         this.targetSpeed = speed;
-        agent.SetDestination(destination);
+        this.turnSpeed = controller.config.turnSpeed;
+
+        // ★ 4. (수정) 이동 방향을 새로운 '회전 목표'로 설정
+        Vector3 direction = (destination - rb.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            this.targetRotation = Quaternion.LookRotation(direction);
+        }
     }
 
+    // TurnTowards 함수: LookAt() 호출 시, 특정 방향으로 targetRotation을 강제 설정
     public void TurnTowards(Vector3 worldTargetPosition, float turnSpeed)
     {
-        agent.SetDestination(transform.position);
-        transform.LookAt(new Vector3(worldTargetPosition.x, transform.position.y, worldTargetPosition.z));
+        this.turnSpeed = turnSpeed;
+
+        // ★ 5. (수정) 바라볼 방향을 '회전 목표'로 설정
+        Vector3 direction = (worldTargetPosition - rb.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            // (이전 코드의 x=0, z=0 제한을 제거하여 3D로 자유롭게 바라보게 함)
+            this.targetRotation = Quaternion.LookRotation(direction);
+        }
     }
 
+    // Stop 함수: 속도만 0으로 줄임 (회전 목표는 그대로 둠)
     public void Stop()
     {
-        if (agent.hasPath)
-        {
-            agent.ResetPath();
-        }
         this.targetSpeed = 0f;
     }
 }

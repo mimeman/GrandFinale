@@ -8,9 +8,9 @@ public class GazerConfig : MonsterConfig
     [Tooltip("ºö °ø°ÝÀ» ½ÃµµÇÒ ÃÖ´ë »ç°Å¸®")]
     public float beamRange = 15f;
     [Tooltip("ºö Ä³½ºÆÃ ½Ã°£ (Cast3Start -> Cast3End)")]
-    public float beamCastTime = 1.5f;
+    public float beamCastTime = 3.5f;
     [Tooltip("ºö °ø°ÝÀÇ Äð´Ù¿î")]
-    public float beamCooldown = 10f;
+    public float beamCooldown = 20f;
     [Tooltip("ºö ÇÁ¸®ÆÕ (¾×¼Çºö)")]
     public GameObject beamPrefab;
 

@@ -19,7 +19,7 @@ namespace GazerStates
             monster.StopMoving();
             monster.SetAnimFloat(monster.hashMoveSpeed, 0f);
 
-            monster.SetAnimInt(monster.hashIdleType, Random.Range(0, 3));
+            monster.SetAnimFloat(monster.hashIdleType, Random.Range(0, 3));
 
             idleTime = Random.Range(monster.config.idleTimeMin, monster.config.idleTimeMax);
             timer = 0f;
@@ -59,7 +59,7 @@ namespace GazerStates
         public override void ExitState(MonsterAIController monster)
         {
             monster.StopMoving();
-            monster.SetAnimFloat(monster.hashMoveSpeed, 0f);
+            monster.SetAnimFloat(monster.hashMoveSpeed, 0);
         }
     }
 
@@ -176,7 +176,7 @@ namespace GazerStates
                 monster.SetAnimTrigger(GazerAnimHashes.Cast3End);
 
                 // ★ 여기에 빔(gazerConfig.beamPrefab) 생성 로직 ★
-                Debug.LogWarning("액션빔 발사!");
+                Debug.Log("액션빔 발사!");
                 // Object.Instantiate(gazerConfig.beamPrefab, monster.firePoint.position, monster.firePoint.rotation);
             }
 
@@ -237,15 +237,12 @@ namespace GazerStates
         public override void EnterState(MonsterAIController monster)
         {
             timer = 0f;
+            monster.StopMoving();
+            if (monster.fsm is GazerFSM gazerFSM)
+            {
+                gazerFSM.StartHitCooldown(10f);
+            }
 
-            // 50% 확률로 GotHit1 또는 GotHit2
-            if (Random.value > 0.5f)
-                monster.SetAnimTrigger(monster.hashHit); // (GotHit1)
-            else
-                monster.SetAnimTrigger(monster.hashDie2); // (GotHit2, Die2 슬롯 재활용)
-
-            if (monster.TryGetComponent<UnityEngine.AI.NavMeshAgent>(out var agent))
-                agent.speed = monster.config.runSpeed * 0.3f;
         }
         public override ZombieBaseState<MonsterAIController> UpdateState(MonsterAIController monster)
         {

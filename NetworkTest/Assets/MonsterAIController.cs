@@ -68,6 +68,7 @@ public class MonsterAIController : MonoBehaviour
     public int hashBlockStart { get; private set; } 
     public int hashBlockEnd { get; private set; } 
     public int hashHit { get; private set; }
+    public int hashHit2 { get; private set; }
     public int hashDie { get; private set; }
     public int hashDie2 { get; private set; }
     public int hashLookAround { get; private set; }
@@ -147,6 +148,7 @@ public class MonsterAIController : MonoBehaviour
         hashAttack3 = Animator.StringToHash(animConfig.attackTrigger3);
         hashAttack4 = Animator.StringToHash(animConfig.attackTrigger4);
         hashHit = Animator.StringToHash(animConfig.hitTrigger);
+        hashHit2 = Animator.StringToHash(animConfig.hitTrigger2);
         hashDie = Animator.StringToHash(animConfig.dieTrigger);
         hashDie2 = Animator.StringToHash(animConfig.dieTrigger2);
         hashLookAround = Animator.StringToHash(animConfig.lookAroundTrigger);
@@ -215,55 +217,52 @@ public class MonsterAIController : MonoBehaviour
     {
         if (health.IsDead) return;
 
-        // (요청) 조건 1: 플레이어를 감지하지 못했을 때 (예: 저격)
-        if (!sensor.CanSeePlayer)
+        // 1. GazerFSM인지 확인합니다.
+        if (fsm is GazerFSM gazerFSM)
         {
-            SetAnimTrigger(hashHit);
-            ChangeState(fsm.HitState);
-            return;
-        }
+            // --- 몬스터가 Gazer일 경우 ---
 
-        // --- (이하는 플레이어를 감지한 상황) ---
-
-        // 1. GolemFSM인지 확인
-        var golemFSM = fsm as GolemFSM;
-        if (golemFSM != null)
-        {
-            // (골렘일 때)
-            var blockState = CurrentState as GolemStates.Block;
-
-            // 2. 만약 "Block" 상태라면
-            if (blockState != null)
+            // 2. (요청) Gazer의 10초 쿨다운이 돌고 있는지 확인
+            if (gazerFSM.IsHitOnCooldown)
             {
-                // (요청) "취약" 단계일 때만 피격당함
-                if (blockState.CurrentPhase == GolemStates.Block.Phase.VulnerableCheck)
-                {
-                    SetAnimTrigger(hashHit);
-                    ChangeState(fsm.HitState);
-                }
-                // "방어" 또는 "돌진" 중에는 피격 무시
-                return;
+                Debug.Log("Gazer Hit: 쿨다운 중... 경직 무시.");
+                return; // 쿨다운 중이면 경직(Hit 상태)에 걸리지 않음
             }
-            // 3. (요청) Block 상태가 아닐 때 (예: Trace, Attack)
-            //    Hit 대신 Block 상태로 전환 (쿨다운 확인)
+
+            // 3. (요청) Gazer의 HP 임계점을 확인
+            float hpPercent = health.CurrentHP / health._maxHP;
+            bool thresholdCrossed = gazerFSM.CheckAndTriggerThreshold(hpPercent);
+
+            if (thresholdCrossed)
+            {
+                // 4. (경직 발동) HP 임계점에 도달했습니다!
+
+                // (요청) 플레이어를 감지 못했어도 강제로 쫒아가도록 설정
+                if (!sensor.CanSeePlayer && player != null)
+                {
+                    sensor.ForceDetection(player.transform.position);
+                }
+
+                // (요청) Hit1 / Hit2 랜덤 호출
+                if (Random.value > 0.5f)
+                    SetAnimTrigger(hashHit);
+                else
+                    SetAnimTrigger(hashHit2);
+
+                // Hit 상태로 전환 (GazerStates.Hit가 쿨다운을 10초로 설정할 것임)
+                ChangeState(fsm.HitState);
+            }
             else
             {
-                if (golemFSM.IsBlockOnCooldown)
-                {
-                    Debug.Log("방어 쿨다운 중... 피격!");
-                    // (쿨다운 중일 땐 Hit 애니메이션 실행)
-                    SetAnimTrigger(hashHit);
-                    ChangeState(fsm.HitState);
-                    return;
-                }
-
-                // ★ (수정) "Hit" 대신 "Block" 상태로 전환
-                ChangeState(fsm.BlockState);
+                // (경직 무시) HP 임계점이 아닌 일반 데미지
+                // Gazer는 임계점에만 반응하므로, 일반 데미지는 무시합니다.
+                Debug.Log("Gazer Hit: HP 임계점이 아니므로 경직 무시.");
             }
         }
-        // 4. Golem이 아닌 몬스터(좀비, 식물)
         else
         {
+            // --- 몬스터가 Gazer가 아닐 경우 (예: 좀비, 골렘 등) ---
+            // 2. 다른 몬스터들은 기존 로직대로 매번 피격당합니다.
             SetAnimTrigger(hashHit);
             ChangeState(fsm.HitState);
         }
@@ -302,8 +301,21 @@ public class MonsterAIController : MonoBehaviour
     private void HandleDeath()
     {
         StopAllCoroutines();
-        if (Random.value > 0.5f) SetAnimTrigger(hashDie); // "Death1"
-        else SetAnimTrigger(hashDie2); // "Death2"
+        if (string.IsNullOrEmpty(animConfig.dieTrigger2))
+        {
+            // 1. DieTrigger2가 비어있는 경우 (Gazer 등 Death 애니메이션이 1개인 몬스터)
+            //    config에 설정된 첫 번째 dieTrigger (hashDie)만 실행합니다.
+            SetAnimTrigger(hashDie);
+        }
+        else
+        {
+            // 2. DieTrigger2가 설정되어 있는 경우 (Death 애니메이션이 2개 이상인 몬스터)
+            //    기존처럼 50% 확률로 랜덤 실행합니다.
+            if (Random.value > 0.5f)
+                SetAnimTrigger(hashDie); // "Death1"
+            else
+                SetAnimTrigger(hashDie2); // "Death2"
+        }
         ChangeState(fsm.DieState);
     }
     #endregion

@@ -28,9 +28,11 @@ public class MonsterAnimationConfig : ScriptableObject
 
     [Space(10)]
     [Tooltip("피격 트리거")]
-    public string hitTrigger = "Hit";
+    public string hitTrigger = "GotHit";
+    public string hitTrigger2 = "GotHit2";
+
     [Tooltip("사망 트리거 또는 Bool (트리거 권장)")]
-    public string dieTrigger = "Die"; // (기존 좀비 Die Bool과 이름이 같음)
+    public string dieTrigger = "Death1"; // (기존 좀비 Die Bool과 이름이 같음)
 
     [Tooltip("사망 2번 트리거")]
     public string dieTrigger2 = "Death2";

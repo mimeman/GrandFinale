@@ -7,9 +7,17 @@ public class GazerFSM : MonsterFSM
     // --- 쿨다운 타이머 ---
     private float beamCooldownTimer = 0f;
     private float strafeCooldownTimer = 0f;
+    private float hitCooldownTimer = 0f;
+
+    // ★★★ 아래 3줄 (HP 임계점 플래그) 추가 ★★★
+    private bool canTriggerHit90 = true;
+    private bool canTriggerHit60 = true;
+    private bool canTriggerHit30 = true;
+    public bool IsHitOnCooldown => hitCooldownTimer > 0;
 
     public bool IsBeamOnCooldown => beamCooldownTimer > 0;
     public bool IsStrafeOnCooldown => strafeCooldownTimer > 0;
+    public void StartHitCooldown(float duration) { hitCooldownTimer = duration; }
 
     public void StartBeamCooldown(float duration) { beamCooldownTimer = duration; }
     public void StartStrafeCooldown(float duration) { strafeCooldownTimer = duration; }
@@ -18,6 +26,42 @@ public class GazerFSM : MonsterFSM
     {
         if (beamCooldownTimer > 0) beamCooldownTimer -= Time.deltaTime;
         if (strafeCooldownTimer > 0) strafeCooldownTimer -= Time.deltaTime;
+        if (hitCooldownTimer > 0) hitCooldownTimer -= Time.deltaTime;
+    }
+    /// <summary>
+    /// Gazer의 HP 임계점을 확인하고, 경직이 발동되어야 하는지 알려줍니다.
+    /// </summary>
+    /// <returns>경직이 발동되면 true</returns>
+    public bool CheckAndTriggerThreshold(float hpPercent)
+    {
+        // 쿨다운이 아니며, HP가 30% 이하이고, 30% 플래그가 켜져있을 때
+        if (hpPercent <= 0.3f && canTriggerHit30)
+        {
+            canTriggerHit30 = false; // 플래그를 끔 (다음엔 발동 안 함)
+            return true; // 경직 발동!
+        }
+        // 60%
+        if (hpPercent <= 0.6f && canTriggerHit60)
+        {
+            canTriggerHit60 = false;
+            return true; // 경직 발동!
+        }
+        // 90%
+        if (hpPercent <= 0.9f && canTriggerHit90)
+        {
+            canTriggerHit90 = false;
+            return true; // 경직 발동!
+        }
+
+        return false; // 경직 발동 조건이 아님
+    }
+
+    // (참고: 몬스터가 리스폰될 때 이 플래그들을 다시 true로 켜줘야 합니다.)
+    public void ResetThresholds()
+    {
+        canTriggerHit90 = true;
+        canTriggerHit60 = true;
+        canTriggerHit30 = true;
     }
 
     // --- 상태 정의 ---

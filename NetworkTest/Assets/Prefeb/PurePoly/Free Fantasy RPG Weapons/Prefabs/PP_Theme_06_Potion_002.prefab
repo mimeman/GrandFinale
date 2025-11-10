@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 626826552349492004}
   - component: {fileID: 7254994664134611593}
   - component: {fileID: -8788722262167286745}
+  - component: {fileID: 3875683644559568975}
   m_Layer: 0
   m_Name: PP_Theme_06_Potion_002
   m_TagString: Untagged
@@ -207,11 +208,11 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.172087
+  m_Radius: 1.5
   m_Center: {x: 0.0000015087426, y: 0.18434678, z: 0.00053283945}
 --- !u!114 &-8788722262167286745
 MonoBehaviour:
@@ -225,5 +226,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fac4f4b6aac1b94c81bcfd431a868a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vfxObject: {fileID: 0}
   itemData: {fileID: 11400000, guid: b8290487f748f6048afcb78d4015aac5, type: 2}
   addToInventoryInstead: 1
+--- !u!54 &3875683644559568975
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771452789413926460}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

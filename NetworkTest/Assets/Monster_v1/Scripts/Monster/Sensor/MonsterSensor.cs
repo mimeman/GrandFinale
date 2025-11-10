@@ -49,33 +49,35 @@ public class MonsterSensor : MonoBehaviour
 
         bool playerDetected = false;
 
+        // 1. 거리 감지 (수정 없음)
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, config.fovRange, targetMask);
 
         if (rangeChecks.Length > 0)
         {
-            // Debug.Log($"<color=green>1. 거리 감지 성공...</color>"); // (디버그 로그는 잠시 비활성화)
-
             Transform target = rangeChecks[0].transform;
 
-            // --- 수정된 '눈' 위치 및 방향 계산 ---
-            // 몬스터의 '눈' 위치를 계산합니다. (transform.up을 사용해 경사로에서도 작동)
+            // 2. '눈' 위치 계산 (수정 없음)
             Vector3 eyePosition = transform.position + transform.up * eyeHeight;
-
-            // '눈'에서 '타겟'으로 향하는 방향을 계산합니다.
             Vector3 directionToTarget = (target.position - eyePosition).normalized;
-            // --- 수정 끝 ---
 
-            float angle = Vector3.Angle(transform.forward, directionToTarget);
+            // (어떻게) 몬스터의 정면 방향과 타겟 방향에서 Y(높이) 값을 0으로 만듭니다.
+            Vector3 monsterForward_2D = transform.forward;
+            monsterForward_2D.y = 0;
+
+            Vector3 directionToTarget_2D = directionToTarget;
+            directionToTarget_2D.y = 0;
+
+            // (왜) 3D 각도(Vector3.Angle) 대신, Y축이 무시된 2D 각도를 계산합니다.
+            //     이래야 몬스터가 3미터 위에 떠서 아래를 봐도 수평 각도만 체크합니다.
+            float angle = Vector3.Angle(monsterForward_2D, directionToTarget_2D);
 
             if (angle < config.fovAngle / 2)
             {
-                // Debug.Log($"<color=green>2. 시야각 감지 성공...</color>"); // (디버그 로그는 잠시 비활성화)
-
-                // '눈'에서 '타겟'까지의 거리를 계산합니다.
+                // 4. 장애물 감지 (수정 없음)
+                // (왜) 장애물(벽, 기둥)은 3D로 체크해야 하므로,
+                //     원래의 3D 방향(directionToTarget)을 그대로 사용합니다.
                 float distanceToTarget = Vector3.Distance(eyePosition, target.position);
 
-                // --- 수정된 '눈' 위치에서 레이캐스트 ---
-                // 'transform.position' 대신 'eyePosition'에서 레이캐스트를 쏩니다.
                 if (Physics.Raycast(eyePosition, directionToTarget, out RaycastHit hit, distanceToTarget, obstructionMask))
                 {
                     Debug.LogWarning($"<color=red>3. 장애물 감지:</color> 시야가 '{hit.collider.name}'에 막혔습니다!");
@@ -83,24 +85,25 @@ public class MonsterSensor : MonoBehaviour
                 else
                 {
                     playerDetected = true;
-                    TargetLastPosition = target.position; // 마지막 위치 저장
+                    TargetLastPosition = target.position;
                     Debug.Log("<color=cyan>★★★ 최종 감지 성공! ★★★</color>");
                 }
             }
-            //else
-            //{
-            //    Debug.LogWarning($"<color=orange>2. 시야각 감지 실패...</color>"); // (디버그 로그는 잠시 비활성화)
-            //}
         }
-        //else
-        //{
-        //    Debug.Log($"<color=red>1. 거리 감지 실패...</color>"); // (디버그 로그는 잠시 비활성화)
-        //}
 
         CanSeePlayer = playerDetected;
-        // Debug.Log($"[Sensor Report] 최종 감지 결과: CanSeePlayer = {CanSeePlayer}"); // (디버그 로그는 잠시 비활성화)
     }
 
+    /// <summary>
+    /// 플레이어를 강제로 감지 상태로 만들고 마지막 위치를 갱신합니다.
+    /// (예: 피격 시)
+    /// </summary>
+    public void ForceDetection(Vector3 targetPosition)
+    {
+        CanSeePlayer = true;
+        TargetLastPosition = targetPosition;
+        Debug.LogWarning("강제 감지 발동!");
+    }
     // 디버그용 기즈모 (AI 컨트롤러에서 옮겨옴)
     private void OnDrawGizmosSelected()
     {

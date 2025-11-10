@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: REL_002
   m_EditorClassIdentifier: 
   itemID: REL_002
-  itemName: "\uB291\uB300\uC758 \uB4B7\uB2E4\uB9AC"
-  itemType: Relic
+  itemName: "\uBCC0\uC774 \uC2DD\uBB3C\uC758 \uD3EC\uC790 \uC8FC\uBA38\uB2C8"
+  itemType: Junk
   grade: Common
   maxStack: 3
-  description: "\uC2E0\uACBD \uC2E0\uD638\uC640 \uB3D9\uAE30\uD654\uB418\uC5B4 \uB2E4\uB9AC
-    \uADFC\uB825\uC744 \uAC15\uD654\uD569\uB2C8\uB2E4. (\uC774\uB3D9 \uC18D\uB3C4
-    \uC99D\uAC00)"
-  iconPath: Icons/Relics/CyberLegs
-  grantedAbility: {fileID: 11400000, guid: e8a79c80584477d4880e016f7f5d2a14, type: 2}
-  dropPrefab: {fileID: 100018019714611367, guid: 3441d49fa3ca7744a95e9dfd2aba3f54, type: 3}
+  description: "\uC720\uB3C5\uD574 \uBCF4\uC774\uC9C0\uB9CC, \uC9C0\uAE08 \uB2F9\uC7A5
+    \uC4F8\uBAA8\uB294 \uC5C6\uC5B4 \uBCF4\uC778\uB2E4."
+  iconPath: Icons/Junk/SporeSac
+  grantedAbility: {fileID: 11400000, guid: f4a49548d6276204eb4db60f3a915060, type: 2}

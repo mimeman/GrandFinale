@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: REL_006
   m_EditorClassIdentifier: 
   itemID: REL_006
-  itemName: "\uD734\uB300\uC6A9 \uC5ED\uC7A5 \uC0DD\uC131\uAE30"
+  itemName: "\uC81C\uD53C\uB85C\uC2A4 \uCD94\uC9C4\uAE30"
   itemType: Relic
-  grade: Rare
+  grade: Epic
   maxStack: 1
-  description: "\uC77C\uC2DC\uC801\uC778 \uBC29\uC5B4\uB9C9\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4.
-    [\uC561\uD2F0\uBE0C \uC2AC\uB86F] \uC0AC\uC6A9."
-  iconPath: Icons/Relics/FieldGenerator
-  grantedAbility: {fileID: 11400000, guid: e8d9faffde32a8440ad6ff172894a48f, type: 2}
+  description: "\uACE0\uB300 \uAE30\uC220\uB85C \uB9CC\uB4E4\uC5B4\uC9C4 \uCD94\uC9C4\uAE30.
+    \uC774\uB3D9 \uC18D\uB3C4\uB97C \uB300\uD3ED \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  iconPath: Icons/Relics/Thruster
+  grantedAbility: {fileID: 11400000, guid: 4564effd17a8bfc49ada3de13a2d8054, type: 2}

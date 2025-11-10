@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_006
   m_EditorClassIdentifier: 
   abilityID: ABIL_006
-  abilityName: "(\uBCF8\uC778) \uC5D0\uB108\uC9C0 \uC2E4\uB4DC"
-  activationType: Active
-  abilityLogicID: Add_Shield
-  param_Key: 100
-  param_ValueA: 10
-  param_ValueB: 20
+  abilityName: "(\uBCF8\uC778) \uC774\uB3D9 \uC18D\uB3C4 \uC99D\uAC00 (\uB300)"
+  activationType: Passive
+  abilityLogicID: Stat_Percent
+  param_Key: MoveSpeed
+  param_ValueA: 30
+  param_ValueB: 
   param_ValueC: 
-  resourcePath: Prefabs/VFX/EnergyShield
+  resourcePath: 

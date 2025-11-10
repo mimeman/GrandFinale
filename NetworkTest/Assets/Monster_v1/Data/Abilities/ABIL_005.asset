@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_005
   m_EditorClassIdentifier: 
   abilityID: ABIL_005
-  abilityName: "(\uB109\uBC31) \uC5ED\uCD94\uC9C4\uD30C"
-  activationType: Active
-  abilityLogicID: Cone_Knockback
-  param_Key: 5
+  abilityName: "(\uBCF8\uC778) \uC774\uB3D9 \uC18D\uB3C4 \uC99D\uAC00 (\uC18C)"
+  activationType: Passive
+  abilityLogicID: Stat_Percent
+  param_Key: MoveSpeed
   param_ValueA: 10
-  param_ValueB: 8
+  param_ValueB: 
   param_ValueC: 
-  resourcePath: Prefabs/VFX/RepulsorWave
+  resourcePath: 

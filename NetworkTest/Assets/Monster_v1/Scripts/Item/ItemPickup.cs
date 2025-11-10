@@ -4,9 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class ItemPickup : MonoBehaviour
 {
-    [Header("VFX (선택 사항)")]
-    [Tooltip("아이템 아우라 등 시각 효과 오브젝트")]
-    [SerializeField] private GameObject vfxObject;
+
 
     [Header("이 아이템의 데이터")]
     [Tooltip("여기에 RelicData ScriptableObject를 끌어다 놓으세요.")]
@@ -31,10 +29,7 @@ public class ItemPickup : MonoBehaviour
 
         // 1. (수정) Awake에서는 GameManager.Instance를 호출하지 않습니다. (순서 문제 방지)
 
-        if (vfxObject != null)
-        {
-            vfxObject.SetActive(true);
-        }
+
     }
 
     private void OnTriggerEnter(Collider other)

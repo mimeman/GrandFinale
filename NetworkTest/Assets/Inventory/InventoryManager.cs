@@ -17,6 +17,9 @@ public class InventoryManager : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private GameObject inventoryUI; // 'Inventory info' 오브젝트를 연결할 곳
 
+    [Header("Loot Settings")]
+    [SerializeField] private GameObject genericLootPrefab;
+
     [Header("Player Control References")]
     [SerializeField] private PlayerInputs playerInput;     // PlayerInputs.cs
     [SerializeField] private CharacterMove characterMove;   // CharacterMove.cs (이동 제어)
@@ -145,7 +148,7 @@ public class InventoryManager : MonoBehaviour
         if (itemToDrop == null) return;
 
         // 1. (중요!) RelicData에 dropPrefab이 설정되어 있는지 확인
-        if (itemToDrop.dropPrefab != null)
+        if (genericLootPrefab != null)
         {
             // 2. 플레이어 위치 찾기 (임시로 "Player" 태그 사용)
             GameObject player = GameObject.FindWithTag("Player");
@@ -162,8 +165,19 @@ public class InventoryManager : MonoBehaviour
                 dropPosition = Camera.main.transform.position + (Camera.main.transform.forward * 1f);
             }
 
-            // 3. 3D 모델(dropPrefab)을 월드에 생성(Instantiate)
-            Instantiate(itemToDrop.dropPrefab, dropPosition, Quaternion.identity);
+            GameObject orbInstance = Instantiate(genericLootPrefab, dropPosition, Quaternion.identity);
+
+            ItemPickup pickupScript = orbInstance.GetComponent<ItemPickup>();
+            if (pickupScript != null)
+            {
+                pickupScript.itemData = itemToDrop; // [중요] 이 구체가 어떤 아이템인지 설정
+            }
+
+            LootOrbVisuals visualScript = orbInstance.GetComponent<LootOrbVisuals>();
+            if (visualScript != null)
+            {
+                visualScript.Initialize(itemToDrop.grade); // [중요] 등급에 맞는 VFX 활성화
+            }
 
             // 4. 인벤토리에서 아이템 제거
             RemoveItem(slotIndex); // (이 함수는 OnInventoryChanged를 호출함)
@@ -171,7 +185,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning(itemToDrop.itemName + "에 dropPrefab이 설정되지 않아 버릴 수 없습니다.");
+            Debug.LogWarning("InventoryManager에 genericLootPrefab이 설정되지 않아 아이템을 버릴 수 없습니다.");
         }
     }
 }

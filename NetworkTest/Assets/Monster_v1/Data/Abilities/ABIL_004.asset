@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_004
   m_EditorClassIdentifier: 
   abilityID: ABIL_004
-  abilityName: "(\uC544\uAD70) \uCE58\uC720 \uC624\uB77C"
+  abilityName: "(\uBCF8\uC778) \uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00"
   activationType: Passive
-  abilityLogicID: Aura_Heal_Ally
-  param_Key: 5
-  param_ValueA: 3
-  param_ValueB: 1
+  abilityLogicID: Stat_Add
+  param_Key: MaxHealth
+  param_ValueA: 50
+  param_ValueB: 
   param_ValueC: 
-  resourcePath: Prefabs/VFX/HealAura
+  resourcePath: 

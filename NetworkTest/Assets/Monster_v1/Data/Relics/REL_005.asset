@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: REL_005
   m_EditorClassIdentifier: 
   itemID: REL_005
-  itemName: "\uBC14\uB78C \uC815\uB839\uC758 \uD314\uCC0C"
+  itemName: "\uB0A1\uC740 \uC11C\uBCF4 \uBAA8\uD130"
   itemType: Relic
-  grade: Rare
+  grade: Common
   maxStack: 1
-  description: "\uBC14\uB78C\uC758 \uD798\uC744 \uC751\uCD95\uD569\uB2C8\uB2E4. [\uC561\uD2F0\uBE0C
-    \uC2AC\uB86F] \uC7A5\uCC29 \uC2DC \uC804\uBC29\uC758 \uC801\uC744 \uBC00\uC5B4\uB0C5\uB2C8\uB2E4."
-  iconPath: Icons/Relics/WindBracer
-  grantedAbility: {fileID: 11400000, guid: 3ca859f210d31624caea59c1dd386140, type: 2}
+  description: "\uC2E0\uCCB4\uC5D0 \uB3D9\uB825\uC744 \uBCF4\uC870\uD558\uC5EC \uC774\uB3D9
+    \uC18D\uB3C4\uB97C \uC18C\uD3ED \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  iconPath: Icons/Relics/ServoMotor
+  grantedAbility: {fileID: 11400000, guid: cd0786daadb860244bc54cb2016863cc, type: 2}

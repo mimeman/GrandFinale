@@ -6,8 +6,10 @@ public class MonsterHealth : MonoBehaviour
 {
     #region 필드
     [Header("아이템 드랍 설정")]
-    [Tooltip("몬스터가 죽었을 때 떨어뜨릴 아이템 프리팹 (ItemPickup 스크립트 포함)")]
-    public GameObject itemPickupPrefab;
+    [Tooltip("모든 아이템이 공용으로 사용할 'GenericLootDrop' 프리팹")]
+    [SerializeField] private GameObject genericLootPrefab;
+
+
 
     public float _maxHP { get; private set; }
     private float _defense;
@@ -160,32 +162,77 @@ public class MonsterHealth : MonoBehaviour
             Debug.LogWarning("LootTable이 비어있습니다.", this);
             return;
         }
+        if (genericLootPrefab == null)
+        {
+            Debug.LogError($"[드랍 실패] {gameObject.name}에 genericLootPrefab이 연결되지 않았습니다!", this);
+            return;
+        }
+
+        // 1. [★핵심★] 몬스터 위치 (X, Z)를 기준으로 지면의 Y 좌표를 찾습니다.
+        float groundY = transform.position.y; // 기본값은 몬스터 피벗의 Y
+        RaycastHit hit;
+
+        // 몬스터의 위치에서 아래로 100m 레이캐스트를 쏴서 지형을 찾습니다.
+        // LayerMask를 지정하면 더 좋습니다. (예: LayerMask.GetMask("Ground"))
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out hit, 100f))
+        {
+            // 레이가 맞은 지점의 Y 좌표를 사용합니다.
+            groundY = hit.point.y;
+            Debug.Log($"[Raycast] 지면 찾음: Y = {groundY}");
+        }
+        else
+        {
+            Debug.LogWarning("지면을 찾지 못했습니다. 아이템이 공중에 생성될 수 있습니다.");
+        }
+
+
+        float scatterDistance = 1.0f; // 아이템을 흩뿌릴 범위
 
         foreach (var entry in lootTable.items)
         {
-            if (entry.item == null)
-            {
-                Debug.LogWarning("LootTable에 비어있는 아이템 슬롯이 있습니다.", this);
-                continue;
-            }
+            if (entry.item == null) continue;
 
-            // 1. 드랍 확률 체크 (LootTable.cs 기반)
             if (Random.Range(0f, 100f) <= entry.dropChance)
             {
-                // 2. RelicData에서 드랍 프리팹 가져오기 (RelicData.cs 기반)
-                GameObject prefabToSpawn = entry.item.dropPrefab;
-                if (prefabToSpawn != null)
-                {
-                    // 3. 몬스터 위치 (공중일 수 있음)에 생성
-                    //    -> Rigidbody가 중력으로 떨어뜨릴 것입니다.
-                    Vector3 spawnPos = transform.position + Vector3.up * 1f;
-                    GameObject spawnedItem = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+                GameObject prefabToSpawn = genericLootPrefab;
 
-                    Debug.Log($"{entry.item.itemName} 드랍! (확률: {entry.dropChance}%)");
+                // 2. 랜덤 오프셋 계산 (흩뿌림)
+                Vector2 randomCircle = Random.insideUnitCircle * scatterDistance;
+
+                // 3. 생성 위치를 레이캐스트로 찾은 지면(groundY)으로 고정합니다.
+                Vector3 spawnPos = transform.position;
+                spawnPos.x += randomCircle.x;
+                spawnPos.z += randomCircle.y;
+
+                // [★핵심★] Y 좌표를 찾은 지면 + 구체의 반지름(0.5f)만큼 올려줍니다.
+                // 구체 콜라이더 중심이 Y=0.5이므로, 구체 바닥이 groundY에 닿게 됩니다.
+                spawnPos.y = groundY + 0.5f;
+
+                Debug.Log($"<color=cyan>[LootSpawn] 드랍 시작: {entry.item.itemName}, Grade: {entry.item.grade}</color>");
+
+                GameObject spawnedItem = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+                Debug.Log($"<color=cyan>[LootSpawn] {entry.item.itemName} 드랍! (생성 Y: {spawnPos.y}, 이름: {spawnedItem.name})</color>");
+
+
+                // 4. 생성된 구체에 데이터 주입
+                ItemPickup pickupScript = spawnedItem.GetComponent<ItemPickup>();
+                if (pickupScript != null)
+                {
+                    pickupScript.itemData = entry.item;
+                    pickupScript.addToInventoryInstead = true;
+                    Debug.Log($"<color=cyan>[LootSpawn] ItemPickup 데이터 주입 완료.</color>");
+                }
+
+                // 5. VFX 스크립트에 등급 주입 (VFX 위치 제어는 LootOrbVisuals가 전담)
+                LootOrbVisuals visualScript = spawnedItem.GetComponent<LootOrbVisuals>();
+                if (visualScript != null)
+                {
+                    visualScript.Initialize(entry.item.grade);
+                    Debug.Log($"<color=cyan>[LootSpawn] LootOrbVisuals.Initialize('{entry.item.grade}') 호출 완료.</color>");
                 }
                 else
                 {
-                    Debug.LogWarning($"{entry.item.itemName}은(는) 드랍되었지만, RelicData에 dropPrefab이 할당되지 않았습니다.", this);
+                    Debug.LogError("[LootSpawn ERROR] GenericLootDrop 프리팹에 LootOrbVisuals.cs가 없습니다!");
                 }
             }
         }

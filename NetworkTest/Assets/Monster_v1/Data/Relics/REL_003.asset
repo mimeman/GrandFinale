@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: REL_003
   m_EditorClassIdentifier: 
   itemID: REL_003
-  itemName: "\uACE0\uB300 \uB9C8\uBC95\uC11D \uC870\uAC01"
-  itemType: Relic
-  grade: Rare
+  itemName: "\uAE08\uC774 \uAC04 \uAC8C\uC774\uC800 \uB80C\uC988"
+  itemType: Junk
+  grade: Common
   maxStack: 1
-  description: "\uACE0\uB300 \uBB38\uBA85\uC758 \uB3D9\uB825\uC6D0. \uC561\uD2F0\uBE0C
-    \uC2AC\uB86F \uB2A5\uB825 \uAC1C\uBC29. (\uD50C\uB77C\uC988\uB9C8\uD0C4)"
-  iconPath: Icons/Relics/Spellstone
-  grantedAbility: {fileID: 11400000, guid: 83bb426d741cdc545a3da71c4129786b, type: 2}
-  dropPrefab: {fileID: 8512130858803666336, guid: 0c90db8fea3862442b559c97aca37ba7, type: 3}
+  description: "\uBE5B\uC744 \uC783\uC740 \uAC8C\uC774\uC800\uC758 \uB208. \uC12C\uB729\uD55C
+    \uAE30\uC6B4\uC774 \uAC10\uB3C8\uB2E4."
+  iconPath: Icons/Junk/GazerLens
+  grantedAbility: {fileID: 11400000, guid: 24ff66fc2a3d5fd4181f2edf192fe69b, type: 2}

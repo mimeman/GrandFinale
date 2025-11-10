@@ -34,7 +34,7 @@ public class MonsterConfig : ScriptableObject
     [Header("이동 관련")]
     public float walkSpeed = 1.5f;
     public float runSpeed = 3f;
-    public float turnSpeed = 5f;
+    public float turnSpeed = 2000f;
 
     [Header("공격 패턴")]
     public float attackDelay = 0.5f;

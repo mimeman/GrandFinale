@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: REL_008
   m_EditorClassIdentifier: 
   itemID: REL_008
-  itemName: "\uC5F0\uC18C \uCF54\uC5B4"
+  itemName: "??\uC758 \uC120\uAE00\uB77C\uC2A4"
   itemType: Relic
-  grade: Epic
+  grade: Rare
   maxStack: 1
-  description: "\uBAB8 \uC8FC\uC704\uC5D0 \uB04A\uC784\uC5C6\uC774 \uD0C0\uC624\uB974\uB294
-    \uC5D0\uB108\uC9C0 \uD544\uB4DC\uB97C \uB450\uB985\uB2C8\uB2E4."
-  iconPath: Icons/Relics/BurningCore
-  grantedAbility: {fileID: 11400000, guid: 4be17acc061198d498048d31e094265c, type: 2}
+  description: "\uBAAC\uC2A4\uD130\uC758 \uC57D\uC810 \uB370\uC774\uD130\uB97C \uBD84\uC11D\uD558\uC5EC
+    \uBAA8\uB4E0 \uACF5\uACA9\uC758 \uD53C\uD574\uB7C9\uC744 \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  iconPath: Icons/Relics/DataChip
+  grantedAbility: {fileID: 11400000, guid: 08a7cd9920c1df44b83a6dbef8f9e1a1, type: 2}

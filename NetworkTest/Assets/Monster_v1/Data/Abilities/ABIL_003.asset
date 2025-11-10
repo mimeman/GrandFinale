@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_003
   m_EditorClassIdentifier: 
   abilityID: ABIL_003
-  abilityName: "(\uD654\uC5FC) \uD50C\uB77C\uC988\uB9C8\uD0C4 \uBC1C\uC0AC"
-  activationType: Active
-  abilityLogicID: Projectile
-  param_Key: 25
-  param_ValueA: 2
-  param_ValueB: 15
+  abilityName: "(\uAE30\uB2A5 \uC5C6\uC74C)"
+  activationType: Passive
+  abilityLogicID: 
+  param_Key: 
+  param_ValueA: 
+  param_ValueB: 
   param_ValueC: 
-  resourcePath: Prefabs/Abilities/PlasmaBolt
+  resourcePath: 

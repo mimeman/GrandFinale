@@ -19,8 +19,4 @@ public class RelicData : ScriptableObject
 
     [Header("★핵심 연동★")]
     public AbilityData grantedAbility;
-
-    [Header("월드 드랍 설정")]
-    [Tooltip("땅에 떨어질 때 생성될 3D 모델 프리팹 (ItemPickup.cs 포함)")]
-    public GameObject dropPrefab;
 }

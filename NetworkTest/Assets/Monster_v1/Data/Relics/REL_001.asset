@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: REL_001
   m_EditorClassIdentifier: 
   itemID: REL_001
-  itemName: "\uC624\uD06C\uC758 \uC2EC\uC7A5"
-  itemType: Relic
+  itemName: "\uBD80\uC11C\uC9C4 \uACE8\uB818 \uC11D\uD310"
+  itemType: Junk
   grade: Common
   maxStack: 1
-  description: "\uCC29\uC6A9\uC790\uC758 \uCD5C\uB300 \uC0DD\uCCB4 \uC5D0\uB108\uC9C0\uB97C
-    \uC99D\uD3ED\uC2DC\uD0B5\uB2C8\uB2E4. (\uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00)"
-  iconPath: Icons/Relics/AuxHeart
-  grantedAbility: {fileID: 11400000, guid: ce00df0cc125c4b45a192fde1571fe69, type: 2}
-  dropPrefab: {fileID: 3771452789413926460, guid: 589b0e358669b3d48a16ab26d6f3e8a8, type: 3}
+  description: "\uACE0\uB300 \uBB38\uC790\uAC00 \uC0C8\uACA8\uC9C4 \uC11D\uD310 \uC870\uAC01.
+    \uC9C0\uAE08\uC740 \uB3D9\uB825 \uBC18\uC751\uC774 \uC5C6\uB2E4."
+  iconPath: Icons/Junk/GolemShard
+  grantedAbility: {fileID: 11400000, guid: 1d4a70dfd428e5845a5b252068c9cfea, type: 2}

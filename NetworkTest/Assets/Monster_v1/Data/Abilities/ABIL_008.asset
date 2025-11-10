@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_008
   m_EditorClassIdentifier: 
   abilityID: ABIL_008
-  abilityName: "(\uD654\uC5FC) \uC5F0\uC18C \uC624\uB77C"
+  abilityName: "(\uBCF8\uC778) \uBAA8\uB4E0 \uD53C\uD574\uB7C9 \uC99D\uAC00"
   activationType: Passive
-  abilityLogicID: Aura_Damage_Enemy
-  param_Key: 3
-  param_ValueA: 2.5
-  param_ValueB: 0.5
+  abilityLogicID: Stat_Percent
+  param_Key: AllDamage
+  param_ValueA: 15
+  param_ValueB: 
   param_ValueC: 
-  resourcePath: Prefabs/VFX/FireAura
+  resourcePath: 

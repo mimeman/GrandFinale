@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ABIL_001
   m_EditorClassIdentifier: 
   abilityID: ABIL_001
-  abilityName: "(\uBCF8\uC778) \uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00"
+  abilityName: "(\uAE30\uB2A5 \uC5C6\uC74C)"
   activationType: Passive
-  abilityLogicID: Stat_Add
-  param_Key: MaxHealth
-  param_ValueA: 50
+  abilityLogicID: 
+  param_Key: 
+  param_ValueA: 
   param_ValueB: 
   param_ValueC: 
   resourcePath: 

@@ -829,11 +829,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a02d6db46f7546a79ad04c20ce00eb4, type: 3}
---- !u!1 &644673497 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2649117589146016420, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
-  m_PrefabInstance: {fileID: 2067179752}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &925495769 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3733449208113481832, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
@@ -1134,7 +1129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fdf9378a38a1c945bbfe43fa9d6db7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPickupPrefab: {fileID: 644673497}
+  genericLootPrefab: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
   blockTriggerTime: 2
   blockTriggerHits: 5
   OnBlock:
@@ -1174,6 +1169,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 500099897}
     m_Modifications:
+    - target: {fileID: 139227241308200751, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.395
+      objectReference: {fileID: 0}
     - target: {fileID: 180618760434608227, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -1185,6 +1184,10 @@ PrefabInstance:
     - target: {fileID: 248145079801958446, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 248145079801958446, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 278182168793559624, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
@@ -1237,6 +1240,10 @@ PrefabInstance:
     - target: {fileID: 2459826018316447714, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2459826018316447714, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2526935986058520861, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
@@ -1312,7 +1319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3733449208113481832, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3733449208113481832, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_TagString
@@ -1325,6 +1332,10 @@ PrefabInstance:
     - target: {fileID: 3794758068087414514, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794758068087414514, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4072433747685872338, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1438,6 +1449,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5690480351478227223, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5805170755910617454, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -1445,6 +1460,10 @@ PrefabInstance:
     - target: {fileID: 5875649062274167612, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875649062274167612, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5889377509691904738, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
@@ -1525,6 +1544,10 @@ PrefabInstance:
     - target: {fileID: 7678684275483205509, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678684275483205509, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7996050135190243580, guid: 5350d3f8ef67a4129b14fcd57cd84ab9, type: 3}
       propertyPath: m_Layer
@@ -1628,10 +1651,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 979634176}
     m_Modifications:
+    - target: {fileID: 905107479807137120, guid: 035b07a0a61fa3c41a21e4468e691b39, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 4587d570305cd4f42a6bf9eb7fdfa9ac, type: 2}
     - target: {fileID: 3743490569067870962, guid: 035b07a0a61fa3c41a21e4468e691b39, type: 3}
       propertyPath: itemPickupPrefab
       value: 
       objectReference: {fileID: 5315395889910002384}
+    - target: {fileID: 3743490569067870962, guid: 035b07a0a61fa3c41a21e4468e691b39, type: 3}
+      propertyPath: genericLootPrefab
+      value: 
+      objectReference: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
+    - target: {fileID: 3913275839591548085, guid: 035b07a0a61fa3c41a21e4468e691b39, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 4587d570305cd4f42a6bf9eb7fdfa9ac, type: 2}
     - target: {fileID: 4006490837296403399, guid: 035b07a0a61fa3c41a21e4468e691b39, type: 3}
       propertyPath: m_Name
       value: GellySphere_LP
@@ -1755,6 +1790,10 @@ PrefabInstance:
       propertyPath: itemPickupPrefab
       value: 
       objectReference: {fileID: 271128649}
+    - target: {fileID: 7753966662926335515, guid: c483fec6e1a3af3498c479c8a22118c4, type: 3}
+      propertyPath: genericLootPrefab
+      value: 
+      objectReference: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1839,6 +1878,10 @@ PrefabInstance:
       propertyPath: cacheTypes
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5603294228463021956, guid: 5ca5c0d51176ce143bfd9fa7271a5999, type: 3}
+      propertyPath: genericLootPrefab
+      value: 
+      objectReference: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
     - target: {fileID: 7102970492372852519, guid: 5ca5c0d51176ce143bfd9fa7271a5999, type: 3}
       propertyPath: m_Name
       value: PlantMonster_LP
@@ -2078,19 +2121,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1985623938479072974, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1985623938479072974, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1985623938479072974, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 960
       objectReference: {fileID: 0}
     - target: {fileID: 1985623938479072974, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -700
       objectReference: {fileID: 0}
     - target: {fileID: 2355158804683307839, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2550,19 +2593,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6031338906534932235, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6031338906534932235, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6031338906534932235, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 960
       objectReference: {fileID: 0}
     - target: {fileID: 6031338906534932235, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -300
       objectReference: {fileID: 0}
     - target: {fileID: 6523732888615567132, guid: 3ae79f25acc678246ba4bf4cc46055d5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2995,6 +3038,10 @@ PrefabInstance:
       propertyPath: itemPickupPrefab
       value: 
       objectReference: {fileID: 1454047846}
+    - target: {fileID: 1221979911246124908, guid: 523feccdbc334f049827126864f9ab2b, type: 3}
+      propertyPath: genericLootPrefab
+      value: 
+      objectReference: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
     - target: {fileID: 3705905294249923662, guid: 523feccdbc334f049827126864f9ab2b, type: 3}
       propertyPath: m_Name
       value: Golem_LP
@@ -3020,14 +3067,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 979634176}
     m_Modifications:
+    - target: {fileID: 2603511368572753440, guid: e8f256ab680271343867d4a5292c9138, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 78f57db7a85f94345bc1ac62c3afaddd, type: 2}
     - target: {fileID: 4698491536715232082, guid: e8f256ab680271343867d4a5292c9138, type: 3}
       propertyPath: m_Name
       value: Minotaur_LP
       objectReference: {fileID: 0}
     - target: {fileID: 4698491536715232082, guid: e8f256ab680271343867d4a5292c9138, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4894597845866006804, guid: e8f256ab680271343867d4a5292c9138, type: 3}
+      propertyPath: genericLootPrefab
+      value: 
+      objectReference: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
     - target: {fileID: 5237802258061618240, guid: e8f256ab680271343867d4a5292c9138, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.605008
@@ -3068,6 +3123,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8186005785295264177, guid: e8f256ab680271343867d4a5292c9138, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 78f57db7a85f94345bc1ac62c3afaddd, type: 2}
     m_RemovedComponents:
     - {fileID: 2299106349195169547, guid: e8f256ab680271343867d4a5292c9138, type: 3}
     m_RemovedGameObjects: []

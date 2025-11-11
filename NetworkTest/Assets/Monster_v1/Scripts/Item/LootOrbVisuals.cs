@@ -90,5 +90,8 @@ public class LootOrbVisuals : MonoBehaviour
         {
             Debug.Log($"<color=yellow>[VFX_INIT] VFX Center '{vfxCenter.name}' Active State: {vfxCenter.activeInHierarchy}</color>");
         }
+
+        Debug.Log($"[VFX DEBUG] {targetVFXObject.name} activeSelf={targetVFXObject.activeSelf}, activeInHierarchy={targetVFXObject.activeInHierarchy}");
+
     }
 }

@@ -39,7 +39,8 @@ public class PickupPromptUI : MonoBehaviour
         if (show && item != null && item.itemData != null)
         {
             currentNearbyItem = item;
-            promptText.text = $"E : {item.itemData.itemName} 줍기"; // 아이템 이름 표시
+            //promptText.text = $"E : {item.itemData.itemName} 줍기"; // 아이템 이름 표시
+            promptText.text = "E : 아이템을 줍는다";
             promptPanel.SetActive(true); // UI 패널 활성화
         }
         else

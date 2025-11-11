@@ -1,17 +1,21 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using System;
 using Cinemachine;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
+    public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All; // 기본값: 전체
 
     private int slotCapacity = 8;
     public List<RelicData> inventorySlots;
 
     public static event Action OnInventoryChanged;
     public static event Action<bool> OnInventoryToggle;
+    public bool IsFocused { get; private set; } = false;
+    public bool IsUIActiveAndFocused => IsUIOpen && IsFocused;
 
     [Header("UI Reference")]
     // [SerializeField] private GameObject inventoryUI; // L18: 단일 UI 필드 제거
@@ -25,7 +29,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private PlayerInputs playerInput;    // PlayerInputs.cs
     [SerializeField] private CharacterMove characterMove;  // CharacterMove.cs (이동 제어) - NOTE: 제어 로직은 InputHandler로 이동됨
     [SerializeField] private CameraController cameraController; // 카메라 회전 제어 - NOTE: 제어 로직은 InputHandler로 이동됨
-    [SerializeField] private InputHandler inputHandler;  // L27: InputHandler 참조 유지
     [SerializeField] private WeaponController weaponController; // 무기 발사 제어 - NOTE: 제어 로직은 InputHandler로 이동됨
 
     // 현재 인벤토리/UI가 열려있는지 확인
@@ -54,48 +57,78 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        if (inputHandler == null) return;
+        // ★★★ 2. 인게임 클릭 시 포커스 상실 로직 (닫기 아님) ★★★
+        if (IsFocused && Input.GetMouseButtonDown(0))
+        {
+            // 마우스 커서가 UI 요소 위에 있는지 확인
+            // IsPointerOverGameObject()는 EventSystem이 null이 아닐 때만 호출해야 안전
+            bool isOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
-        // L61: I 키 입력 감지 (작은 인벤토리)
-        if (inputHandler.GetInventoryToggle())
+            if (!isOverUI)
+            {
+                // UI 밖에 클릭했다면 포커스 상실 (UI는 열린 상태 유지)
+                SetFocusState(false);
+            }
+        }
+
+        if (playerInput == null) return;
+
+        // I, O 키를 누르면 포커스 획득/상실 로직으로 연결
+        if (playerInput.GetInventoryToggle())
         {
             ToggleSmallInventory();
         }
 
-        // L66: O 키 입력 감지 (전체 인벤토리 - InputHandler에 GetFullCharacterToggle()이 있다고 가정)
-        if (inputHandler.GetFullCharacterToggle())
+        if (playerInput.GetFullInventoryToggle())
         {
             ToggleFullInventory();
         }
 
-        // L71: ESC 키 입력 감지 (모든 인벤토리 닫기)
-        if (Input.GetKeyDown(KeyCode.Escape))
+
+        if (playerInput.GetEscape())
         {
-            CloseAllInventories();
+            CloseAllInventories(); // ESC는 완전히 닫음
         }
     }
 
-    // L77: 기존 ToggleInventory를 CloseAllInventories로 대체하고, ToggleSmall/FullInventory를 사용합니다.
 
     /// <summary>
-    /// I 키 입력 처리: 작은 인벤토리 창(슬롯만)을 토글합니다.
+    /// 탭 키 입력 처리: 작은 인벤토리 창(슬롯만)을 토글합니다.
     /// </summary>
     public void ToggleSmallInventory()
     {
         if (smallInventoryUI == null) return;
 
-        // 1. 전체 창이 켜져 있으면 끄기
+        // 전체 창이 켜져 있으면 끄기
         if (fullInventoryUI != null && fullInventoryUI.activeSelf)
         {
             fullInventoryUI.SetActive(false);
+            // 전체 창이 닫히면 포커스 상태도 초기화
+            if (IsFocused) SetFocusState(false);
         }
 
-        // 2. 작은 창 토글
-        bool shouldBeActive = !smallInventoryUI.activeSelf;
-        smallInventoryUI.SetActive(shouldBeActive);
+        // UI가 현재 열려있는지 확인
+        bool currentActive = smallInventoryUI.activeSelf;
 
-        // 3. 커서 및 입력 상태 설정
-        SetPlayerInputState(shouldBeActive);
+        if (currentActive && IsFocused)
+        {
+            // 열려있고 포커스가 있었다면: 포커스 상실 (UI는 그대로 둠)
+            smallInventoryUI.SetActive(false);
+            SetFocusState(false);
+        }
+        else if (!currentActive)
+        {
+            // 닫혀있었다면: UI를 열고 포커스 획득
+            smallInventoryUI.SetActive(true);
+            SetFocusState(true);
+        }
+
+
+        else // 열려있지만 포커스가 없었다면: 포커스 다시 획득
+        {
+            SetFocusState(true);
+        }
+
     }
 
     /// <summary>
@@ -104,19 +137,23 @@ public class InventoryManager : MonoBehaviour
     public void ToggleFullInventory()
     {
         if (fullInventoryUI == null) return;
-
-        // 1. 작은 창이 켜져 있으면 끄기
         if (smallInventoryUI != null && smallInventoryUI.activeSelf)
         {
             smallInventoryUI.SetActive(false);
+            if (IsFocused) SetFocusState(false);
         }
 
-        // 2. 전체 창 토글
-        bool shouldBeActive = !fullInventoryUI.activeSelf;
-        fullInventoryUI.SetActive(shouldBeActive);
+        bool currentActive = fullInventoryUI.activeSelf;
 
-        // 3. 커서 및 입력 상태 설정
-        SetPlayerInputState(shouldBeActive);
+        if (!currentActive)
+        {
+            fullInventoryUI.SetActive(true);
+            SetFocusState(true);
+        }
+        else // UI가 현재 열려있는 상태
+        {
+            SetFocusState(!IsFocused);
+        }
     }
 
     /// <summary>
@@ -129,35 +166,40 @@ public class InventoryManager : MonoBehaviour
         if (smallInventoryUI != null) smallInventoryUI.SetActive(false);
         if (fullInventoryUI != null) fullInventoryUI.SetActive(false);
 
-        // 커서 및 입력 상태 설정 (비활성화 상태)
-        SetPlayerInputState(false);
+        SetFocusState(false);
     }
 
 
     /// <summary>
     /// UI 활성화 여부에 따라 커서 상태와 입력 이벤트를 설정합니다.
     /// </summary>
-    private void SetPlayerInputState(bool uiIsActive)
+    private void SetPlayerInputState(bool uiHasFocus) // 매개변수 이름을 uiHasFocus로 변경
     {
-        if (uiIsActive)
+        // 1. 커서 상태 제어 (포커스가 있으면 커서 해제)
+        if (uiHasFocus)
         {
-            Cursor.lockState = CursorLockMode.None; // 커서 잠금 해제
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked; // 커서 잠금 (게임 입력 상태로 복귀)
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-        // L159: InputHandler에서 입력 차단을 처리하도록 이벤트 호출
-        OnInventoryToggle?.Invoke(uiIsActive);
+        // 2. 플레이어 제어 컴포넌트 비활성화/활성화 (포커스가 있으면 비활성화)
+        if (characterMove != null)
+        {
+            characterMove.enabled = !uiHasFocus;
+        }
 
-        // NOTE: 이전 ToggleInventory의 스크립트 활성화/비활성화 로직은 
-        // InputHandler의 OnInventoryToggle을 구독하는 다른 스크립트로 이동하는 것을 권장합니다.
-        // InputHandler는 마우스 입력을 제어하며, 이동 스크립트(CharacterMove, CameraController 등)는 
-        // InventoryManager의 상태 변화에 따라 직접 활성화/비활성화 할 수도 있습니다. 
-        // 여기서는 InputHandler에 위임하는 것이 일관성을 높입니다.
+        if (cameraController != null)
+        {
+            cameraController.enabled = !uiHasFocus;
+        }
+
+        // 3. 이벤트 발생 (WeaponController에게 포커스 상태 전달)
+        OnInventoryToggle?.Invoke(uiHasFocus);
     }
 
 
@@ -268,5 +310,53 @@ public class InventoryManager : MonoBehaviour
     public void NotifyInventoryChanged()
     {
         OnInventoryChanged?.Invoke();
+    }
+
+    public void SetFilter(InventoryFilterType newFilter)
+    {
+        if (currentFilter != newFilter)
+        {
+            currentFilter = newFilter;
+            Debug.Log($"[InventoryManager] 필터 변경: {currentFilter}");
+            OnInventoryChanged?.Invoke();
+        }
+    }
+
+    public bool IsCombatInputBlockedByUI()
+    {
+        return IsUIActiveAndFocused;
+    }
+
+    private void SetFocusState(bool isFocused)
+    {
+        if (this.IsFocused == isFocused) return;
+        this.IsFocused = isFocused;
+
+        Debug.Log($"[InventoryManager] 포커스 변경: {(isFocused ? "획득" : "상실(인게임 포커스)")}");
+
+        // 1. 커서 상태 제어
+        if (isFocused)
+        {
+            Cursor.lockState = CursorLockMode.None; // 마우스 포커스 획득
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked; // 마우스 포커스 상실(인게임 복귀)
+            Cursor.visible = false;
+        }
+
+        if (characterMove != null)
+        {
+            characterMove.enabled = !isFocused;
+        }
+
+        if (cameraController != null)
+        {
+            cameraController.enabled = !isFocused;
+        }
+
+        // 3. 이벤트 발생 (WeaponController에게 포커스 상태 전달)
+        OnInventoryToggle?.Invoke(isFocused);
     }
 }

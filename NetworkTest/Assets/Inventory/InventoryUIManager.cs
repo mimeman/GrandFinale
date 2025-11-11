@@ -87,7 +87,7 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
         else
         {
             // Header Bar 밖에서 드래그 시작 시 이벤트 무시
-            eventData.pointerDrag = null;
+            //eventData.pointerDrag = null;
         }
     }
 
@@ -109,38 +109,78 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    // InventoryUIManager.cs (ShowTooltip 함수)
+
     public void ShowTooltip(RelicData item, Vector3 slotScreenPosition)
     {
         if (tooltipPanel == null || tooltipPanel.transform.parent == null) return;
 
-        // 1. 스크린 마우스 위치를 툴팁 패널의 부모(캔버스)의 로컬 좌표로 변환
+        // 1. 위치 설정 로직 (기존 로직 유지)
         RectTransform parentCanvas = tooltipPanel.transform.parent.GetComponent<RectTransform>();
         Vector2 localPointerPosition;
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
             parentCanvas,
             Input.mousePosition,
-            null, // eventData.pressEventCamera 대신 null 사용 (스크린 포인트 기준)
+            null,
             out localPointerPosition))
         {
-            // 2. 툴팁 오프셋을 적용하여 로컬 위치 설정
             RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
             if (tooltipRect != null)
             {
                 tooltipRect.localPosition = localPointerPosition + tooltipOffset;
             }
+        }
+
+        // 2. 제목, 등급, 설명 설정
+        tooltipTitleText.text = $"<color={GetGradeColor(item.grade)}>{item.itemName}</color> ({item.grade})"; // 등급 추가
+        tooltipDescriptionText.text = item.description;
+
+        // 3. 능력치 및 상세 정보 포맷팅 (개선)
+        StringBuilder detailsBuilder = new StringBuilder();
+
+        // 아이템 타입 (예: 유물, 기타)
+        detailsBuilder.AppendLine($"\n**타입**: {item.itemTypeEnum}");
+
+        // 아이템 스택 정보
+        if (item.maxStack > 1)
+        {
+            detailsBuilder.AppendLine($"**최대 스택**: {item.maxStack}개");
+        }
+
+        // 능력치 정보
+        if (item.grantedAbility != null)
+        {
+            AbilityData ability = item.grantedAbility;
+            detailsBuilder.AppendLine("\n**--- 부여 능력 ---**");
+
+            // ABIL_004: 최대 체력 증가 (Stat_Add)
+            if (ability.abilityLogicID == "Stat_Add")
+            {
+                detailsBuilder.AppendLine($"+{ability.param_ValueA} {ability.param_Key}");
+            }
+            // ABIL_005, ABIL_006, ABIL_008: % 증가 (Stat_Percent)
+            else if (ability.abilityLogicID.Contains("Stat_Percent"))
+            {
+                detailsBuilder.AppendLine($"+{ability.param_ValueA}% {ability.param_Key} 증가");
+            }
+            // ABIL_007: 무한 탄창 (ActiveApply_Self_Buff)
+            else if (ability.abilityLogicID == "Apply_Self_Buff" && ability.param_Key == "InfiniteAmmo")
+            {
+                detailsBuilder.AppendLine($"**능력**: {ability.abilityName}");
+                // param_ValueA: 지속 시간, param_ValueB: 쿨타임 (CSV 데이터 구조에 따라 가정)
+                detailsBuilder.AppendLine($"지속 시간: {ability.param_ValueA}초, 쿨타임: {ability.param_ValueB}초");
+            }
             else
             {
-                // RectTransform이 없을 경우를 대비한 안전장치 (localPosition 사용)
-                tooltipPanel.transform.localPosition = new Vector3(localPointerPosition.x + tooltipOffset.x, localPointerPosition.y + tooltipOffset.y, 0);
+                // 기타 능력 (기능 없음)
+                detailsBuilder.AppendLine($"**능력**: {ability.abilityName}");
             }
         }
 
-        // 이전 코드: tooltipPanel.transform.position = Input.mousePosition + new Vector3(20, -50, 0); 
-        // ^ 이 코드는 캔버스 스케일이 다를 때 위치 오류를 일으킬 수 있습니다.
-
-        tooltipTitleText.text = $"<color={GetGradeColor(item.grade)}>{item.itemName}</color>";
-        tooltipDescriptionText.text = item.description;
+        // 툴팁 텍스트에 최종 상세 정보 추가 (새로운 TMP 필드가 있다고 가정)
+        // 현재 InventoryUIManager.cs에는 tooltipDescriptionText만 있으므로, 여기에 모두 합칩니다.
+        tooltipDescriptionText.text += detailsBuilder.ToString();
 
         tooltipPanel.SetActive(true);
     }

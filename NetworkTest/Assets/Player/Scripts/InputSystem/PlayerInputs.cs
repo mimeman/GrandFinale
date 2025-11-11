@@ -1,9 +1,12 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerInputs : MonoBehaviour
 {
+    private InventoryManager inventoryManager;
+
     [SerializeField] private OptionKeyData keyData;
 
     private float horizontalInput = 0f;
@@ -64,14 +67,21 @@ public class PlayerInputs : MonoBehaviour
     // Attack
     public bool GetAttack()
     {
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
+        Debug.Log("전투 입력 차단됨!");
         return Input.GetKey(keyData.m_KeyAttack);
     }
     public bool GetAimed()
     {
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
+        Debug.Log("전투 입력 차단됨!");
+
         return Input.GetKey(keyData.m_KeyAimed);
     }
     public bool GetReload()
     {
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
+
         return Input.GetKeyDown(keyData.m_KeyReload);
     }
 
@@ -107,6 +117,16 @@ public class PlayerInputs : MonoBehaviour
         return Input.GetKeyDown(keyData.m_KeyInventory);
     }
 
+    public bool GetInventoryToggle() // I 키 (작은 인벤토리)
+    {
+        return Input.GetKeyDown(keyData.m_KeyInventory);
+    }
+
+    public bool GetFullInventoryToggle() // O 키 (전체 인벤토리)
+    {
+        return Input.GetKeyDown(keyData.m_KeyFullInventory);
+    }
+
     // UI
     public bool GetEscape()
     {
@@ -121,6 +141,13 @@ public class PlayerInputs : MonoBehaviour
     {
         if (OptionDataManager.Instance)
             keyData = OptionDataManager.Instance.OptionData.m_keyData;
+
+        inventoryManager = InventoryManager.Instance;
+
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("[PlayerInputs] 씬에 EventSystem이 없습니다! UI 입력 차단이 작동하지 않습니다.");
+        }
     }
 
     void Update()
@@ -178,4 +205,5 @@ public class OptionKeyData
     [Header("UI")]
     public KeyCode m_KeyEscape;
     public KeyCode m_KeyChat;
+    public KeyCode m_KeyFullInventory;
 }

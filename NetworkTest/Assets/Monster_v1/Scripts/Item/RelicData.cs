@@ -7,7 +7,7 @@ public class RelicData : ScriptableObject
     [Header("시트 원본 정보")]
     public string itemID;
     public string itemName;
-    public string itemType;
+    public ItemType itemTypeEnum;
     public string grade;
     public int maxStack;
 

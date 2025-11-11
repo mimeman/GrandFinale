@@ -12,6 +12,16 @@ public enum ItemType
     Etc
 }
 
+public enum InventoryFilterType
+{
+    All,        // 전체
+    Weapon,     // 무기
+    Equipment,  // 장비
+    Accessory,  // 장신구
+    Relic,      // 유물
+    Etc         // 기타
+}
+
 [CreateAssetMenu(fileName = "New ItemData", menuName = "Item/Data", order = 1)]
 
 public class ItemData : ScriptableObject

@@ -82,6 +82,7 @@ public class ItemDataParser
 
     // 2. RelicData 임포트 메뉴
     [MenuItem("MyTools/Import Data/2. Import RelicData (CSV)")]
+    [MenuItem("MyTools/Import Data/2. Import RelicData (CSV)")]
     public static void ImportRelicData()
     {
         string path = EditorUtility.OpenFilePanel("Import Relic CSV", "", "csv");
@@ -99,7 +100,13 @@ public class ItemDataParser
             if (string.IsNullOrWhiteSpace(allLines[i])) continue;
 
             string[] row = SplitCSVLine(allLines[i]);
-            if (row.Length < 7) continue;
+            // CSV 열 개수가 7개 미만이면 무시 (최소 항목 수)
+            // RelicData 임포트 로직에는 최소 8개의 열이 필요합니다 (ID~아이콘경로, 능력ID, MaxStack).
+            if (row.Length < 8)
+            {
+                Debug.LogWarning($"[RelicParser] 줄 무시됨 (열 부족, 8개 미만): {allLines[i]}");
+                continue;
+            }
 
             string itemID = row[0].Trim();
             if (string.IsNullOrEmpty(itemID)) continue;
@@ -116,16 +123,31 @@ public class ItemDataParser
             // RelicData 필드 채우기
             relic.itemID = itemID;
             relic.itemName = row[1].Trim();
-            relic.itemType = row[2].Trim();
+
+            // ★★★ 핵심 수정: string itemType을 ItemType Enum으로 변환하여 할당 ★★★
+            string itemTypeString = row[2].Trim(); // CSV의 "Weapon", "Artifact" 등의 문자열을 읽음
+
+            // Enum.TryParse: 대소문자 구분 없이 문자열을 ItemType Enum으로 변환 시도
+            if (System.Enum.TryParse(itemTypeString, true, out ItemType parsedItemType))
+            {
+                relic.itemTypeEnum = parsedItemType;
+            }
+            else
+            {
+                Debug.LogWarning($"[RelicParser] ItemType '{itemTypeString}' 파싱 실패! '{itemID}'에 ItemType.Etc 할당. CSV와 Enum 이름 확인 필요.");
+                relic.itemTypeEnum = ItemType.Etc; // 파싱 실패 시 기본값 (기타)
+            }
+            // ★★★ 기존 string itemType 필드 할당 로직은 제거됨 ★★★
+
             relic.grade = row[3].Trim();
             relic.description = row[4].Trim();
             relic.iconPath = row[5].Trim();
 
-            // maxStack 파싱 (숫자 변환)
+            // maxStack 파싱 (row[7]은 maxStack)
             int.TryParse(row[7].Trim(), out relic.maxStack);
 
-            // ★★★ 핵심 연동 로직 ★★★
-            string abilityIDString = row[6].Trim(); // 시트의 "ABIL_001"
+            // ★★★ 핵심 연동 로직 (Ability) ★★★
+            string abilityIDString = row[6].Trim(); // 시트의 "ABIL_001" (row[6]은 능력 ID)
             if (!string.IsNullOrEmpty(abilityIDString))
             {
                 string abilityAssetPath = $"{ABILITY_DATA_PATH}/{abilityIDString}.asset";
@@ -152,7 +174,7 @@ public class ItemDataParser
         AssetDatabase.SaveAssets();
         Debug.Log("[RelicParser] 임포트 완료!");
 
-        // ★★★ (버그 수정) Relic 임포트 후에도 DB 업데이트 호출 ★★★
+        // 임포트가 모두 끝난 후 마스터 데이터베이스 업데이트
         UpdateMasterDatabase();
     }
 
@@ -171,7 +193,6 @@ public class ItemDataParser
             AssetDatabase.CreateAsset(db, MASTER_DB_PATH);
         }
 
-        // ★★★ (오류 수정) 리스트가 null일 경우 새로 생성 ★★★
         if (db.allAbilities == null)
         {
             db.allAbilities = new List<AbilityData>();

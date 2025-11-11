@@ -5,9 +5,9 @@ using UnityEngine.EventSystems; // 드롭 감지!
 public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    // 1. 이 슬롯이 받을 수 있는 아이템 타입 (RelicData.itemType과 비교할 문자열)
-    [Tooltip("이 슬롯이 받을 itemType 문자열 (예: Relic, Artifact, Skill...)")]
-    public string requiredType = "Relic"; // (RelicData의 itemType에 맞게 수정하세요)
+    // 1. 이 슬롯이 받을 수 있는 아이템 타입 (ItemType Enum의 문자열과 비교할 문자열)
+    [Tooltip("이 슬롯이 받을 ItemType Enum 문자열 (예: Weapon, Artifact, StatBoost...)")]
+    public string requiredType = "Artifact"; // 슬롯에 맞는 기본값으로 수정
 
     [Header("UI (선택 사항)")]
     public Image slotIcon; // 장착된 아이템 아이콘을 표시할 이미지
@@ -65,8 +65,11 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
             return; // 인벤토리 슬롯이 아님
         }
 
-        // 2. (문자열 비교) 아이템의 itemType과 이 슬롯이 요구하는 requiredType이 일치하는지 확인
-        if (sourceSlot.currentItem.itemType == this.requiredType)
+        // ItemType Enum의 문자열 표현과 requiredType을 비교합니다.
+        string itemTypeString = sourceSlot.currentItem.itemTypeEnum.ToString();
+
+        // 2. (문자열 비교) 아이템의 itemTypeEnum과 이 슬롯이 요구하는 requiredType이 일치하는지 확인
+        if (itemTypeString == this.requiredType)
         {
             // 3. 타입이 일치하면, EquipmentManager에게 장착 요청
             bool success = EquipmentManager.Instance.EquipItem(sourceSlot.currentItem, sourceSlot.slotIndex);
@@ -78,7 +81,7 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
         }
         else
         {
-            Debug.Log($"타입이 맞지 않습니다. 이 슬롯은 '{requiredType}'만 받습니다. (아이템 타입: '{sourceSlot.currentItem.itemType}')");
+            Debug.Log($"타입이 맞지 않습니다. 이 슬롯은 '{requiredType}'만 받습니다. (아이템 타입: '{itemTypeString}')");
         }
     }
 

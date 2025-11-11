@@ -1,10 +1,12 @@
-// Tab_UI.cs (새 스크립트)
+// Tab_UI.cs 수정
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Tab_UI : MonoBehaviour
 {
-    // 인스펙터에서 이 탭이 어떤 종류의 아이템을 필터링할지 설정
+    // L1: 인스펙터에서 이 탭이 어떤 종류의 아이템을 필터링할지 설정
+    public InventoryFilterType filterType; // ★추가★ 인스펙터에서 선택
+
     private Button button;
 
     void Awake()
@@ -12,13 +14,16 @@ public class Tab_UI : MonoBehaviour
         button = GetComponent<Button>();
         if (button != null)
         {
-            // 클릭 이벤트에 필터링 함수 연결
             button.onClick.AddListener(OnTabClicked);
         }
     }
 
     private void OnTabClicked()
     {
-
+        // L2: 클릭 시 InventoryManager의 필터 설정 함수 호출
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.SetFilter(filterType);
+        }
     }
 }

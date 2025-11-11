@@ -98,6 +98,11 @@ public class WeaponController : MonoBehaviour
 
     public void StartShoot()
     {
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI())
+        {
+            Debug.Log("발사 차단");
+            return;
+        }
         var currentWeapon = GETCurrentWeapon;
         if (currentWeapon != null && !changed && currentWeapon.Shoot())
             OnShoot?.Invoke();

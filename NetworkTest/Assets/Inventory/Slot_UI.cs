@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using System.Collections; // Coroutine 사용을 위해 필요
+using System.Collections;
 
 public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler,
-    IPointerEnterHandler, IPointerExitHandler // L8: IPointerEnterHandler 추가
+    IPointerEnterHandler, IPointerExitHandler
 {
     public int slotIndex;
     public Image slotIcon;
@@ -16,6 +16,12 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     private const float TooltipDelay = 0.5f;
 
     public RelicData currentItem { get; private set; }
+
+    private static readonly string[] EquippableTypes =
+    {
+    ItemType.Weapon.ToString().ToLower(),    // "weapon"
+    ItemType.Artifact.ToString().ToLower(),  // "artifact"
+};
 
     void Start()
     {
@@ -29,7 +35,10 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     void UpdateSlotVisuals()
     {
-        currentItem = InventoryManager.Instance.inventorySlots[slotIndex];
+        RelicData itemData = InventoryManager.Instance.inventorySlots[slotIndex];
+        currentItem = itemData;
+
+        bool isFilterMatch = CheckFilterMatch(itemData);
 
         if (currentItem != null && !string.IsNullOrEmpty(currentItem.iconPath))
         {
@@ -51,6 +60,47 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             slotIcon.sprite = null;
             slotIcon.enabled = false;
         }
+    }
+
+    private bool CheckFilterMatch(RelicData item)
+    {
+        // L1: 현재 필터 가져오기
+        InventoryFilterType currentFilter = InventoryManager.Instance.currentFilter;
+
+        // L2: '전체' 필터는 항상 통과
+        if (currentFilter == InventoryFilterType.All)
+        {
+            return true;
+        }
+
+        // L3: 아이템이 없으면 필터 통과 실패
+        if (item == null)
+        {
+            return false;
+        }
+
+        // NOTE: ItemData.cs에 ItemType Enum이 정의되어 있으므로 이를 사용합니다.
+        ItemType itemType = item.itemTypeEnum; // RelicData.cs에 itemTypeEnum 필드가 있다고 가정
+
+        return currentFilter switch
+        {
+            // 무기: RelicData의 타입이 ItemType.Weapon일 때
+            InventoryFilterType.Weapon => itemType == ItemType.Weapon,
+
+            // 유물: RelicData의 타입이 ItemType.Artifact일 때
+            InventoryFilterType.Relic => itemType == ItemType.Artifact,
+
+            // 장비: 무기 또는 유물일 때 (장착 가능 아이템으로 간주)
+            InventoryFilterType.Equipment => itemType == ItemType.Weapon || itemType == ItemType.Artifact,
+
+            // 장신구: ItemType이 Accessory인 경우 (ItemData.cs에 Accessory가 없다면 임시로 StatBoost 사용)
+            InventoryFilterType.Accessory => itemType == ItemType.StatBoost, // 실제 Accessory 타입으로 변경 필요
+
+            // 기타: 위에 해당되지 않는 모든 타입
+            InventoryFilterType.Etc => itemType != ItemType.Weapon && itemType != ItemType.Artifact,
+
+            _ => false,
+        };
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -162,50 +212,58 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     private void AttemptEquip()
     {
-        string requiredType = "Relic"; // 장착 가능 여부 확인 (RelicData의 itemType과 비교해야 함)
+        if (currentItem == null) return;
 
-        if (currentItem != null && currentItem.itemType == requiredType)
+        string currentItemTypeString = currentItem.itemTypeEnum.ToString().ToLower();
+
+        // 1. 장착 가능한 타입 목록에 현재 아이템 타입이 포함되는지 확인
+        bool isEquippable = false;
+        foreach (var type in EquippableTypes)
+        {
+            if (currentItemTypeString == type) // 수정된 변수 사용
+            {
+                isEquippable = true;
+                break;
+            }
+        }
+
+        if (isEquippable)
         {
             // 장착 시도
             bool success = EquipmentManager.Instance.EquipItem(currentItem, this.slotIndex);
 
             if (!success)
             {
-                Debug.Log("장비 슬롯이 꽉 찼습니다.");
+                Debug.Log("장비 슬롯이 꽉 찼습니다. (기존 장비를 되돌릴 공간 부족)");
+            }
+            else
+            {
+                Debug.Log($"{currentItem.itemName} 장착 성공!");
             }
         }
         else
         {
-            Debug.Log($"이 아이템({currentItem.itemName})은 장착할 수 없습니다. (타입: {currentItem.itemType})");
+            // 현재 아이템 타입이 장착 가능 목록에 없는 경우
+            Debug.Log($"이 아이템({currentItem.itemName})은 장착할 수 없습니다. (타입: {currentItem.itemTypeEnum})");
         }
     }
 
-    // ★ L200: OnPointerEnter 함수
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (currentItem == null) return;
-
-        // 마우스가 슬롯에 들어왔을 때, 딜레이 후 툴팁을 띄우는 코루틴 시작
-        // 기존 코루틴이 실행 중이면 중복 실행을 막기 위해 멈추는 로직이 있으면 더 안전합니다.
         if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
         tooltipCoroutine = StartCoroutine(ShowTooltipAfterDelay(currentItem));
     }
 
-    // L209: OnPointerExit 함수
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 마우스가 슬롯을 벗어났을 때, 툴팁 코루틴을 중지하고 툴팁 숨김
-        if (tooltipCoroutine != null)
-        {
-            StopCoroutine(tooltipCoroutine);
-        }
+        if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
         if (InventoryUIManager.Instance != null)
         {
             InventoryUIManager.Instance.HideTooltip();
         }
     }
 
-    // L221: ShowTooltipAfterDelay 코루틴
     private IEnumerator ShowTooltipAfterDelay(RelicData item)
     {
         yield return new WaitForSeconds(TooltipDelay);

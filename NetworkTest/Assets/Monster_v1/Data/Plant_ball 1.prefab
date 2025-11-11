@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8503601400582392744}
   - component: {fileID: 6154201507643390496}
   - component: {fileID: 8197398430251081287}
+  - component: {fileID: 4211786484795688932}
   m_Layer: 0
   m_Name: Plant_ball 1
   m_TagString: Untagged
@@ -146,3 +147,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76a3aca1e445bc144bccd2f7d4760c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4211786484795688932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983626663567947396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9734e43e6132044bea0344d82d721d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poisonPrefab: {fileID: 1318073152662360, guid: 182577ea51c4d3448b6a458d8758511b, type: 3}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8

@@ -8,32 +8,35 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
 
     private int slotCapacity = 8;
-    // 1. ItemData -> RelicData로 변경
     public List<RelicData> inventorySlots;
 
     public static event Action OnInventoryChanged;
     public static event Action<bool> OnInventoryToggle;
 
     [Header("UI Reference")]
-    [SerializeField] private GameObject inventoryUI; // 'Inventory info' 오브젝트를 연결할 곳
+    // [SerializeField] private GameObject inventoryUI; // L18: 단일 UI 필드 제거
+    [SerializeField] private GameObject smallInventoryUI; // L19: 작은 인벤토리 UI (I 키)
+    [SerializeField] private GameObject fullInventoryUI;  // L20: 전체 인벤토리 UI (O 키)
 
     [Header("Loot Settings")]
     [SerializeField] private GameObject genericLootPrefab;
 
     [Header("Player Control References")]
-    [SerializeField] private PlayerInputs playerInput;     // PlayerInputs.cs
-    [SerializeField] private CharacterMove characterMove;   // CharacterMove.cs (이동 제어)
-    [SerializeField] private CameraController cameraController; // 카메라 회전 제어 (CameraController, InputHandler 등)
-    [SerializeField] private InputHandler inputHandler; 
-    [SerializeField] private WeaponController weaponController; // 무기 발사 제어
+    [SerializeField] private PlayerInputs playerInput;    // PlayerInputs.cs
+    [SerializeField] private CharacterMove characterMove;  // CharacterMove.cs (이동 제어) - NOTE: 제어 로직은 InputHandler로 이동됨
+    [SerializeField] private CameraController cameraController; // 카메라 회전 제어 - NOTE: 제어 로직은 InputHandler로 이동됨
+    [SerializeField] private InputHandler inputHandler;  // L27: InputHandler 참조 유지
+    [SerializeField] private WeaponController weaponController; // 무기 발사 제어 - NOTE: 제어 로직은 InputHandler로 이동됨
 
+    // 현재 인벤토리/UI가 열려있는지 확인
+    public bool IsUIOpen => (smallInventoryUI != null && smallInventoryUI.activeSelf) ||
+                            (fullInventoryUI != null && fullInventoryUI.activeSelf);
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -51,51 +54,116 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        if (playerInput != null && playerInput.GetInventory())
+        if (inputHandler == null) return;
+
+        // L61: I 키 입력 감지 (작은 인벤토리)
+        if (inputHandler.GetInventoryToggle())
         {
-            Debug.Log("인벤토리 키 입력 감지 (by PlayerInputs)!");
-            ToggleInventory();
+            ToggleSmallInventory();
+        }
+
+        // L66: O 키 입력 감지 (전체 인벤토리 - InputHandler에 GetFullCharacterToggle()이 있다고 가정)
+        if (inputHandler.GetFullCharacterToggle())
+        {
+            ToggleFullInventory();
+        }
+
+        // L71: ESC 키 입력 감지 (모든 인벤토리 닫기)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseAllInventories();
         }
     }
-    public void ToggleInventory()
+
+    // L77: 기존 ToggleInventory를 CloseAllInventories로 대체하고, ToggleSmall/FullInventory를 사용합니다.
+
+    /// <summary>
+    /// I 키 입력 처리: 작은 인벤토리 창(슬롯만)을 토글합니다.
+    /// </summary>
+    public void ToggleSmallInventory()
     {
-        if (inventoryUI == null)
+        if (smallInventoryUI == null) return;
+
+        // 1. 전체 창이 켜져 있으면 끄기
+        if (fullInventoryUI != null && fullInventoryUI.activeSelf)
         {
-            Debug.LogError("InventoryManager에 inventoryUI가 연결되지 않았습니다!");
-            return;
+            fullInventoryUI.SetActive(false);
         }
 
-        bool shouldBeActive = !inventoryUI.activeSelf;
+        // 2. 작은 창 토글
+        bool shouldBeActive = !smallInventoryUI.activeSelf;
+        smallInventoryUI.SetActive(shouldBeActive);
 
-        // 1. 인벤토리 UI 활성화/비활성화
-        inventoryUI.SetActive(shouldBeActive);
+        // 3. 커서 및 입력 상태 설정
+        SetPlayerInputState(shouldBeActive);
+    }
 
-        // 2. (핵심!) 플레이어 입력 및 제어 스크립트 활성화/비활성화
-        // 인벤토리가 켜지면 (= shouldBeActive == true) 스크립트들은 꺼집니다 (!shouldBeActive)
-        if (playerInput != null) playerInput.enabled = !shouldBeActive;
-        if (characterMove != null) characterMove.enabled = !shouldBeActive;
-        if (cameraController != null) cameraController.enabled = !shouldBeActive;
-        if (inputHandler != null) inputHandler.enabled = !shouldBeActive;
-/*        if (CinemachineCameras != null) CinemachineCameras.enabled = !shouldBeActive;
-*/        if (weaponController != null) weaponController.enabled = !shouldBeActive;
+    /// <summary>
+    /// O 키 입력 처리: 전체 인벤토리 창(슬롯 + 장비/스탯)을 토글합니다.
+    /// </summary>
+    public void ToggleFullInventory()
+    {
+        if (fullInventoryUI == null) return;
+
+        // 1. 작은 창이 켜져 있으면 끄기
+        if (smallInventoryUI != null && smallInventoryUI.activeSelf)
+        {
+            smallInventoryUI.SetActive(false);
+        }
+
+        // 2. 전체 창 토글
+        bool shouldBeActive = !fullInventoryUI.activeSelf;
+        fullInventoryUI.SetActive(shouldBeActive);
+
+        // 3. 커서 및 입력 상태 설정
+        SetPlayerInputState(shouldBeActive);
+    }
+
+    /// <summary>
+    /// ESC 키 입력 처리: 모든 인벤토리 창을 닫고 커서를 잠급니다.
+    /// </summary>
+    public void CloseAllInventories()
+    {
+        if (!IsUIOpen) return;
+
+        if (smallInventoryUI != null) smallInventoryUI.SetActive(false);
+        if (fullInventoryUI != null) fullInventoryUI.SetActive(false);
+
+        // 커서 및 입력 상태 설정 (비활성화 상태)
+        SetPlayerInputState(false);
+    }
 
 
-        // 3. 커서 제어 (시간 정지 없이 커서만 해제/잠금)
-        if (shouldBeActive)
+    /// <summary>
+    /// UI 활성화 여부에 따라 커서 상태와 입력 이벤트를 설정합니다.
+    /// </summary>
+    private void SetPlayerInputState(bool uiIsActive)
+    {
+        if (uiIsActive)
         {
             Cursor.lockState = CursorLockMode.None; // 커서 잠금 해제
-            Cursor.visible = true; // 커서 보이기 (드래그 앤 드롭 가능)
+            Cursor.visible = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked; // 커서 잠금 (게임 입력 상태로 복귀)
-            Cursor.visible = false; // 커서 숨기기
+            Cursor.visible = false;
         }
+
+        // L159: InputHandler에서 입력 차단을 처리하도록 이벤트 호출
+        OnInventoryToggle?.Invoke(uiIsActive);
+
+        // NOTE: 이전 ToggleInventory의 스크립트 활성화/비활성화 로직은 
+        // InputHandler의 OnInventoryToggle을 구독하는 다른 스크립트로 이동하는 것을 권장합니다.
+        // InputHandler는 마우스 입력을 제어하며, 이동 스크립트(CharacterMove, CameraController 등)는 
+        // InventoryManager의 상태 변화에 따라 직접 활성화/비활성화 할 수도 있습니다. 
+        // 여기서는 InputHandler에 위임하는 것이 일관성을 높입니다.
     }
 
-        /// <summary>
-        /// RelicData 아이템을 인벤토리에 추가합니다.
-        /// </summary>
+
+    /// <summary>
+    /// RelicData 아이템을 인벤토리에 추가합니다.
+    /// </summary>
     public bool AddItem(RelicData itemToAdd) // 3. ItemData -> RelicData
     {
         int emptySlotIndex = FindNextEmptySlot();
@@ -133,12 +201,18 @@ public class InventoryManager : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
-    // 5. RelicData를 제거하도록 수정
-    public void RemoveItem(int slotIndex)
+    // L215: RelicData를 제거하도록 수정 + bool 반환 추가 (CS0029 에러 방지)
+    public bool RemoveItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= slotCapacity) return;
+        if (slotIndex < 0 || slotIndex >= slotCapacity)
+        {
+            Debug.LogError($"[InventoryManager] 잘못된 슬롯 인덱스: {slotIndex}");
+            return false;
+        }
+
         inventorySlots[slotIndex] = null;
         OnInventoryChanged?.Invoke();
+        return true; // 제거 성공
     }
 
 
@@ -172,11 +246,10 @@ public class InventoryManager : MonoBehaviour
             {
                 pickupScript.itemData = itemToDrop; // [중요] 이 구체가 어떤 아이템인지 설정
             }
-
             LootOrbVisuals visualScript = orbInstance.GetComponent<LootOrbVisuals>();
             if (visualScript != null)
             {
-                visualScript.Initialize(itemToDrop.grade); // [중요] 등급에 맞는 VFX 활성화
+                visualScript.Initialize(itemToDrop.grade);
             }
 
             // 4. 인벤토리에서 아이템 제거
@@ -187,5 +260,13 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.LogWarning("InventoryManager에 genericLootPrefab이 설정되지 않아 아이템을 버릴 수 없습니다.");
         }
+    }
+
+    /// <summary>
+    /// 인벤토리 변경 이벤트를 외부에 알립니다. (이벤트 직접 호출 방지용)
+    /// </summary>
+    public void NotifyInventoryChanged()
+    {
+        OnInventoryChanged?.Invoke();
     }
 }

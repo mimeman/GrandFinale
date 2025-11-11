@@ -34,7 +34,7 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
         if (EquipmentManager.Instance == null) return;
 
         // 내 인덱스에 맞는 RelicData를 가져옴
-        currentItem = EquipmentManager.Instance.equipmentSlots[equipmentSlotIndex]; 
+        currentItem = EquipmentManager.Instance.equipmentSlots[equipmentSlotIndex];
         if (currentItem != null && !string.IsNullOrEmpty(currentItem.iconPath))
         {
             Sprite icon = Resources.Load<Sprite>(currentItem.iconPath);
@@ -70,7 +70,7 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
         {
             // 3. 타입이 일치하면, EquipmentManager에게 장착 요청
             bool success = EquipmentManager.Instance.EquipItem(sourceSlot.currentItem, sourceSlot.slotIndex);
-            
+
             if (success)
             {
                 sourceSlot.dropSuccessful = true;
@@ -90,6 +90,7 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
             Sprite icon = Resources.Load<Sprite>(currentItem.iconPath);
             if (icon != null)
             {
+                // NOTE: InventoryUIManager.Instance != null 체크는 편의상 생략했습니다.
                 InventoryUIManager.Instance.StartDrag(icon);
                 slotIcon.enabled = false;
             }
@@ -106,7 +107,10 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        InventoryUIManager.Instance.EndDrag();
+        // 유령 아이콘 무조건 끔
+        if (InventoryUIManager.Instance != null)
+            InventoryUIManager.Instance.EndDrag();
+
         if (currentItem == null) return;
 
         // 드롭에 실패했고, UI 밖으로 버린 것도 아니라면 (제자리 복귀)
@@ -127,24 +131,40 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
     {
         if (currentItem == null) return; // 슬롯이 비어있으면 아무것도 안 함
 
+        // 1. 좌클릭 (한 번 클릭) -> 상세 정보 표시
         if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 1)
         {
-            Debug.Log("장비 상세정보 표시");
-            InventoryUIManager.Instance.UpdateDetails(currentItem);
+            // Debug.Log("장비 상세정보 표시");
+            if (InventoryUIManager.Instance != null)
+                InventoryUIManager.Instance.UpdateDetails(currentItem);
         }
 
-        // 좌 더블클릭 (두 번 클릭) -> 장착 해제 시도
+        // 2. 좌 더블클릭 (두 번 클릭) -> 장착 해제 시도
         if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
         {
-            Debug.Log("더블 클릭으로 장착 해제 시도...");
+            UnequipItemAttempt();
+        }
 
-            // (UnequipItem 함수가 알아서 빈 인벤토리 슬롯을 찾고, 스탯을 제거함)
-            bool success = EquipmentManager.Instance.UnequipItem(currentItem, this.equipmentSlotIndex);
+        // ★ L126: 3. 우클릭 -> 장착 해제 시도 (요청 기능 추가)
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            UnequipItemAttempt();
+        }
+    }
 
-            if (!success)
-            {
-                Debug.Log("인벤토리가 꽉 차서 장비를 해제할 수 없습니다.");
-            }
+    /// <summary>
+    /// 장착 해제를 시도합니다. (인벤토리가 꽉 찼는지 확인)
+    /// </summary>
+    private void UnequipItemAttempt()
+    {
+        if (currentItem == null) return;
+
+        // (UnequipItem 함수가 알아서 빈 인벤토리 슬롯을 찾고, 스탯을 제거함)
+        bool success = EquipmentManager.Instance.UnequipItem(currentItem, this.equipmentSlotIndex);
+
+        if (!success)
+        {
+            Debug.Log("인벤토리가 꽉 차서 장비를 해제할 수 없습니다.");
         }
     }
 }

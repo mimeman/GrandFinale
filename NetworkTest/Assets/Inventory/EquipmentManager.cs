@@ -34,46 +34,66 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 아이템을 장착합니다. (Inventory -> Equipment)
-    /// </summary>
-    /// <param name="itemToEquip">장착할 RelicData</param>
-    /// <param name="inventorySlotIndex">아이템이 원래 있던 인벤토리 슬롯 번호</param>
-    /// <returns>장착 성공 여부</returns>
-    public bool EquipItem(RelicData itemToEquip, int inventorySlotIndex) // 3. RelicData
+    public bool EquipItem(RelicData itemToEquip, int inventorySlotIndex)
     {
-        // 4. 빈 장비 슬롯(0~3)을 찾습니다.
-        int emptyEquipSlot = FindNextEmptyEquipSlot();
+        // 1. 인벤토리에서 아이템 제거 (EquipmentManager가 Equip을 시작할 때 인벤토리에서 제거합니다.)
+        bool removedFromInventory = InventoryManager.Instance.RemoveItem(inventorySlotIndex);
 
-        if (emptyEquipSlot == -1)
+        if (!removedFromInventory)
         {
-            Debug.Log("장비 슬롯이 꽉 찼습니다.");
-            return false; // 장착 실패
+            Debug.LogError($"[EquipItem] 인벤토리 슬롯 {inventorySlotIndex}에서 아이템을 제거하는 데 실패했습니다.");
+            return false;
         }
 
-        // 5. 장비 슬롯에 아이템을 등록합니다.
-        equipmentSlots[emptyEquipSlot] = itemToEquip;
+        // 2. 장착 가능한 빈 슬롯을 찾거나 0번 인덱스부터 교체
+        int equipIndex = FindNextEmptyEquipSlot();
+        RelicData oldItem = null;
 
-        // 6. (중요) 가방(InventoryManager)에서 이 아이템을 제거합니다.
-        InventoryManager.Instance.RemoveItem(inventorySlotIndex);
+        if (equipIndex == -1) // 빈 슬롯이 없으면 (꽉 찼다면)
+        {
+            // 사용자의 요청: 0번 인덱스부터 교체
+            equipIndex = 0; // 0번 슬롯으로 지정
+            oldItem = equipmentSlots[equipIndex]; // 기존 아이템을 저장
 
-        // 7. (플레이어 스탯 적용 로직 - PlayerAbilityManager 호출)
-        // 이 아이템의 능력을 플레이어에게 적용합니다.
+            // 2-1. 기존 아이템(oldItem)을 인벤토리로 되돌림
+            bool addBackSuccess = InventoryManager.Instance.AddItem(oldItem);
+
+            if (!addBackSuccess)
+            {
+                InventoryManager.Instance.inventorySlots[inventorySlotIndex] = itemToEquip;
+                InventoryManager.Instance.NotifyInventoryChanged();
+
+                Debug.LogError("[EquipItem] 0번 교체 시도 중, 기존 장비가 인벤토리에 들어갈 공간이 없어 장착 실패! 아이템이 복구되었습니다.");
+                return false;
+            }
+
+            // 2-2. 기존 아이템의 능력치 해제
+            if (oldItem.grantedAbility != null)
+            {
+                PlayerAbilityManager playerAbilities = FindObjectOfType<PlayerAbilityManager>();
+                if (playerAbilities != null)
+                {
+                    playerAbilities.RemoveRelic(oldItem.itemID);
+                }
+            }
+        }
+
+        // 3. 새 아이템 장착 (빈 슬롯이거나 0번 슬롯)
+        equipmentSlots[equipIndex] = itemToEquip;
+
+        // 4. 새 아이템의 능력치 적용
         if (itemToEquip.grantedAbility != null)
         {
-            // PlayerAbilityManager가 있는지 확인하고 능력을 추가합니다.
-            // (ItemPickup.cs와 동일한 로직)
-            PlayerAbilityManager playerAbilities = FindObjectOfType<PlayerAbilityManager>(); // (임시)
+            PlayerAbilityManager playerAbilities = FindObjectOfType<PlayerAbilityManager>();
             if (playerAbilities != null)
             {
                 playerAbilities.AddRelic(itemToEquip.itemID);
             }
         }
 
-        // 8. 장비가 바뀌었다고 신호를 보냅니다.
+        // 5. 장비 변경 이벤트 알림
         OnEquipmentChanged?.Invoke();
 
-        Debug.Log(itemToEquip.itemName + "을(를) 장착했습니다.");
         return true;
     }
 

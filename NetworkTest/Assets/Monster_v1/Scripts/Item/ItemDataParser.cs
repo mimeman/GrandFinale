@@ -137,8 +137,6 @@ public class ItemDataParser
                 Debug.LogWarning($"[RelicParser] ItemType '{itemTypeString}' 파싱 실패! '{itemID}'에 ItemType.Etc 할당. CSV와 Enum 이름 확인 필요.");
                 relic.itemTypeEnum = ItemType.Etc; // 파싱 실패 시 기본값 (기타)
             }
-            // ★★★ 기존 string itemType 필드 할당 로직은 제거됨 ★★★
-
             relic.grade = row[3].Trim();
             relic.description = row[4].Trim();
             relic.iconPath = row[5].Trim();
@@ -146,7 +144,6 @@ public class ItemDataParser
             // maxStack 파싱 (row[7]은 maxStack)
             int.TryParse(row[7].Trim(), out relic.maxStack);
 
-            // ★★★ 핵심 연동 로직 (Ability) ★★★
             string abilityIDString = row[6].Trim(); // 시트의 "ABIL_001" (row[6]은 능력 ID)
             if (!string.IsNullOrEmpty(abilityIDString))
             {

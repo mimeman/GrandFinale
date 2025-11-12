@@ -307,11 +307,18 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void UpdateDetails(RelicData item)
     {
-        if (item == null)
+        /*if (item == null)
         {
             ClearDetails();
             return;
-        }
+        }*/
+
+        if (titleText == null || descriptionText == null || statsText == null || statsBoxObject == null)
+    {
+        // Debug.LogError("Inventory Details UI 컴포넌트가 연결되지 않았습니다! (TitleText, DescriptionText, StatsText, StatsBoxObject)");
+        ClearDetails(); // 연결되지 않은 상태에서도 UI를 초기화 시도
+        return;
+    }
 
         titleText.text = $"<color={GetGradeColor(item.grade)}>{item.itemName}</color>";
         descriptionText.text = item.description;

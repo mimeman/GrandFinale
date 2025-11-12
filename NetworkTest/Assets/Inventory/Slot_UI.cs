@@ -38,6 +38,12 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     // L45 부근의 UpdateSlotVisuals 함수를 다음과 같이 수정 (새 로직)
     void UpdateSlotVisuals()
     {
+        if (slotIcon == null)
+        {
+            // Debug.LogError($"SlotIcon_UI (Index: {slotIndex})에 'Slot Icon' 이미지가 연결되지 않았습니다.");
+            return;
+        }
+
         if (currentItem != null && !string.IsNullOrEmpty(currentItem.iconPath))
         {
             Sprite icon = Resources.Load<Sprite>(currentItem.iconPath);
@@ -192,6 +198,12 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         {
             // UI 안의 유효하지 않은 곳에 놓았을 경우: 원본 슬롯 아이콘을 즉시 복구합니다.
             slotIcon.enabled = true;
+        }
+
+        if (currentItem != null)
+        {
+            // 현재 아이템 상세 정보를 다시 표시 (UI가 비워지는 것을 방지)
+            InventoryUIManager.Instance.UpdateDetails(currentItem);
         }
 
         dropSuccessful = false;

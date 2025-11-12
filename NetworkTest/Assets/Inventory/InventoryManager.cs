@@ -9,7 +9,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All; // 기본값: 전체
 
-    private int slotCapacity = 42;
+    private int slotCapacity = 60;
     public List<RelicData> inventorySlots;
 
     public static event Action OnInventoryChanged;

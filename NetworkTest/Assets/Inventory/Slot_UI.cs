@@ -12,6 +12,7 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     public Image slotIcon;
     public bool dropSuccessful = false;
 
+    private Coroutine hideTooltipCoroutine; // 툴팁 숨김 딜레이용 코루틴
     private Coroutine tooltipCoroutine;
     private const float TooltipDelay = 0.5f;
 
@@ -25,21 +26,30 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     void Start()
     {
-        InventoryManager.OnInventoryChanged += UpdateSlotVisuals;
-        UpdateSlotVisuals();
+        //InventoryManager.OnInventoryChanged += UpdateSlotVisuals;
+        //UpdateSlotVisuals();
     }
     void OnDestroy()
     {
-        InventoryManager.OnInventoryChanged -= UpdateSlotVisuals;
+        //InventoryManager.OnInventoryChanged -= UpdateSlotVisuals;
     }
 
+    /// <summary>
+    /// [NEW] InventorySlotUIController에서 필터링된 아이템을 직접 바인딩합니다.
+    /// </summary>
+    public void SetBoundItem(RelicData newItem, int newIndex)
+    {
+        // 새로운 아이템 데이터와 인덱스를 저장합니다.
+        currentItem = newItem;
+        slotIndex = newIndex; // 슬롯 인덱스는 여전히 드래그/드롭에 필요합니다.
+
+        // 시각적 업데이트를 강제합니다.
+        UpdateSlotVisuals();
+    }
+
+    // L45 부근의 UpdateSlotVisuals 함수를 다음과 같이 수정 (새 로직)
     void UpdateSlotVisuals()
     {
-        RelicData itemData = InventoryManager.Instance.inventorySlots[slotIndex];
-        currentItem = itemData;
-
-        bool isFilterMatch = CheckFilterMatch(itemData);
-
         if (currentItem != null && !string.IsNullOrEmpty(currentItem.iconPath))
         {
             Sprite icon = Resources.Load<Sprite>(currentItem.iconPath);
@@ -48,18 +58,20 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             {
                 slotIcon.sprite = icon;
                 slotIcon.enabled = true;
+                // 인벤토리 상세 정보 업데이트
+                if (InventoryUIManager.Instance != null)
+                    InventoryUIManager.Instance.UpdateDetails(currentItem);
             }
             else
             {
-                Debug.LogWarning($"아이콘을 로드할 수 없습니다: {currentItem.iconPath}");
                 slotIcon.enabled = false;
             }
         }
         else
         {
-            slotIcon.sprite = null;
             slotIcon.enabled = false;
         }
+
     }
 
     private bool CheckFilterMatch(RelicData item)
@@ -250,6 +262,12 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (hideTooltipCoroutine != null)
+        {
+            StopCoroutine(hideTooltipCoroutine);
+            hideTooltipCoroutine = null;
+        }
+
         if (currentItem == null) return;
         if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
         tooltipCoroutine = StartCoroutine(ShowTooltipAfterDelay(currentItem));
@@ -257,11 +275,15 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // 마우스가 벗어나면 툴팁 표시 딜레이 코루틴을 중단합니다.
         if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
-        if (InventoryUIManager.Instance != null)
-        {
-            InventoryUIManager.Instance.HideTooltip();
-        }
+        tooltipCoroutine = null;
+
+        // ★ 추가: 툴팁 숨김 코루틴이 이미 실행 중이면 중단하고 새로 시작 (클릭 등으로 인한 중복 방지)
+        if (hideTooltipCoroutine != null) StopCoroutine(hideTooltipCoroutine);
+
+        // ★ 0.1초 딜레이 후 툴팁을 숨깁니다.
+        hideTooltipCoroutine = StartCoroutine(HideTooltipAfterDelay(0.1f));
     }
 
     private IEnumerator ShowTooltipAfterDelay(RelicData item)
@@ -274,5 +296,22 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             // 툴팁 표시 (현재 슬롯 위치 기준)
             InventoryUIManager.Instance.ShowTooltip(item, transform.position);
         }
+    }
+
+    private IEnumerator HideTooltipAfterDelay(float delay)
+    {
+        // 1. 딜레이 동안 기다립니다.
+        yield return new WaitForSeconds(delay);
+
+        // 2. 딜레이가 끝났다면 툴팁을 숨깁니다.
+        if (InventoryUIManager.Instance != null)
+        {
+            // InventoryUIManager.HideTooltip()은 페이드 아웃을 시작하고, 
+            // 페이드 아웃이 완료되면 툴팁 GameObject를 비활성화합니다.
+            InventoryUIManager.Instance.HideTooltip();
+        }
+
+        // 3. 이 코루틴이 완료되었으므로 레퍼런스를 해제합니다.
+        hideTooltipCoroutine = null; // <--- 이 위치가 맞습니다.
     }
 }

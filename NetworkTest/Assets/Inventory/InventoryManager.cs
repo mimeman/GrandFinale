@@ -9,7 +9,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All; // 기본값: 전체
 
-    private int slotCapacity = 8;
+    private int slotCapacity = 42;
     public List<RelicData> inventorySlots;
 
     public static event Action OnInventoryChanged;
@@ -257,7 +257,6 @@ public class InventoryManager : MonoBehaviour
         return true; // 제거 성공
     }
 
-
     public void DropItem(int slotIndex)
     {
         RelicData itemToDrop = inventorySlots[slotIndex];
@@ -358,5 +357,59 @@ public class InventoryManager : MonoBehaviour
 
         // 3. 이벤트 발생 (WeaponController에게 포커스 상태 전달)
         OnInventoryToggle?.Invoke(isFocused);
+    }
+
+    // InventoryManager.cs (새 함수 추가)
+    public List<RelicData> GetFilteredInventory()
+    {
+        // InventoryManager.cs의 slotCapacity 변수를 사용합니다.
+        int capacity = slotCapacity; // 현재 8로 설정되어 있음
+
+        // 1. '전체' 필터 시에는 null 슬롯을 포함한 전체 리스트의 복사본을 반환
+        if (currentFilter == InventoryFilterType.All)
+        {
+            // 리스트를 복사하여 반환 (원본 데이터 보호)
+            List<RelicData> allSlotsCopy = new List<RelicData>(inventorySlots);
+            return allSlotsCopy;
+        }
+
+        // 2. 필터링 로직
+        List<RelicData> filteredList = new List<RelicData>();
+
+        foreach (RelicData item in inventorySlots)
+        {
+            if (item == null) continue; // 빈 슬롯은 필터링에서 제외
+
+            // RelicData.cs의 itemTypeEnum을 사용합니다.
+            bool match = currentFilter switch
+            {
+                InventoryFilterType.Weapon => item.itemTypeEnum == ItemType.Weapon,
+                InventoryFilterType.Relic => item.itemTypeEnum == ItemType.Artifact,
+                // Weapon 또는 Artifact (무기 + 유물)
+                InventoryFilterType.Equipment => item.itemTypeEnum == ItemType.Weapon || item.itemTypeEnum == ItemType.Artifact,
+                // Accessory는 ItemType.StatBoost로 임시 설정되어 있습니다. (Accessory 타입 추가를 권장함)
+                InventoryFilterType.Accessory => item.itemTypeEnum == ItemType.StatBoost,
+                // Etc는 필터에 명시되지 않은 모든 것을 포함
+                InventoryFilterType.Etc => item.itemTypeEnum != ItemType.Weapon
+                                       && item.itemTypeEnum != ItemType.Artifact
+                                       && item.itemTypeEnum != ItemType.StatBoost,
+                _ => false,
+            };
+
+            if (match)
+            {
+                filteredList.Add(item);
+            }
+        }
+
+        // 3. UI 바인딩을 위해 필터링된 리스트 뒤에 null을 채워줍니다.
+        //    (필터링 후 빈 슬롯을 표시하기 위함)
+        while (filteredList.Count < capacity)
+        {
+            filteredList.Add(null);
+        }
+
+        // 최종적으로 인벤토리의 총 슬롯 개수까지만 반환하도록 자릅니다.
+        return filteredList.GetRange(0, Mathf.Min(filteredList.Count, capacity));
     }
 }

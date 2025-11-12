@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_005
   itemName: "\uB0A1\uC740 \uC11C\uBCF4 \uBAA8\uD130"
-  itemType: Relic
+  itemTypeEnum: 3
   grade: Common
   maxStack: 1
   description: "\uC2E0\uCCB4\uC5D0 \uB3D9\uB825\uC744 \uBCF4\uC870\uD558\uC5EC \uC774\uB3D9

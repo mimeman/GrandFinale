@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_003
   itemName: "\uAE08\uC774 \uAC04 \uAC8C\uC774\uC800 \uB80C\uC988"
-  itemType: Junk
+  itemTypeEnum: 6
   grade: Common
   maxStack: 1
   description: "\uBE5B\uC744 \uC783\uC740 \uAC8C\uC774\uC800\uC758 \uB208. \uC12C\uB729\uD55C

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Tab_UI : MonoBehaviour
 {
     // L1: 인스펙터에서 이 탭이 어떤 종류의 아이템을 필터링할지 설정
-    public InventoryFilterType filterType; // ★추가★ 인스펙터에서 선택
+    public InventoryFilterType filterType;
 
     private Button button;
 

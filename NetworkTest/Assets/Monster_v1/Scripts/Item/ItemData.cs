@@ -1,9 +1,9 @@
 using UnityEngine;
 public enum ItemType
 {
-    // 장비 슬롯에 장착 가능한 아이템
-    Weapon,
-    Artifact,
+    Weapon, //무기
+    Artifact, //갑바
+    Accessory, // 장신구
 
     // 단순 소모품 또는 기타
     StatBoost,

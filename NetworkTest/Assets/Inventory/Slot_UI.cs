@@ -20,23 +20,11 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     private static readonly string[] EquippableTypes =
     {
-    ItemType.Weapon.ToString().ToLower(),    // "weapon"
-    ItemType.Artifact.ToString().ToLower(),  // "artifact"
+    ItemType.Weapon.ToString().ToLower(),
+    ItemType.Artifact.ToString().ToLower(),
+    ItemType.Accessory.ToString().ToLower(),
 };
 
-    void Start()
-    {
-        //InventoryManager.OnInventoryChanged += UpdateSlotVisuals;
-        //UpdateSlotVisuals();
-    }
-    void OnDestroy()
-    {
-        //InventoryManager.OnInventoryChanged -= UpdateSlotVisuals;
-    }
-
-    /// <summary>
-    /// [NEW] InventorySlotUIController에서 필터링된 아이템을 직접 바인딩합니다.
-    /// </summary>
     public void SetBoundItem(RelicData newItem, int newIndex)
     {
         // 새로운 아이템 데이터와 인덱스를 저장합니다.

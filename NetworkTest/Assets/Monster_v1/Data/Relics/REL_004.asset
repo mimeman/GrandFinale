@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_004
   itemName: "\uAC15\uD654 \uC0DD\uCCB4 \uBC30\uD130\uB9AC"
-  itemType: Relic
+  itemTypeEnum: 2
   grade: Rare
   maxStack: 1
   description: "\uCC29\uC6A9\uC790\uC758 \uC0DD\uCCB4 \uC2E0\uD638\uB97C \uC99D\uD3ED\uC2DC\uCF1C

@@ -264,7 +264,6 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             // ... (기존 ShowTooltip의 능력치 포맷팅 로직 그대로 사용)
             AbilityData ability = item.grantedAbility;
-            detailsBuilder.AppendLine("\n--- 부여 능력 ---");
 
             if (ability.abilityLogicID == "Stat_Add")
             {

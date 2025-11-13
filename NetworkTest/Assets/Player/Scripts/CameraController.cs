@@ -15,6 +15,14 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        bool isInvReady = InventoryManager.Instance != null;
+        bool isInputBlocked = isInvReady && InventoryManager.Instance.IsUIActiveAndFocused;
+
+        if (isInputBlocked)
+        {
+            return;
+        }
+
         if (isPause)
             return;
 

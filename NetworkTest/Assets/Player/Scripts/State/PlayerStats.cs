@@ -1,4 +1,3 @@
-// Assets/Scripts/Player/PlayerStats.cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +5,9 @@ using System; // 'Action' 이벤트를 사용하기 위함
 
 public class PlayerStats : MonoBehaviour
 {
+    // [★수정★] 스탯이 변경될 때마다 UI 매니저에게 알리기 위한 이벤트
+    public event Action OnStatsChanged;
+
     [Header("기본 능력치 (Base Stats)")]
     public float baseWalkSpeed = 2f;
     public float baseRunSpeed = 3f;
@@ -13,6 +15,10 @@ public class PlayerStats : MonoBehaviour
     public float baseCooldownReduction = 0f;
     public float baseMaxHealth = 100f;
     public float baseDamageModifier = 1.0f;
+    public float baseDefense = 10f;  // [★신규★] 기본 방어력
+    public float basePower = 10f;    // [★신규★] 기본 파워
+    public int baseLevel = 1;        // [★신규★] 기본 레벨
+    public int baseCurrency = 22222; // [★신규★] 기본 재화
 
     [Header("현재 상태 (실시간 디버그용)")]
     [SerializeField] private float currentHealth;
@@ -23,8 +29,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentSprintSpeed;
     [SerializeField] private float currentDamageModifier;
     [SerializeField] private float currentCooldownReduction;
+    [SerializeField] private float currentDefense; // [★신규★]
+    [SerializeField] private float currentPower;   // [★신규★]
+    [SerializeField] private int currentLevel;     // [★신규★]
+    [SerializeField] private int currentCurrency;  // [★신규★]
 
-
+    // Public Properties (UI 및 다른 스크립트가 접근용)
     public float CurrentHealth { get { return currentHealth; } private set { currentHealth = value; } }
     public float CurrentMaxHealth { get { return currentMaxHealth; } private set { currentMaxHealth = value; } }
     public float CurrentShield { get { return currentShield; } private set { currentShield = value; } }
@@ -33,72 +43,98 @@ public class PlayerStats : MonoBehaviour
     public float CurrentSprintSpeed { get { return currentSprintSpeed; } private set { currentSprintSpeed = value; } }
     public float CurrentDamageModifier { get { return currentDamageModifier; } private set { currentDamageModifier = value; } }
     public float CurrentCooldownReduction { get { return currentCooldownReduction; } private set { currentCooldownReduction = value; } }
-    // UI 업데이트를 위한 이벤트 (옵션)
-    // 예: public event Action<string> OnStatChanged;
+    public float CurrentDefense { get { return currentDefense; } private set { currentDefense = value; } } // [★신규★]
+    public float CurrentPower { get { return currentPower; } private set { currentPower = value; } }     // [★신규★]
+    public int CurrentLevel { get { return currentLevel; } private set { currentLevel = value; } }     // [★신규★]
+    public int CurrentCurrency { get { return currentCurrency; } private set { currentCurrency = value; } } // [★신규★]
+
 
     void Awake()
     {
-        ResetToBaseStats(); 
-        CurrentHealth = CurrentMaxHealth; // 체력 꽉 채움
+        ResetToBaseStats();
+        CurrentHealth = CurrentMaxHealth;
+        currentCurrency = baseCurrency; // [★신규★] 기본 재화로 시작
     }
 
     // ====================================================================
-    // 1. 데미지 및 회복 처리 (기존 코드와 동일)
+    // 1. 데미지 및 회복 처리
     // ====================================================================
 
-    public void TakeDamage(float damage) 
+    public void TakeDamage(float damage)
     {
         float damageToTake = damage;
 
-        if (CurrentShield > 0) 
+        if (CurrentShield > 0)
         {
             if (CurrentShield >= damageToTake)
             {
-                CurrentShield -= damageToTake; 
-                damageToTake = 0; 
+                CurrentShield -= damageToTake;
+                damageToTake = 0;
             }
             else
             {
-                damageToTake -= CurrentShield; 
-                CurrentShield = 0; 
+                damageToTake -= CurrentShield;
+                CurrentShield = 0;
             }
         }
 
         if (damageToTake > 0)
         {
-            CurrentHealth -= damageToTake; 
+            CurrentHealth -= damageToTake;
         }
 
-        Debug.Log($"데미지 {damage} 받음. 현재 체력: {CurrentHealth}, 현재 실드: {CurrentShield}"); //
-
-        if (CurrentHealth <= 0) 
+        if (CurrentHealth <= 0)
         {
-            CurrentHealth = 0; 
-            Die(); 
+            CurrentHealth = 0;
+            Die();
         }
+
+        // [★수정★] UI 업데이트 신호 보내기
+        OnStatsChanged?.Invoke();
     }
 
-    public void Heal(float amount) 
+    public void Heal(float amount)
     {
-        CurrentHealth += amount; 
-        if (CurrentHealth > CurrentMaxHealth) 
+        CurrentHealth += amount;
+        if (CurrentHealth > CurrentMaxHealth)
         {
-            CurrentHealth = CurrentMaxHealth; 
+            CurrentHealth = CurrentMaxHealth;
         }
+        // [★수정★] UI 업데이트 신호 보내기
+        OnStatsChanged?.Invoke();
     }
 
-    private void Die() 
+    private void Die()
     {
-        Debug.Log("플레이어가 사망했습니다."); 
+        Debug.Log("플레이어가 사망했습니다.");
     }
 
     // ====================================================================
-    // 2. 스탯 적용 (AbilityManager가 호출)
+    // 2. [★신규★] 재화 관리
     // ====================================================================
-    /// <summary>
-    /// 모든 '현재 스탯'을 '기본 스탯'으로 되돌립니다.
-    /// (AbilityManager가 스탯 재계산 전 호출)
-    /// </summary>
+
+    public void AddCurrency(int amount)
+    {
+        currentCurrency += amount;
+        OnStatsChanged?.Invoke();
+    }
+
+    public bool SpendCurrency(int amount)
+    {
+        if (currentCurrency >= amount)
+        {
+            currentCurrency -= amount;
+            OnStatsChanged?.Invoke();
+            return true;
+        }
+        return false;
+    }
+
+
+    // ====================================================================
+    // 3. 스탯 적용 (AbilityManager가 호출)
+    // ====================================================================
+
     public void ResetToBaseStats()
     {
         currentMaxHealth = baseMaxHealth;
@@ -107,43 +143,43 @@ public class PlayerStats : MonoBehaviour
         currentWalkSpeed = baseWalkSpeed;
         currentRunSpeed = baseRunSpeed;
         currentSprintSpeed = baseSprintSpeed;
+        currentDefense = baseDefense;
+        currentPower = basePower;    
+        currentLevel = baseLevel;    
+
+        // [★수정★] UI 업데이트 신호 보내기
+        OnStatsChanged?.Invoke();
     }
 
-    // ★★★ (신규) 2. 체력 보정 함수 ★★★
-    /// <summary>
-    /// 스탯 재계산 후, 현재 체력이 최대 체력보다 높으면 최대 체력으로 맞춥니다.
-    /// (예: 아이템을 버려서 최대 체력이 150 -> 100이 되었을 때)
-    /// </summary>
     public void ValidateHealth()
     {
         if (CurrentHealth > CurrentMaxHealth)
         {
             CurrentHealth = CurrentMaxHealth;
         }
+        // [★수정★] UI 업데이트 신호 보내기
+        OnStatsChanged?.Invoke();
     }
 
-    /// <summary>
-    /// (ABIL_001) 합연산 스탯을 적용합니다. (예: 최대 체력 +50)
-    /// </summary>
-    public void AddStat(string statName, float value) 
+    public void AddStat(string statName, float value)
     {
         switch (statName)
         {
             case "MaxHealth":
-                CurrentMaxHealth += value; 
-                CurrentHealth += value; 
-                Debug.Log($"MaxHealth 증가: +{value} (총 {CurrentMaxHealth})"); 
+                CurrentMaxHealth += value;
+                CurrentHealth += value;
                 break;
-            case "BaseDamage":
-                Debug.Log($"BaseDamage 증가: +{value} (구현 필요)"); 
+            case "Defense":
+                CurrentDefense += value; // [★신규★]
+                break;
+            case "Power":
+                CurrentPower += value;   // [★신규★]
                 break;
         }
+        // [★수정★] UI 업데이트 신호 보내기
+        OnStatsChanged?.Invoke();
     }
 
-
-    /// <summary>
-    /// (ABIL_002) 곱연산(%) 스탯을 적용합니다. (예: 이동 속도 +10%)
-    /// </summary>
     public void AddStatPercent(string statName, float value)
     {
         switch (statName)
@@ -152,37 +188,32 @@ public class PlayerStats : MonoBehaviour
                 float walkBonus = baseWalkSpeed * (value / 100.0f);
                 float runBonus = baseRunSpeed * (value / 100.0f);
                 float sprintBonus = baseSprintSpeed * (value / 100.0f);
-
                 CurrentWalkSpeed += walkBonus;
                 CurrentRunSpeed += runBonus;
                 CurrentSprintSpeed += sprintBonus;
-                Debug.Log($"모든 MoveSpeed 증가: +{value}% (현재 스프린트: {CurrentSprintSpeed})");
                 break;
 
             case "CooldownReduction":
                 CurrentCooldownReduction += value;
-                Debug.Log($"CooldownReduction 증가: +{value}% (총 {CurrentCooldownReduction}%)");
                 break;
         }
+        OnStatsChanged?.Invoke();
     }
 
-    /// <summary>
-    /// (ABIL_006) 지정된 시간 동안 실드를 추가합니다.
-    /// </summary>
-    public void AddTemporaryShield(float amount, float duration) 
+    public void AddTemporaryShield(float amount, float duration)
     {
-        StartCoroutine(ShieldRoutine(amount, duration)); 
+        StartCoroutine(ShieldRoutine(amount, duration));
     }
 
-    private IEnumerator ShieldRoutine(float amount, float duration) 
+    private IEnumerator ShieldRoutine(float amount, float duration)
     {
-        CurrentShield += amount; 
-        Debug.Log($"실드 {amount} 획득! (총 {CurrentShield})"); 
+        CurrentShield += amount;
+        OnStatsChanged?.Invoke(); // 실드 변경도 UI에 알림 (필요시)
 
-        yield return new WaitForSeconds(duration); 
+        yield return new WaitForSeconds(duration);
 
-        CurrentShield -= amount; 
-        if (CurrentShield < 0) CurrentShield = 0; 
-        Debug.Log($"실드 {amount} 종료. (남은 실드 {CurrentShield})"); 
+        CurrentShield -= amount;
+        if (CurrentShield < 0) CurrentShield = 0;
+        OnStatsChanged?.Invoke(); // 실드 변경도 UI에 알림 (필요시)
     }
 }

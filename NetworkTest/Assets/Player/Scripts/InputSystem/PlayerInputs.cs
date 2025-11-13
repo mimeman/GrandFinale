@@ -124,7 +124,8 @@ public class PlayerInputs : MonoBehaviour
 
     public bool GetFullInventoryToggle() // O 키 (전체 인벤토리)
     {
-        return Input.GetKeyDown(keyData.m_KeyFullInventory);
+        return Input.GetKeyDown(KeyCode.O);
+        //return Input.GetKeyDown(keyData.m_KeyFullInventory);
     }
 
     // UI

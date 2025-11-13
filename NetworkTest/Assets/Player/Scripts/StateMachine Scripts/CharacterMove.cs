@@ -12,6 +12,8 @@ public class CharacterMove : MonoBehaviour
     private PlayerStats playerStats;
     public PlayerInputs Inputs { get { return playerInputs; } }
 
+    bool isInvReady = InventoryManager.Instance != null;
+
 
     [Header("Colider values")]
     public float crouchColliderHeight = 1f;
@@ -127,36 +129,25 @@ public class CharacterMove : MonoBehaviour
         if (currentState == null)
             return;
 
-        // InventoryManager 인스턴스 준비 상태 확인
+        // UI 상태 변수를 Update 함수 안에서 매 프레임 확인
         bool isInvReady = InventoryManager.Instance != null;
-
-        // UI 포커스 상태 확인 (InventoryManager가 준비되었을 때만 체크)
         bool isInputBlocked = isInvReady && InventoryManager.Instance.IsUIActiveAndFocused;
 
-        // 1. GroundCheck는 항상 실행 (물리 상태 유지)
-        GroundCheck();
+        GroundCheck(); // 땅 체크는 항상 실행
 
         if (isInputBlocked)
         {
-            // 인벤토리에 포커스가 있는 상태 (입력 차단)
-
-            // 공중에 있을 경우, InAirState로 강제 전환하여 중력 적용을 보장합니다.
-            if (!isGrounded && currentState != inAirState)
+            if (!isGrounded)
             {
-                // SetState(inAirState)를 통해 중력 상태로 진입
-                SetState(inAirState);
+                if (currentState != inAirState)
+                {
+                    SetState(inAirState); // 공중 상태로 강제 변경
+                }
+                inAirState.Tick();
             }
-
-            // currentState.Tick()을 호출하여 중력, 애니메이션 상태 유지 등 
-            // 필수 물리 업데이트를 진행합니다. (Tick 내부에서 입력이 0이므로 이동은 막힘)
-            currentState.Tick();
+            return;
         }
-        else // 인벤토리 포커스가 해제된 상태 (정상적인 인게임 입력 복구)
-        {
-            // 인게임 플레이가 정상적으로 진행될 때의 Tick()을 호출합니다.
-            // Tick() 내부에서 PlayerInputs.GetAxis() 등의 실제 입력값을 사용합니다.
-            currentState.Tick();
-        }
+        currentState.Tick();
     }
 
     void GroundCheck()
@@ -187,6 +178,52 @@ public class CharacterMove : MonoBehaviour
             edgeSlipVelocity = Vector3.zero;
         }
 
+    }
+
+    public void StopAllActions()
+    {
+        // 1. 모든 입력 기반 속도를 0으로 만듭니다.
+        moveVelocity = Vector3.zero;
+        rollVelocity = Vector3.zero;
+
+        // 2. 땅에 있다면 Y축 속도(중력)도 초기화합니다.
+        if (isGrounded)
+        {
+            velocity = new Vector3(0, -2f, 0);
+        }
+        // (공중에 있다면 Y축 속도는 유지해서 계속 떨어지게 합니다)
+
+        // 3. 애니메이터를 'Idle' 상태로 되돌립니다.
+        if (animator != null)
+        {
+            animator.SetFloat(horizontalInputID, 0f);
+            animator.SetFloat(verticalInputID, 0f);
+            animator.SetBool(sprintID, false);
+            animator.SetBool(rollID, false);
+            animator.SetBool(walkID, false);
+        }
+
+        // 4. 현재 상태(점프 중, 구르기 중)를 강제로 기본 상태로 되돌립니다.
+        if (isGrounded)
+        {
+            if (currentState != crouchState) // 웅크린 상태가 아니라면
+            {
+                SetState(moveState); // 기본 이동 상태로
+            }
+        }
+        else
+        {
+            if (currentState != inAirState) // 공중 상태가 아니라면
+            {
+                SetState(inAirState); // 공중 상태로
+            }
+        }
+
+        // 5. 몸 회전(Turn)을 멈춥니다.
+        if (bodyTurnHandler != null)
+        {
+            bodyTurnHandler.momentaryTurn = false;
+        }
     }
 
     IEnumerator ColliderSizeChangeSmooth(bool reduce)

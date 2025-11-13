@@ -6,12 +6,14 @@ using Cinemachine;
 
 public class InventoryManager : MonoBehaviour
 {
+    public CharacterMove playerCharacterMove;
+
     public static InventoryManager Instance;
     public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All; // 기본값: 전체
 
     private int slotCapacity = 60;
     public List<RelicData> inventorySlots;
-
+    
     public static event Action OnInventoryChanged;
     public static event Action<bool> OnInventoryToggle;
     public bool IsFocused { get; private set; } = false;
@@ -57,7 +59,6 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        // ★★★ 2. 인게임 클릭 시 포커스 상실 로직 (닫기 아님) ★★★
         if (IsFocused && Input.GetMouseButtonDown(0))
         {
             // 마우스 커서가 UI 요소 위에 있는지 확인
@@ -128,7 +129,6 @@ public class InventoryManager : MonoBehaviour
         {
             SetFocusState(true);
         }
-
     }
 
     /// <summary>
@@ -143,16 +143,24 @@ public class InventoryManager : MonoBehaviour
             if (IsFocused) SetFocusState(false);
         }
 
+        // UI가 현재 열려있는지 확인
         bool currentActive = fullInventoryUI.activeSelf;
 
-        if (!currentActive)
+        if (currentActive && IsFocused)
         {
+            // 2. [변경됨] 열려있고 포커스가 있었다면: UI를 닫고 포커스 상실
+            fullInventoryUI.SetActive(false);
+            SetFocusState(false);
+        }
+        else if (!currentActive)
+        {
+            // 3. 닫혀있었다면: UI를 열고 포커스 획득
             fullInventoryUI.SetActive(true);
             SetFocusState(true);
         }
-        else // UI가 현재 열려있는 상태
+        else // 4. 열려있지만 포커스가 없었다면: 포커스 다시 획득
         {
-            SetFocusState(!IsFocused);
+            SetFocusState(true);
         }
     }
 
@@ -333,7 +341,6 @@ public class InventoryManager : MonoBehaviour
 
         Debug.Log($"[InventoryManager] 포커스 변경: {(isFocused ? "획득" : "상실(인게임 포커스)")}");
 
-        // 1. 커서 상태 제어
         if (isFocused)
         {
             Cursor.lockState = CursorLockMode.None; // 마우스 포커스 획득
@@ -345,17 +352,14 @@ public class InventoryManager : MonoBehaviour
             Cursor.visible = false;
         }
 
-        if (characterMove != null)
+        if (isFocused)
         {
-            characterMove.enabled = !isFocused;
+            if (characterMove != null)
+            {
+                characterMove.StopAllActions();
+            }
         }
 
-        if (cameraController != null)
-        {
-            cameraController.enabled = !isFocused;
-        }
-
-        // 3. 이벤트 발생 (WeaponController에게 포커스 상태 전달)
         OnInventoryToggle?.Invoke(isFocused);
     }
 

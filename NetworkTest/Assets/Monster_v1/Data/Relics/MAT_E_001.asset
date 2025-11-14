@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: MAT_E_001
   itemName: "\uC644\uC804\uD55C \uAC8C\uC774\uC800\uC758 \uB208"
-  itemTypeEnum: 6
+  itemTypeEnum: 7
+  equipmentSlot: 0
   grade: Epic
   maxStack: 20
   description: "\uD615\uD0DC\uAC00 \uBCF4\uC874\uB41C \uAC8C\uC774\uC800\uC758 \uB208.

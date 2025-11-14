@@ -15,6 +15,7 @@ MonoBehaviour:
   itemID: REL_S_001
   itemName: "S.A.S \uC804\uD22C \uBAA8\uB4C8"
   itemTypeEnum: 1
+  equipmentSlot: 0
   grade: Epic
   maxStack: 1
   description: "\uB9CC\uB2A5 \uC804\uD22C \uBCF4\uC870 \uC2DC\uC2A4\uD15C'. \uCC29\uC6A9\uC790\uC758

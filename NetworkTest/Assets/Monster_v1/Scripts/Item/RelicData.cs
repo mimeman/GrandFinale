@@ -8,6 +8,8 @@ public class RelicData : ScriptableObject
     public string itemID;
     public string itemName;
     public ItemType itemTypeEnum;
+    public EquipmentSlot equipmentSlot;
+
     public string grade;
     public int maxStack;
 

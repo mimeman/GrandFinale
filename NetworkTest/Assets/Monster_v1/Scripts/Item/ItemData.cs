@@ -2,8 +2,9 @@ using UnityEngine;
 public enum ItemType
 {
     Weapon, //무기
-    Artifact, //갑바
+    Artifact, //유물
     Accessory, // 장신구
+    Equipment, // 장비
 
     // 단순 소모품 또는 기타
     StatBoost,
@@ -20,6 +21,17 @@ public enum InventoryFilterType
     Accessory,  // 장신구
     Relic,      // 유물
     Etc         // 기타
+}
+
+public enum EquipmentSlot
+{
+    None,     // 장착 부위 없음 (재료, 유물, 무기 등)
+    Head,
+    Face,
+    Necklace,
+    Armor,
+    Pants,
+    Shoes
 }
 
 [CreateAssetMenu(fileName = "New ItemData", menuName = "Item/Data", order = 1)]
@@ -39,4 +51,7 @@ public class ItemData : ScriptableObject
 
     [Header("Item Type")]
     public ItemType itemType;
+
+    [Header("Equipment Info")]
+    public EquipmentSlot equipmentSlot;
 }

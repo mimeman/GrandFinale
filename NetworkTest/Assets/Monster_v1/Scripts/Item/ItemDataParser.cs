@@ -67,15 +67,12 @@ public class ItemDataParser
 
             // 4. 변경 사항 저장
             EditorUtility.SetDirty(ability);
-
-            // ★★★ (최적화) 루프 안에서 UpdateMasterDatabase() 호출 제거 ★★★
-            // UpdateMasterDatabase(); // (제거)
         }
 
         AssetDatabase.SaveAssets();
         Debug.Log("[AbilityParser] 임포트 완료!");
 
-        // ★★★ (최적화) 임포트가 모두 끝난 후 '한 번만' 호출 ★★★
+        // 임포트가 모두 끝난 후 '한 번만' 호출
         UpdateMasterDatabase();
     }
 
@@ -98,9 +95,10 @@ public class ItemDataParser
 
             string[] row = SplitCSVLine(allLines[i]);
 
-            if (row.Length < 9)
+            // [수정] 열 개수 검사를 10개로 변경
+            if (row.Length < 10)
             {
-                Debug.LogWarning($"[RelicParser] 줄 무시됨 (열 부족, 9개 미만): {allLines[i]}");
+                Debug.LogWarning($"[RelicParser] 줄 무시됨 (열 부족, 10개 미만): {allLines[i]}");
                 continue;
             }
 
@@ -120,30 +118,43 @@ public class ItemDataParser
             relic.itemID = row[0].Trim();
             relic.itemName = row[1].Trim();
 
-            string itemTypeString = row[2].Trim(); // CSV의 "Weapon", "Artifact" 등의 문자열을 읽음
-
-            // Enum.TryParse: 대소문자 구분 없이 문자열을 ItemType Enum으로 변환 시도
+            // ItemType 파싱 (row[2])
+            string itemTypeString = row[2].Trim();
             if (System.Enum.TryParse(itemTypeString, true, out ItemType parsedItemType))
             {
                 relic.itemTypeEnum = parsedItemType;
             }
             else
             {
-                Debug.LogWarning($"[RelicParser] ItemType '{itemTypeString}' 파싱 실패! '{itemID}'에 ItemType.Etc 할당. CSV와 Enum 이름 확인 필요.");
-                relic.itemTypeEnum = ItemType.Etc; // 파싱 실패 시 기본값 (기타)
+                Debug.LogWarning($"[RelicParser] ItemType '{itemTypeString}' 파싱 실패! '{itemID}'에 ItemType.Etc 할당.");
+                relic.itemTypeEnum = ItemType.Etc;
             }
-            relic.grade = row[3].Trim();
-            relic.description = row[4].Trim();
-            relic.iconPath = row[5].Trim();
 
-            // maxStack 파싱 (row[7]은 maxStack)
-            int.TryParse(row[7].Trim(), out relic.maxStack);
+            // [추가] equipmentSlot 파싱 (row[3])
+            string slotString = row[3].Trim();
+            if (System.Enum.TryParse(slotString, true, out EquipmentSlot parsedSlotType))
+            {
+                relic.equipmentSlot = parsedSlotType;
+            }
+            else
+            {
+                // "None" 문자열이거나 비어있는 경우
+                if (string.Equals(slotString, "None", System.StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(slotString))
+                {
+                    relic.equipmentSlot = EquipmentSlot.None;
+                }
+                else
+                {
+                    Debug.LogWarning($"[RelicParser] EquipmentSlot '{slotString}' 파싱 실패! '{itemID}'에 EquipmentSlot.None 할당.");
+                    relic.equipmentSlot = EquipmentSlot.None;
+                }
+            }
+            relic.grade = row[4].Trim();            // (기존 row[3])
+            relic.description = row[5].Trim();      // (기존 row[4])
+            relic.iconPath = row[6].Trim();         // (기존 row[5])
 
-            // price 파싱 (row[8]은 price)
-            int.TryParse(row[8].Trim(), out relic.price);
-
-
-            string abilityIDString = row[6].Trim(); // 시트의 "ABIL_001" (row[6]은 능력 ID)
+            // Ability ID 파싱 (row[7]) - (기존 row[6])
+            string abilityIDString = row[7].Trim();
             if (!string.IsNullOrEmpty(abilityIDString))
             {
                 string abilityAssetPath = $"{ABILITY_DATA_PATH}/{abilityIDString}.asset";
@@ -164,6 +175,12 @@ public class ItemDataParser
                 relic.grantedAbility = null; // 연결된 능력이 없음
             }
 
+            // maxStack 파싱 (row[8]) - (기존 row[7])
+            int.TryParse(row[8].Trim(), out relic.maxStack);
+
+            // price 파싱 (row[9]) - (기존 row[8])
+            int.TryParse(row[9].Trim(), out relic.price);
+
             EditorUtility.SetDirty(relic);
         }
 
@@ -173,7 +190,6 @@ public class ItemDataParser
         // 임포트가 모두 끝난 후 마스터 데이터베이스 업데이트
         UpdateMasterDatabase();
     }
-
 
     [MenuItem("MyTools/Import Data/3. Update Master Database")]
     public static void UpdateMasterDatabase()
@@ -189,6 +205,7 @@ public class ItemDataParser
             AssetDatabase.CreateAsset(db, MASTER_DB_PATH);
         }
 
+        // (안정성) 리스트가 null이면 새로 생성
         if (db.allAbilities == null)
         {
             db.allAbilities = new List<AbilityData>();
@@ -214,6 +231,7 @@ public class ItemDataParser
         string[] relicGUIDs = AssetDatabase.FindAssets("t:RelicData", new[] { RELIC_DATA_PATH });
         foreach (string guid in relicGUIDs)
         {
+            // [수정] 오타(stray 's')가 제거된 깨끗한 코드
             string path = AssetDatabase.GUIDToAssetPath(guid);
             db.allRelics.Add(AssetDatabase.LoadAssetAtPath<RelicData>(path));
         }
@@ -224,8 +242,6 @@ public class ItemDataParser
 
         Debug.Log($"[MasterDB] 업데이트 완료: Abilities({db.allAbilities.Count}), Relics({db.allRelics.Count})");
     }
-
-    // 제공해주신 CSV 파싱 유틸리티 (따옴표(")로 묶인 콤마 무시)
     private static string[] SplitCSVLine(string line)
     {
         List<string> result = new();

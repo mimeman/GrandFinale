@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: EQP_A_002
   itemName: "\uB098\uB178-\uC7AC\uC0DD \uBAA9\uAC78\uC774"
-  itemTypeEnum: 2
+  itemTypeEnum: 3
+  equipmentSlot: 3
   grade: Epic
   maxStack: 1
   description: "\uAE01\uD78C \uC0C1\uCC98 \uC815\uB3C4\uB294 \uC54C\uC544\uC11C \uC544\uBB3C

@@ -31,9 +31,6 @@ public class InventorySlotUIController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// InventoryManager에서 필터링된 리스트를 가져와서 UI 슬롯에 바인딩하고 활성/비활성화합니다.
-    /// </summary>
     private void UpdateSlotUIBindings()
     {
         if (InventoryManager.Instance == null)
@@ -42,33 +39,35 @@ public class InventorySlotUIController : MonoBehaviour
             return;
         }
 
-        // 1. InventoryManager에서 현재 필터에 맞는 아이템 리스트를 가져옵니다.
-        List<RelicData> filteredItems = InventoryManager.Instance.GetFilteredInventory();
+        // 1. InventoryManager에서 필터링된 InventorySlot 리스트를 가져옵니다.
+        List<InventorySlot> filteredSlots = InventoryManager.Instance.GetFilteredInventory();
 
-        // 2. UI 슬롯과 필터링된 아이템을 1:1 매칭합니다.
+        // 2. 'allInventorySlots' 리스트의 'i'번째 슬롯을 가져옵니다.
+        // (이 슬롯의 slotIndex는 Inspector에서 설정한 0~59 고유값)
         for (int i = 0; i < allInventorySlots.Count; i++)
         {
             Slot_UI slotUI = allInventorySlots[i];
+            if (slotUI == null) continue; // (안전 장치)
 
-            if (i >= filteredItems.Count)
+            // 3. 'filteredSlots' 리스트의 'i'번째 아이템을 가져옵니다.
+            // (필터링된 리스트이므로 0, 1, 2... 순서)
+            InventorySlot slotData;
+            if (i < filteredSlots.Count)
             {
-                slotUI.gameObject.SetActive(false);
-                continue;
+                slotData = filteredSlots[i];
             }
-
-            RelicData item = filteredItems[i];
-            if (item != null)
-            {
-
-                slotUI.SetBoundItem(item, i);
-                slotUI.gameObject.SetActive(true);
-            }
-            // 4. 필터링된 아이템이 null인 경우 (즉, 아이템이 비어있는 경우)
             else
             {
-                slotUI.SetBoundItem(null, i);
-                slotUI.gameObject.SetActive(true);
+                // (안전 장치) 필터링된 아이템 수보다 UI 슬롯이 더 많으면
+                // 뒤쪽 슬롯은 빈 슬롯으로 채웁니다.
+                slotData = new InventorySlot(); // 빈 슬롯 데이터
             }
+
+            // 4. ★★★ (핵심 수정) ★★★
+            // slotUI.SetBoundItem(slotData, i); // (이전 코드, 에러 발생 지점)
+            slotUI.SetBoundItem(slotData); // (수정된 코드)
+
+            slotUI.gameObject.SetActive(true);
         }
     }
 }

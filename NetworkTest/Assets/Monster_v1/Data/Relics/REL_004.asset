@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_004
   itemName: "\uAC15\uD654 \uC0DD\uCCB4 \uBC30\uD130\uB9AC"
-  itemTypeEnum: 2
+  itemTypeEnum: 1
   grade: Rare
   maxStack: 1
-  description: "\uCC29\uC6A9\uC790\uC758 \uC0DD\uCCB4 \uC2E0\uD638\uB97C \uC99D\uD3ED\uC2DC\uCF1C
-    \uCD5C\uB300 \uCCB4\uB825\uC744 \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  description: "\uC2EC\uC7A5\uC774 \uD558\uB098 \uB354 \uB6F0\uB294 \uAC83 \uAC19\uC740
+    \uB4E0\uB4E0\uD568\uC744 \uC81C\uACF5\uD569\uB2C8\uB2E4. \uCD5C\uB300 \uCCB4\uB825\uC774
+    \uD070 \uD3ED\uC73C\uB85C \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  price: 350
   iconPath: Icons/Relics/CyberHeart
-  grantedAbility: {fileID: 11400000, guid: 1fa75a25b29dfd244b2c48bd6f28526b, type: 2}
+  grantedAbility: {fileID: 11400000, guid: a15b7b376eb5aab4b9c360317eb3a250, type: 2}

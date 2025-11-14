@@ -14,6 +14,8 @@ public class RelicData : ScriptableObject
     [TextArea(3, 5)]
     public string description;
 
+    public int price;
+
     [Header("리소스 경로")]
     public string iconPath; // Icons/Relics/AuxHeart
 

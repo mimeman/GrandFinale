@@ -86,7 +86,7 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             equippedRelics.Add(relic);
             Debug.Log($"[AbilityManager] {relic.itemName}는(은) 이미 보유 중입니다.");
-            return;
+            // return; // ★참고: 중복 허용 시 이 줄을 주석 처리 (현재는 중복 적용되도록 됨)
         }
 
         equippedRelics.Add(relic);
@@ -163,6 +163,12 @@ public class PlayerAbilityManager : MonoBehaviour
                 playerStats.AddStatPercent(ability.param_Key, float.Parse(ability.param_ValueA));
                 break;
 
+            // ★★★ 1. (신규) 복합 스탯 로직 케이스 추가 ★★★
+            case "Stat_Composite":
+                // 이 능력은 param_Key를 기준으로 여러 스탯을 적용합니다.
+                ApplyCompositeStat(ability);
+                break;
+
             case "Aura_Heal_Ally":
             case "Aura_Damage_Enemy":
                 Debug.Log($"{ability.abilityName} 오라 생성 (구현 필요)");
@@ -179,6 +185,38 @@ public class PlayerAbilityManager : MonoBehaviour
                 break;
         }
     }
+
+    // ★★★ 2. (신규) 복합 스탯 전용 적용 함수 ★★★
+    /// <summary>
+    /// 'Stat_Composite' 로직 ID를 가진 능력의 세부 스탯을 적용합니다.
+    /// </summary>
+    private void ApplyCompositeStat(AbilityData ability)
+    {
+        switch (ability.param_Key)
+        {
+            // ABIL_301: S.A.S 전투 모듈
+            // (체력, 방어력, 이동 속도, 공격력 소폭 증가)
+            case "SAS_Module":
+                playerStats.AddStat("MaxHealth", 10f);
+                playerStats.AddStat("Defense", 5f);
+                playerStats.AddStat("Power", 5f);
+                playerStats.AddStatPercent("MoveSpeed", 5f); // 5% 증가
+                break;
+
+            // ABIL_302: '불워크' 중장갑
+            // (최대 체력/방어력 대폭 증가, 이동 속도 감소)
+            case "Bulwark_Armor":
+                playerStats.AddStat("MaxHealth", 50f);
+                playerStats.AddStat("Defense", 20f);
+                playerStats.AddStatPercent("MoveSpeed", -15f); // 15% 감소
+                break;
+
+            default:
+                Debug.LogWarning($"[ApplyCompositeStat] 정의되지 않은 param_Key: {ability.param_Key}");
+                break;
+        }
+    }
+
 
     /// <summary>
     /// 스탯 재계산 전에 모든 오라/이펙트를 멈추고 파괴합니다.
@@ -297,13 +335,6 @@ public class PlayerAbilityManager : MonoBehaviour
         // (이펙트 제거)
         runningSkillCoroutines.Remove(ability.abilityID);
     }
-
-    /**
-     * ABIL_006: (본인) 에너지 실드
-     * (PlayerStats.AddTemporaryShield로 이동했으므로 이 코루틴은 이제 필요 없음)
-     */
-    // private IEnumerator AddShieldRoutine(AbilityData ability) { ... } // ★★★ 삭제됨 ★★★
-
 
     // ====================================================================
     // 6. 유틸리티 (코루틴 관리) (기존 코드와 동일)

@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_008
   itemName: "??\uC758 \uC120\uAE00\uB77C\uC2A4"
-  itemTypeEnum: 5
+  itemTypeEnum: 1
   grade: Rare
   maxStack: 1
-  description: "\uBAAC\uC2A4\uD130\uC758 \uC57D\uC810 \uB370\uC774\uD130\uB97C \uBD84\uC11D\uD558\uC5EC
-    \uBAA8\uB4E0 \uACF5\uACA9\uC758 \uD53C\uD574\uB7C9\uC744 \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  description: "\uB370\uC774\uD130\uAC00... \uB108\uBB34 \uB9CE\uC544! \uC801\uC758
+    \uBAA8\uB4E0 \uC57D\uC810\uC744 \uC2A4\uCE94\uD558\uC5EC, \uAC00\uD558\uB294
+    \uBAA8\uB4E0 \uD53C\uD574\uB7C9\uC744 \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  price: 400
   iconPath: Icons/Relics/DataChip
-  grantedAbility: {fileID: 11400000, guid: 08a7cd9920c1df44b83a6dbef8f9e1a1, type: 2}
+  grantedAbility: {fileID: 11400000, guid: 3654c14ce70f0ef419430e578bd8c876, type: 2}

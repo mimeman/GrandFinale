@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: REL_006
   itemName: "\uC81C\uD53C\uB85C\uC2A4 \uCD94\uC9C4\uAE30"
-  itemTypeEnum: 3
+  itemTypeEnum: 1
   grade: Epic
   maxStack: 1
-  description: "\uACE0\uB300 \uAE30\uC220\uB85C \uB9CC\uB4E4\uC5B4\uC9C4 \uCD94\uC9C4\uAE30.
+  description: "\uC81C\uC870\uC0AC \uBD88\uBA85. \uACBD\uACE0: \uCD94\uC9C4\uAE30
+    \uC0AC\uC6A9 \uC2DC \uC2E0\uCCB4 \uBC1C\uD654\uC5D0 \uC8FC\uC758\uD558\uC2ED\uC2DC\uC624.
     \uC774\uB3D9 \uC18D\uB3C4\uB97C \uB300\uD3ED \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
+  price: 800
   iconPath: Icons/Relics/Thruster
-  grantedAbility: {fileID: 11400000, guid: 4564effd17a8bfc49ada3de13a2d8054, type: 2}
+  grantedAbility: {fileID: 11400000, guid: c9219a390838c214a8eee1f004075e42, type: 2}

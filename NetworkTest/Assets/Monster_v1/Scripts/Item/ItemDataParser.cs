@@ -1,4 +1,3 @@
-// Assets/Scripts/Editor/ItemDataParser.cs
 using UnityEngine;
 using UnityEditor; // Editor 스크립트
 using System.IO;   // 파일 읽기/쓰기
@@ -80,8 +79,6 @@ public class ItemDataParser
         UpdateMasterDatabase();
     }
 
-    // 2. RelicData 임포트 메뉴
-    [MenuItem("MyTools/Import Data/2. Import RelicData (CSV)")]
     [MenuItem("MyTools/Import Data/2. Import RelicData (CSV)")]
     public static void ImportRelicData()
     {
@@ -100,11 +97,10 @@ public class ItemDataParser
             if (string.IsNullOrWhiteSpace(allLines[i])) continue;
 
             string[] row = SplitCSVLine(allLines[i]);
-            // CSV 열 개수가 7개 미만이면 무시 (최소 항목 수)
-            // RelicData 임포트 로직에는 최소 8개의 열이 필요합니다 (ID~아이콘경로, 능력ID, MaxStack).
-            if (row.Length < 8)
+
+            if (row.Length < 9)
             {
-                Debug.LogWarning($"[RelicParser] 줄 무시됨 (열 부족, 8개 미만): {allLines[i]}");
+                Debug.LogWarning($"[RelicParser] 줄 무시됨 (열 부족, 9개 미만): {allLines[i]}");
                 continue;
             }
 
@@ -121,10 +117,9 @@ public class ItemDataParser
             }
 
             // RelicData 필드 채우기
-            relic.itemID = itemID;
+            relic.itemID = row[0].Trim();
             relic.itemName = row[1].Trim();
 
-            // ★★★ 핵심 수정: string itemType을 ItemType Enum으로 변환하여 할당 ★★★
             string itemTypeString = row[2].Trim(); // CSV의 "Weapon", "Artifact" 등의 문자열을 읽음
 
             // Enum.TryParse: 대소문자 구분 없이 문자열을 ItemType Enum으로 변환 시도
@@ -143,6 +138,10 @@ public class ItemDataParser
 
             // maxStack 파싱 (row[7]은 maxStack)
             int.TryParse(row[7].Trim(), out relic.maxStack);
+
+            // price 파싱 (row[8]은 price)
+            int.TryParse(row[8].Trim(), out relic.price);
+
 
             string abilityIDString = row[6].Trim(); // 시트의 "ABIL_001" (row[6]은 능력 ID)
             if (!string.IsNullOrEmpty(abilityIDString))

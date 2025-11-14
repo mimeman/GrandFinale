@@ -279,7 +279,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
         tooltipCoroutine = null;
 
-        // ★ 추가: 툴팁 숨김 코루틴이 이미 실행 중이면 중단하고 새로 시작 (클릭 등으로 인한 중복 방지)
         if (hideTooltipCoroutine != null) StopCoroutine(hideTooltipCoroutine);
 
         // ★ 0.1초 딜레이 후 툴팁을 숨깁니다.
@@ -312,6 +311,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
 
         // 3. 이 코루틴이 완료되었으므로 레퍼런스를 해제합니다.
-        hideTooltipCoroutine = null; // <--- 이 위치가 맞습니다.
+        hideTooltipCoroutine = null;
     }
 }

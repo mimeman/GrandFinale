@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private static UIManager m_Instance;
-    public static UIManager Instance {get{return m_Instance;}}
+    public static UIManager Instance { get { return m_Instance; } }
+
     [Header("Menu UI Panels")]
     [SerializeField] private GameObject menuUIParent;
     [SerializeField] private GameObject titleUI;
@@ -31,30 +32,36 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject[] optionUIs;
     [SerializeField] private ModalWindowManager shortcutModal;
 
-
-
-    
     private GameState uiState;
     private PlayerInputs input;
 
     private void Awake()
     {
+
         if (Instance == null)
         {
             m_Instance = this;
             DontDestroyOnLoad(this);
         }
         else
+        {
             Destroy(gameObject);
+            return;
+        }
 
-        GameManager.Instance.TryGetComponent<PlayerInputs>(out input);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.TryGetComponent<PlayerInputs>(out input);
+        }
     }
 
     private void Update()
     {
         if (uiState != GameManager.Instance.CurrentState)
-        {   // Panel 초기화
+        {
             uiState = GameManager.Instance.CurrentState;
+
+            Debug.Log($"[UIManager] GameState 변경됨: {uiState}");
 
             if (GameState.Title == uiState)
             {
@@ -76,7 +83,7 @@ public class UIManager : MonoBehaviour
     private void InitGameUI()
     {
         mobile_UI.SetActive(true);
-        inventoryUI.SetActive(true);
+        inventoryUI.SetActive(false); 
         pauseUI.SetActive(false);
         optionUI.SetActive(false);
         foreach (GameObject obj in optionUIs)
@@ -122,9 +129,8 @@ public class UIManager : MonoBehaviour
                         exitGameModal.Open();
                 }
                 break;
+
             case GameState.Game:
-                if (input.GetInventory() && !pauseUI.activeSelf)
-                    InventoryToggle();
                 if (input.GetEscape())
                 {
                     if (shortcutModal.isOn)
@@ -139,21 +145,11 @@ public class UIManager : MonoBehaviour
                         inEndGameModal.Close();
                     else if (pauseUI.activeSelf)
                         pauseUI.SetActive(false);
-                    else if (inventoryUI.activeSelf)
-                        inventoryUI.SetActive(false);
                     else
                         pauseUI.SetActive(true);
                 }
                 break;
         }
-    }
-
-    public void InventoryToggle()
-    {
-        if (inventoryUI.activeSelf)
-            inventoryUI.SetActive(false);
-        else
-            inventoryUI.SetActive(true);
     }
 
     private int IsOptionEnable()
@@ -165,5 +161,4 @@ public class UIManager : MonoBehaviour
         }
         return -1;
     }
-
 }

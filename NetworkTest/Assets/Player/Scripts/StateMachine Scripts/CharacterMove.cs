@@ -122,8 +122,6 @@ public class CharacterMove : MonoBehaviour
             currentState.OnStateEnter();
     }
 
-    // CharacterMove.cs (Update 함수 수정)
-
     private void Update()
     {
         if (currentState == null)
@@ -131,7 +129,8 @@ public class CharacterMove : MonoBehaviour
 
         // UI 상태 변수를 Update 함수 안에서 매 프레임 확인
         bool isInvReady = InventoryManager.Instance != null;
-        bool isInputBlocked = isInvReady && InventoryManager.Instance.IsUIActiveAndFocused;
+        // [수정] IsUIActiveAndFocused -> IsFocused로 변경 (리팩토링된 InventoryManager에 맞춤)
+        bool isInputBlocked = isInvReady && InventoryManager.Instance.IsFocused;
 
         GroundCheck(); // 땅 체크는 항상 실행
 

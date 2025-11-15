@@ -67,20 +67,24 @@ public class PlayerInputs : MonoBehaviour
     // Attack
     public bool GetAttack()
     {
-        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
-        Debug.Log("전투 입력 차단됨!");
+        // [수정] IsFocused로 간단하게 체크
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsFocused)
+            return false;
+
         return Input.GetKey(keyData.m_KeyAttack);
     }
     public bool GetAimed()
     {
-        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
-        Debug.Log("전투 입력 차단됨!");
+        // 커서가 보이면 조준 불가 (ESC 눌렀을 때처럼)
+        if (Cursor.visible || Cursor.lockState != CursorLockMode.Locked)
+            return false;
 
         return Input.GetKey(keyData.m_KeyAimed);
     }
     public bool GetReload()
     {
-        if (InventoryManager.Instance != null && InventoryManager.Instance.IsCombatInputBlockedByUI()) return false;
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsFocused)
+            return false;
 
         return Input.GetKeyDown(keyData.m_KeyReload);
     }
@@ -112,20 +116,23 @@ public class PlayerInputs : MonoBehaviour
     {
         return Input.GetKeyDown(keyData.m_KeyInteract);
     }
+
+    // [수정] 기존 GetInventory를 Tab 키로 변경
     public bool GetInventory()
     {
-        return Input.GetKeyDown(keyData.m_KeyInventory);
+        return Input.GetKeyDown(keyData.m_KeyInventory); // Tab 키
     }
 
-    public bool GetInventoryToggle() // I 키 (작은 인벤토리)
+    // [추가] Small Inventory 토글 (Tab 키와 동일)
+    public bool GetInventoryToggle()
     {
-        return Input.GetKeyDown(keyData.m_KeyInventory);
+        return Input.GetKeyDown(keyData.m_KeyInventory); // Tab 키
     }
 
-    public bool GetFullInventoryToggle() // O 키 (전체 인벤토리)
+    // [추가] Full Inventory 토글 (O 키)
+    public bool GetFullInventoryToggle()
     {
         return Input.GetKeyDown(KeyCode.O);
-        //return Input.GetKeyDown(keyData.m_KeyFullInventory);
     }
 
     // UI

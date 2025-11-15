@@ -25,9 +25,9 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     private static readonly string[] EquippableTypes =
     {
         ItemType.Weapon.ToString().ToLower(),
-        ItemType.Artifact.ToString().ToLower(),    // 유물
-        ItemType.Accessory.ToString().ToLower(),   // 장신구
-        ItemType.Equipment.ToString().ToLower()    // 장비
+        ItemType.Artifact.ToString().ToLower(),
+        ItemType.Accessory.ToString().ToLower(),
+        ItemType.Equipment.ToString().ToLower()
     };
 
     public void SetBoundItem(InventorySlot newSlot)
@@ -77,43 +77,16 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    private bool CheckFilterMatch(RelicData item)
-    {
-        InventoryFilterType currentFilter = InventoryManager.Instance.currentFilter;
-        if (currentFilter == InventoryFilterType.All) return true;
-        if (item == null) return false;
-
-        ItemType itemType = item.itemTypeEnum;
-
-        return currentFilter switch
-        {
-            InventoryFilterType.Weapon => itemType == ItemType.Weapon,
-
-            // '장비' 탭 = 헬멧, 갑옷, 하의, 신발 등
-            InventoryFilterType.Equipment => itemType == ItemType.Equipment,
-
-            // '장신구' 탭 = 얼굴, 목걸이
-            InventoryFilterType.Accessory => itemType == ItemType.Accessory,
-
-            // '유물' 탭 = Artifact
-            InventoryFilterType.Relic => itemType == ItemType.Artifact,
-
-            // '기타' 탭 = 위 4가지를 제외한 모든 것
-            InventoryFilterType.Etc => itemType != ItemType.Weapon &&
-                                       itemType != ItemType.Equipment &&
-                                       itemType != ItemType.Accessory &&
-                                       itemType != ItemType.Artifact,
-            _ => false,
-        };
-    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (currentSlot == null || currentSlot.item == null || currentSlot.slotIndex == -1) return;
 
+        // 1. 우클릭 (즉시 장착)
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             AttemptEquip();
         }
+        // 2. 좌클릭 (더블클릭/싱글클릭 처리)
         else if (eventData.button == PointerEventData.InputButton.Left)
         {
             if (eventData.clickCount == 1)
@@ -122,7 +95,11 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
                 {
                     StopCoroutine(singleClickCoroutine);
                 }
-                singleClickCoroutine = StartCoroutine(HandleSingleClick());
+
+                if (IsMainInventoryView())
+                {
+                    singleClickCoroutine = StartCoroutine(HandleSingleClick());
+                }
             }
             else if (eventData.clickCount == 2)
             {
@@ -168,12 +145,24 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     public void OnDrop(PointerEventData eventData)
     {
         Slot_UI targetSlot = this;
-        if (targetSlot.currentSlot.slotIndex == -1) return;
 
+        // [디버그] 타겟 슬롯 정보 출력
+        Debug.Log($"[OnDrop] 타겟 슬롯 정보 - slotIndex: {(targetSlot.currentSlot != null ? targetSlot.currentSlot.slotIndex.ToString() : "null")}, hasItem: {(targetSlot.currentSlot?.item != null)}");
+
+        // [수정] 가짜 슬롯(필터링된 슬롯)만 차단, 빈 슬롯은 허용
+        if (targetSlot.currentSlot == null || targetSlot.currentSlot.slotIndex == -1)
+        {
+            Debug.Log("[OnDrop] 가짜 슬롯이므로 드롭 차단");
+            return;
+        }
+
+        // === 1. 인벤토리 슬롯 간 드래그 ===
         Slot_UI sourceInventorySlot = eventData.pointerDrag.GetComponent<Slot_UI>();
         if (sourceInventorySlot != null)
         {
             if (sourceInventorySlot.currentSlot == null || sourceInventorySlot.currentSlot.slotIndex == -1) return;
+
+            Debug.Log($"[OnDrop] 인벤토리 스왑: {sourceInventorySlot.currentSlot.slotIndex} → {targetSlot.currentSlot.slotIndex}");
 
             if (sourceInventorySlot != targetSlot)
             {
@@ -183,9 +172,12 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             return;
         }
 
+        // === 2. 장비 슬롯에서 인벤토리로 드래그 ===
         EquipmentSlot_UI sourceEquipSlot = eventData.pointerDrag.GetComponent<EquipmentSlot_UI>();
         if (sourceEquipSlot != null && sourceEquipSlot.currentItem != null)
         {
+            Debug.Log($"[OnDrop] 장비 해제: {sourceEquipSlot.currentItem.itemName} → 인벤토리");
+
             bool success = EquipmentManager.Instance.UnequipItem(sourceEquipSlot.currentItem, sourceEquipSlot.equipmentSlotIndex);
 
             if (success)
@@ -214,12 +206,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         {
             UpdateSlotVisuals();
         }
-
-        if (currentSlot != null && currentSlot.item != null && currentSlot.slotIndex != -1)
-        {
-            InventoryUIManager.Instance.UpdateDetails(currentSlot.item);
-        }
-
         dropSuccessful = false;
     }
 
@@ -268,7 +254,7 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
         else
         {
-            Debug.Log($"이 아이템({itemToEquip.itemName})은 장착할 수 없습니다. (타입: {itemToEquip.itemTypeEnum})");
+            Debug.Log($"이 아이템({itemToEquip.itemName})은(는) 장착할 수 없습니다. (타입: {itemToEquip.itemTypeEnum})");
         }
     }
 
@@ -310,5 +296,10 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             InventoryUIManager.Instance.HideTooltip();
         }
         hideTooltipCoroutine = null;
+    }
+
+    private bool IsMainInventoryView()
+    {
+        return InventoryManager.Instance.currentFilter != InventoryFilterType.Relic;
     }
 }

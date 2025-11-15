@@ -15,15 +15,15 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        bool isInvReady = InventoryManager.Instance != null;
-        bool isInputBlocked = isInvReady && InventoryManager.Instance.IsUIActiveAndFocused;
-
-        if (isInputBlocked)
-        {
-            return;
-        }
-
         if (isPause)
+            return;
+
+        // [추가] 인벤토리 포커스 상태 확인
+        bool isInventoryFocused = InventoryManager.Instance != null &&
+                                  InventoryManager.Instance.IsFocused;
+
+        // [추가] 인벤토리 열려있으면 카메라 회전 안 함
+        if (isInventoryFocused)
             return;
 
         MouseLocker();

@@ -22,6 +22,10 @@ public class CameraSwitcher : MonoBehaviour
 
     bool CanAimCheck()
     {
+        // [추가] 인벤토리 열려있으면 조준 불가
+        if (InventoryManager.Instance != null && InventoryManager.Instance.IsFocused)
+            return false;
+
         var canAim = (isGrounded && !characterMove.moveState.isSprint && !isWeaponChange);
         return canAim;
     }
@@ -48,7 +52,7 @@ public class CameraSwitcher : MonoBehaviour
     void ApplyIsGround(bool value) => isGrounded = value;
     void ApplyIsWeaponChange(bool value) => isWeaponChange = value;
 
-    // [신규] 롱클릭을 위한 TPV 조준 시작 함수
+    // 롱클릭을 위한 TPV 조준 시작 함수
     public void StartTpvAim()
     {
         if (isFirstpersonView)
@@ -62,7 +66,7 @@ public class CameraSwitcher : MonoBehaviour
         tpv_aimCamera.Priority = 2; // TPV 조준 카메라 활성화
     }
 
-    // [신규] 숏클릭을 위한 FPV 조준 토글 함수
+    // 숏클릭을 위한 FPV 조준 토글 함수
     public void ToggleFpvAim()
     {
         // 현재 조준 중이 아닐 때, 조준 불가능 상태면 아무것도 안 함
@@ -83,14 +87,12 @@ public class CameraSwitcher : MonoBehaviour
         }
     }
 
-    // [수정] 모든 조준을 멈추는 함수
     public void StopAiming()
     {
         if (!isAiming) return;
         isAiming = false;
         characterMove.moveState.walk = false;
 
-        // 모든 조준 카메라의 우선순위를 0으로 초기화
         tpv_aimCamera.Priority = 0;
         fpv_aimCamera.Priority = 0;
     }
@@ -109,7 +111,6 @@ public class CameraSwitcher : MonoBehaviour
     }
     public void ViewChange()
     {
-        // 조준 중일 때는 시점 변경 방지
         if (isAiming) return;
 
         isFirstpersonView = !isFirstpersonView;
@@ -119,7 +120,6 @@ public class CameraSwitcher : MonoBehaviour
 
     private void Update()
     {
-        // 조준 중에 조준 불가능 상태가 되면 강제로 조준 해제
         if (isAiming && !CanAimCheck())
         {
             StopAiming();

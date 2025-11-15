@@ -2,14 +2,11 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
-using Cinemachine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public CharacterMove playerCharacterMove;
-
     public static InventoryManager Instance;
-    public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All; // 기본값: 전체
+    public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All;
 
     private int slotCapacity = 60;
 
@@ -18,7 +15,6 @@ public class InventoryManager : MonoBehaviour
     public static event Action OnInventoryChanged;
     public static event Action<bool> OnInventoryToggle;
     public bool IsFocused { get; private set; } = false;
-    public bool IsUIActiveAndFocused => IsUIOpen && IsFocused;
 
     [Header("UI Reference")]
     [SerializeField] private GameObject smallInventoryUI;
@@ -28,10 +24,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject genericLootPrefab;
 
     [Header("Player Control References")]
-    [SerializeField] private PlayerInputs playerInput;
     [SerializeField] private CharacterMove characterMove;
-    [SerializeField] private CameraController cameraController;
-    [SerializeField] private WeaponController weaponController;
+    [SerializeField] private CameraSwitcher cameraSwitcher; // [추가]
+    private Animator playerAnimator;
 
     public bool IsUIOpen => (smallInventoryUI != null && smallInventoryUI.activeSelf) ||
                             (fullInventoryUI != null && fullInventoryUI.activeSelf);
@@ -51,14 +46,37 @@ public class InventoryManager : MonoBehaviour
         inventorySlots = new List<InventorySlot>();
         for (int i = 0; i < slotCapacity; i++)
         {
-            // ▼▼▼ [수정] 슬롯 생성 시 자신의 '진짜' 인덱스를 할당합니다. ▼▼▼
             inventorySlots.Add(new InventorySlot() { slotIndex = i });
-            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+        }
+
+        // 플레이어 애니메이터 찾기
+        if (characterMove != null)
+        {
+            playerAnimator = characterMove.GetComponent<Animator>();
         }
     }
 
     void Update()
     {
+        // Tab 키: Small 인벤토리 토글
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleSmallInventory();
+        }
+
+        // O 키: Full 인벤토리 토글
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ToggleFullInventory();
+        }
+
+        // ESC 키: 인벤토리가 열려있으면 닫기
+        if (IsFocused && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseAllInventories();
+        }
+
+        // UI 외부 클릭 시 포커스 해제
         if (IsFocused && Input.GetMouseButtonDown(0))
         {
             bool isOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
@@ -67,23 +85,6 @@ public class InventoryManager : MonoBehaviour
             {
                 SetFocusState(false);
             }
-        }
-
-        if (playerInput == null) return;
-
-        if (playerInput.GetInventoryToggle())
-        {
-            ToggleSmallInventory();
-        }
-
-        if (playerInput.GetFullInventoryToggle())
-        {
-            ToggleFullInventory();
-        }
-
-        if (playerInput.GetEscape())
-        {
-            CloseAllInventories();
         }
     }
 
@@ -95,61 +96,55 @@ public class InventoryManager : MonoBehaviour
         if (fullInventoryUI != null && fullInventoryUI.activeSelf)
         {
             fullInventoryUI.SetActive(false);
-            // 전체 창이 닫히면 포커스 상태도 초기화
             if (IsFocused) SetFocusState(false);
         }
 
-        // UI가 현재 열려있는지 확인
         bool currentActive = smallInventoryUI.activeSelf;
 
         if (currentActive && IsFocused)
         {
-            // 열려있고 포커스가 있었다면: 포커스 상실 (UI는 그대로 둠)
             smallInventoryUI.SetActive(false);
             SetFocusState(false);
         }
         else if (!currentActive)
         {
-            // 닫혀있었다면: UI를 열고 포커스 획득
             smallInventoryUI.SetActive(true);
             SetFocusState(true);
         }
-
-
-        else // 열려있지만 포커스가 없었다면: 포커스 다시 획득
+        else
         {
             SetFocusState(true);
         }
     }
+
     public void ToggleFullInventory()
     {
         if (fullInventoryUI == null) return;
+
         if (smallInventoryUI != null && smallInventoryUI.activeSelf)
         {
             smallInventoryUI.SetActive(false);
             if (IsFocused) SetFocusState(false);
         }
 
-        // UI가 현재 열려있는지 확인
         bool currentActive = fullInventoryUI.activeSelf;
 
         if (currentActive && IsFocused)
         {
-            // 2. [변경됨] 열려있고 포커스가 있었다면: UI를 닫고 포커스 상실
             fullInventoryUI.SetActive(false);
             SetFocusState(false);
         }
         else if (!currentActive)
         {
-            // 3. 닫혀있었다면: UI를 열고 포커스 획득
             fullInventoryUI.SetActive(true);
             SetFocusState(true);
         }
-        else // 4. 열려있지만 포커스가 없었다면: 포커스 다시 획득
+        else
         {
             SetFocusState(true);
         }
     }
+
     public void CloseAllInventories()
     {
         if (!IsUIOpen) return;
@@ -159,10 +154,15 @@ public class InventoryManager : MonoBehaviour
 
         SetFocusState(false);
     }
-    private void SetPlayerInputState(bool uiHasFocus) // 매개변수 이름을 uiHasFocus로 변경
+
+    private void SetFocusState(bool isFocused)
     {
-        // 1. 커서 상태 제어 (포커스가 있으면 커서 해제)
-        if (uiHasFocus)
+        if (this.IsFocused == isFocused) return;
+
+        this.IsFocused = isFocused;
+
+        // 커서 제어
+        if (isFocused)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -173,26 +173,54 @@ public class InventoryManager : MonoBehaviour
             Cursor.visible = false;
         }
 
-        // 2. 플레이어 제어 컴포넌트 비활성화/활성화 (포커스가 있으면 비활성화)
-        if (characterMove != null)
+        // 애니메이션 제어
+        if (isFocused)
         {
-            characterMove.enabled = !uiHasFocus;
+            StopPlayerAnimation();
+        }
+        else
+        {
+            ResumePlayerAnimation();
         }
 
-        if (cameraController != null)
-        {
-            cameraController.enabled = !uiHasFocus;
-        }
-
-        // 3. 이벤트 발생 (WeaponController에게 포커스 상태 전달)
-        OnInventoryToggle?.Invoke(uiHasFocus);
+        OnInventoryToggle?.Invoke(isFocused);
     }
 
+    private void StopPlayerAnimation()
+    {
+        if (playerAnimator != null)
+        {
+            playerAnimator.speed = 0f;
+        }
+
+        if (characterMove != null)
+        {
+            characterMove.StopAllActions();
+        }
+
+        // 조준 중이면 강제로 해제
+        if (cameraSwitcher != null)
+        {
+            cameraSwitcher.StopAiming();
+        }
+    }
+
+    private void ResumePlayerAnimation()
+    {
+        if (playerAnimator != null)
+        {
+            playerAnimator.speed = 1f;
+        }
+    }
 
     public bool AddItem(RelicData itemToAdd)
     {
+
+        Debug.Log($"[DEBUG STACK] 아이템: {itemToAdd.itemName}, Max Stack: {itemToAdd.maxStack}, Item ID: {itemToAdd.itemID}");
+        // 1. 스택 가능한 아이템인지 확인 (maxStack > 1)
         if (itemToAdd.maxStack > 1)
         {
+            // 2. 인벤토리를 순회하며 같은 아이템이 있고, 스택이 가득 차지 않았는지 확인
             for (int i = 0; i < slotCapacity; i++)
             {
                 InventorySlot slot = inventorySlots[i];
@@ -200,14 +228,17 @@ public class InventoryManager : MonoBehaviour
                     slot.item.itemID == itemToAdd.itemID &&
                     slot.quantity < slot.item.maxStack)
                 {
+                    // 3. (스택 성공) 수량을 1 증가시키고 알림
                     slot.AddQuantity(1);
                     OnInventoryChanged?.Invoke();
                     Debug.Log($"{itemToAdd.itemName}을(를) {i + 1}번 슬롯에 스택했습니다. (현재: {slot.quantity}개)");
                     return true;
                 }
             }
+            // 4. (실패) 같은 아이템을 찾지 못했거나 모두 가득 찼음. -> 다음 단계(빈 슬롯 찾기)로 이동
         }
 
+        // 5. (스택 불가 또는 스택 실패) 빈 슬롯을 찾습니다.
         int emptySlotIndex = FindNextEmptySlot();
 
         if (emptySlotIndex == -1)
@@ -216,6 +247,7 @@ public class InventoryManager : MonoBehaviour
             return false;
         }
 
+        // 6. 빈 슬롯에 아이템 정보와 수량 1을 설정합니다.
         inventorySlots[emptySlotIndex].item = itemToAdd;
         inventorySlots[emptySlotIndex].quantity = 1;
 
@@ -256,7 +288,6 @@ public class InventoryManager : MonoBehaviour
 
     public void SwapItems(int indexA, int indexB)
     {
-        // 1. A와 B의 '데이터'를 통째로 바꿉니다.
         InventorySlot temp = inventorySlots[indexA];
         inventorySlots[indexA] = inventorySlots[indexB];
         inventorySlots[indexB] = temp;
@@ -340,43 +371,13 @@ public class InventoryManager : MonoBehaviour
 
     public bool IsCombatInputBlockedByUI()
     {
-        return IsUIActiveAndFocused;
-    }
-
-    private void SetFocusState(bool isFocused)
-    {
-        if (this.IsFocused == isFocused) return;
-        this.IsFocused = isFocused;
-
-        Debug.Log($"[InventoryManager] 포커스 변경: {(isFocused ? "획득" : "상실(인게임 포커스)")}");
-
-        if (isFocused)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-
-        if (isFocused)
-        {
-            if (characterMove != null)
-            {
-                characterMove.StopAllActions();
-            }
-        }
-
-        OnInventoryToggle?.Invoke(isFocused);
+        return IsFocused;
     }
 
     public List<InventorySlot> GetFilteredInventory()
     {
         int capacity = slotCapacity;
 
-        // [수정] 'All' 필터도 '복사본'을 반환하도록 변경 (데이터 안정성)
         if (currentFilter == InventoryFilterType.All)
         {
             return new List<InventorySlot>(inventorySlots);
@@ -389,22 +390,14 @@ public class InventoryManager : MonoBehaviour
             RelicData item = slot.item;
             if (item == null) continue;
 
-            ItemType itemType = item.itemTypeEnum; // 편의를 위해
+            ItemType itemType = item.itemTypeEnum;
 
             bool match = currentFilter switch
             {
                 InventoryFilterType.Weapon => itemType == ItemType.Weapon,
-
-                // '장비' 탭 = 헬멧, 갑옷, 하의, 신발 등
                 InventoryFilterType.Equipment => itemType == ItemType.Equipment,
-
-                // '장신구' 탭 = 얼굴, 목걸이
                 InventoryFilterType.Accessory => itemType == ItemType.Accessory,
-
-                // '유물' 탭 = Artifact
                 InventoryFilterType.Relic => itemType == ItemType.Artifact,
-
-                // '기타' 탭 = 위 4가지를 제외한 모든 것
                 InventoryFilterType.Etc => itemType != ItemType.Weapon &&
                                            itemType != ItemType.Equipment &&
                                            itemType != ItemType.Accessory &&
@@ -420,7 +413,6 @@ public class InventoryManager : MonoBehaviour
 
         while (filteredList.Count < capacity)
         {
-            // 필터링된 리스트의 나머지(빈 칸)를 채우는 가짜 슬롯
             filteredList.Add(new InventorySlot() { slotIndex = -1 });
         }
 

@@ -6,7 +6,7 @@ using TMPro;
 
 public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler,
-    IPointerEnterHandler, IPointerExitHandler 
+    IPointerEnterHandler, IPointerExitHandler
 {
     [Header("필터 설정")]
     public EquipmentSlot requiredSlotType = EquipmentSlot.None;
@@ -23,11 +23,15 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
     public bool dropSuccessful = false;
 
     private bool isIgnoringClick = false;
-    private Coroutine singleClickCoroutine;
+
+    // ▼▼▼ [수정] 싱글 클릭 코루틴 변수 제거 (사용하지 않음) ▼▼▼
+    // private Coroutine singleClickCoroutine; 
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     private Coroutine hideTooltipCoroutine;
     private Coroutine tooltipCoroutine;
     private const float TooltipDelay = 0.5f;
+
 
     void Start()
     {
@@ -173,8 +177,10 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
         dropSuccessful = true;
     }
 
+    // ▼▼▼ [수정] OnPointerClick: 싱글클릭 로직 삭제, 우클릭/더블클릭만 허용 ▼▼▼
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 1. 드롭 직후 클릭 무시
         if (isIgnoringClick)
         {
             isIgnoringClick = false;
@@ -183,42 +189,31 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
 
         if (currentItem == null) return;
 
+        // 2. 우클릭 (즉시 해제)
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             UnequipItemAttempt();
         }
+        // 3. 좌클릭 (더블클릭만)
         else if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (eventData.clickCount == 1)
+            // if (eventData.clickCount == 1) { ... 삭제됨 ... }
+            if (eventData.clickCount == 2)
             {
-                if (singleClickCoroutine != null)
-                {
-                    StopCoroutine(singleClickCoroutine);
-                }
-                singleClickCoroutine = StartCoroutine(HandleSingleClick());
-            }
-            else if (eventData.clickCount == 2)
-            {
-                if (singleClickCoroutine != null)
-                {
-                    StopCoroutine(singleClickCoroutine);
-                    singleClickCoroutine = null;
-                }
+                // [수정] 싱글클릭 코루틴이 없으므로 중단 로직 삭제
 
                 UnequipItemAttempt();
             }
         }
+
+        // [수정] HandleSingleClick 코루틴 함수도 삭제되었습니다.
     }
+    // ▲▲▲ [수정 완료] ▲▲▲
 
-    private IEnumerator HandleSingleClick()
-    {
-        yield return new WaitForSeconds(0.2f);
+    // ▼▼▼ [삭제] HandleSingleClick 코루틴 삭제 ▼▼▼
+    // private IEnumerator HandleSingleClick() { ... }
+    // ▲▲▲ [삭제 완료] ▲▲▲
 
-        if (InventoryUIManager.Instance != null)
-            InventoryUIManager.Instance.UpdateDetails(currentItem);
-
-        singleClickCoroutine = null;
-    }
 
     private void UnequipItemAttempt()
     {
@@ -232,6 +227,7 @@ public class EquipmentSlot_UI : MonoBehaviour, IDropHandler,
         }
     }
 
+    // ▼▼▼ [툴팁 로직은 유지] ▼▼▼
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (hideTooltipCoroutine != null)

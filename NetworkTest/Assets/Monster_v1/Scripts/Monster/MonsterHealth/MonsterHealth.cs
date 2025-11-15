@@ -53,15 +53,13 @@ public class MonsterHealth : MonoBehaviour
 
     private void Awake()
     {
-        // ★ 2. (수정) AI 컨트롤러 참조 저장
         ai = GetComponent<MonsterAIController>();
     }
 
     private void Update()
     {
-        // ... (Debug 로직은 그대로) ...
-        if (_DEBUG_ForceDie) { /* ... */ }
-        else if (_DEBUG_ForceHit) { /* ... */ }
+        if (_DEBUG_ForceDie) { }
+        else if (_DEBUG_ForceHit) {  }
 
         // (Block 타이머 로직은 그대로)
         if (hitTimer > 0)
@@ -80,7 +78,6 @@ public class MonsterHealth : MonoBehaviour
         _defense = config.defense;
         currentHP = _maxHP;
         IsDead = false;
-        Debug.Log($"[{gameObject.name}] Health 초기화 완료: HP={_maxHP}, DEF={_defense}");
     }
 
     /// <summary>
@@ -93,7 +90,6 @@ public class MonsterHealth : MonoBehaviour
         float actualDamage = 0f;
         float currentDefense = 0f; // 기본 방어력은 0
 
-        // --- ★ 1. (수정) 골렘 방어 상태인지 체크 ---
         if (ai != null && ai.fsm is GolemFSM && ai.CurrentState == ai.fsm.BlockState)
         {
             // Block 상태라면, 현재 '페이즈'를 가져옵니다.
@@ -106,16 +102,13 @@ public class MonsterHealth : MonoBehaviour
             }
             // (else: VulnerableCheck 페이즈나 CounterRush 페이즈일때는 방어력 0)
         }
-        // --- (Gazer나 다른 몬스터는 항상 방어력 0, 또는 기본 _defense값을 쓰게 하려면
-        //    else { currentDefense = _defense; } 를 추가하세요) ---
 
 
         // 2. 최종 데미지 계산 (기존 로직)
         actualDamage = Mathf.Max(damage - currentDefense, 0f);
         currentHP -= actualDamage;
 
-        // (디버그 로그 수정)
-        Debug.Log($"<color=orange>[{gameObject.name}] 피해! (입힌 데미지: {damage}, 현재 방어력: {currentDefense}, 실제 피해: {actualDamage}) -> 현재 체력: {currentHP}/{_maxHP}</color>");
+        Debug.Log($"<color=>[{gameObject.name}] 피해! (입힌 데미지: {damage}, 현재 방어력: {currentDefense}, 실제 피해: {actualDamage}) -> 현재 체력: {currentHP}/{_maxHP}</color>");
 
         if (currentHP <= 0)
         {
@@ -168,12 +161,10 @@ public class MonsterHealth : MonoBehaviour
             return;
         }
 
-        // 1. [★핵심★] 몬스터 위치 (X, Z)를 기준으로 지면의 Y 좌표를 찾습니다.
         float groundY = transform.position.y; // 기본값은 몬스터 피벗의 Y
         RaycastHit hit;
 
         // 몬스터의 위치에서 아래로 100m 레이캐스트를 쏴서 지형을 찾습니다.
-        // LayerMask를 지정하면 더 좋습니다. (예: LayerMask.GetMask("Ground"))
         if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out hit, 100f))
         {
             // 레이가 맞은 지점의 Y 좌표를 사용합니다.
@@ -204,7 +195,6 @@ public class MonsterHealth : MonoBehaviour
                 spawnPos.x += randomCircle.x;
                 spawnPos.z += randomCircle.y;
 
-                // [★핵심★] Y 좌표를 찾은 지면 + 구체의 반지름(0.5f)만큼 올려줍니다.
                 // 구체 콜라이더 중심이 Y=0.5이므로, 구체 바닥이 groundY에 닿게 됩니다.
                 spawnPos.y = groundY + 0.5f;
 

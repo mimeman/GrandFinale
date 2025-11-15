@@ -111,8 +111,9 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
     [SerializeField] private TMP_Text itemInfoDescriptionText;
     [Tooltip("아이템 정보 헤더 텍스트 (Head_Item_Info_Text)")]
     [SerializeField] private TMP_Text itemInfoHeadText;
-    // --- [End of NEW] ---
 
+    [Tooltip("Full UI의 검색 입력 필드 (Search Text의 부모)")]
+    [SerializeField] private TMPro.TMP_InputField full_SearchInputField; 
 
     // --- [Common Logic] ---
     private Vector2 dragOffset;
@@ -193,7 +194,6 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    // [★신규★] PlayerStats에서 신호가 오면 호출될 함수
     private void UpdateAllStatsFromPlayer()
     {
         if (playerStats == null) return;
@@ -636,6 +636,14 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 
     #endregion
+
+    public void SetSearchQueryFromUI(string query)
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.SetSearchQuery(query);
+        }
+    }
 
     private string GetGradeColor(string grade)
     {

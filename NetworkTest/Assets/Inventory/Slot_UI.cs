@@ -191,26 +191,57 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log($"[Slot_UI] OnEndDrag - Slot: {name}, DropSuccessful: {dropSuccessful}, PointerEnter: {eventData.pointerEnter?.name}");
+
         if (InventoryUIManager.Instance != null)
             InventoryUIManager.Instance.EndDrag();
 
-        if (eventData.pointerEnter == null && !dropSuccessful)
+        // 드롭 성공하지 않았을 때만 추가 검사
+        if (!dropSuccessful)
         {
-            if (currentSlot != null && currentSlot.item != null && currentSlot.slotIndex != -1)
+            // 인벤토리 영역 내에 있는지 확인
+            bool isInsideInventory = false;
+
+            if (eventData.pointerEnter != null)
             {
-                InventoryManager.Instance.DropItem(currentSlot.slotIndex);
-                dropSuccessful = true;
+                // 현재 포인터가 위치한 오브젝트가 인벤토리 관련 오브젝트인지 확인
+                Transform current = eventData.pointerEnter.transform;
+                while (current != null)
+                {
+                    // 인벤토리 관련 오브젝트 이름들을 체크
+                    if (current.name.Contains("Inventory") ||
+                        current.name.Contains("Slot") ||
+                        current.name.Contains("ScrollView") ||
+                        current.name.Contains("Viewport") ||
+                        current.name == "FullInventory_Inventory_UI" ||
+                        current.name == "Small_Inventory_UI")
+                    {
+                        isInsideInventory = true;
+                        break;
+                    }
+                    current = current.parent;
+                }
+            }
+
+            // 인벤토리 밖에 드롭한 경우에만 아이템 드롭
+            if (!isInsideInventory && eventData.pointerEnter == null)
+            {
+                if (currentSlot != null && currentSlot.item != null && currentSlot.slotIndex != -1)
+                {
+                    Debug.Log($"[Slot_UI] Dropping item outside inventory: {currentSlot.item.itemName}");
+                    InventoryManager.Instance.DropItem(currentSlot.slotIndex);
+                    dropSuccessful = true;
+                }
+            }
+            else
+            {
+                Debug.Log($"[Slot_UI] Drop cancelled - still inside inventory area");
             }
         }
 
+        // 드롭이 성공하지 않았다면 아이템 아이콘 복구
         if (!dropSuccessful)
             UpdateSlotVisuals();
-
-        if (currentSlot != null && currentSlot.item != null && currentSlot.slotIndex != -1 && IsMainInventoryView())
-        {
-            if (InventoryUIManager.Instance != null)
-                InventoryUIManager.Instance.UpdateDetails(currentSlot.item);
-        }
 
         dropSuccessful = false;
     }

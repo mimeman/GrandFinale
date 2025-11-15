@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class InventoryManager : MonoBehaviour
     public InventoryFilterType currentFilter { get; private set; } = InventoryFilterType.All;
 
     private int slotCapacity = 60;
+
+    private string currentSearchQuery = string.Empty;
 
     public List<InventorySlot> inventorySlots;
 
@@ -25,7 +28,8 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Player Control References")]
     [SerializeField] private CharacterMove characterMove;
-    [SerializeField] private CameraSwitcher cameraSwitcher; // [추가]
+    [SerializeField] private CameraSwitcher cameraSwitcher;
+
     private Animator playerAnimator;
 
     public bool IsUIOpen => (smallInventoryUI != null && smallInventoryUI.activeSelf) ||
@@ -215,8 +219,6 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(RelicData itemToAdd)
     {
-
-        Debug.Log($"[DEBUG STACK] 아이템: {itemToAdd.itemName}, Max Stack: {itemToAdd.maxStack}, Item ID: {itemToAdd.itemID}");
         // 1. 스택 가능한 아이템인지 확인 (maxStack > 1)
         if (itemToAdd.maxStack > 1)
         {
@@ -231,7 +233,6 @@ public class InventoryManager : MonoBehaviour
                     // 3. (스택 성공) 수량을 1 증가시키고 알림
                     slot.AddQuantity(1);
                     OnInventoryChanged?.Invoke();
-                    Debug.Log($"{itemToAdd.itemName}을(를) {i + 1}번 슬롯에 스택했습니다. (현재: {slot.quantity}개)");
                     return true;
                 }
             }
@@ -252,7 +253,6 @@ public class InventoryManager : MonoBehaviour
         inventorySlots[emptySlotIndex].quantity = 1;
 
         OnInventoryChanged?.Invoke();
-        Debug.Log($"{itemToAdd.itemName}을(를) {emptySlotIndex + 1}번 슬롯에 새로 추가했습니다.");
         return true;
     }
 
@@ -372,6 +372,53 @@ public class InventoryManager : MonoBehaviour
     public bool IsCombatInputBlockedByUI()
     {
         return IsFocused;
+    }
+
+    public void SortInventory()
+    {
+        // 1. 아이템이 있는 슬롯과 비어있는 슬롯을 분리
+        List<InventorySlot> filledSlots = inventorySlots
+            .Where(slot => slot.item != null)
+            .ToList();
+
+        List<InventorySlot> emptySlots = inventorySlots
+            .Where(slot => slot.item == null)
+            .ToList();
+
+        // 2. 아이템이 있는 슬롯을 정렬
+        filledSlots = filledSlots
+            .OrderBy(slot => slot.item.itemName)
+            .ThenByDescending(slot => slot.quantity)
+            .ToList();
+
+        // 3. 정렬된 슬롯과 빈 슬롯을 다시 합치기
+        inventorySlots.Clear();
+        inventorySlots.AddRange(filledSlots);
+        inventorySlots.AddRange(emptySlots);
+
+        // 4. 슬롯 인덱스 재설정
+        for (int i = 0; i < slotCapacity; i++)
+        {
+            inventorySlots[i].slotIndex = i;
+        }
+
+        // 5. UI 업데이트 이벤트 호출
+        OnInventoryChanged?.Invoke();
+        Debug.Log("[InventoryManager] 인벤토리 정렬 완료.");
+    }
+
+    public void SetSearchQuery(string query)
+    {
+        // 소문자로 변환하여 저장 (대소문자 구분 없이 검색하기 위함)
+        string newQuery = query.Trim().ToLower();
+
+        if (currentSearchQuery != newQuery)
+        {
+            currentSearchQuery = newQuery;
+            Debug.Log($"[InventoryManager] 검색어 변경: {currentSearchQuery}");
+            // 검색어가 변경되면 UI를 업데이트해야 함
+            OnInventoryChanged?.Invoke();
+        }
     }
 
     public List<InventorySlot> GetFilteredInventory()

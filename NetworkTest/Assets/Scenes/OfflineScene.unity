@@ -1772,6 +1772,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7107658855856018132}
   countText: {fileID: 2689467784634554746}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &25015255351197001
 GameObject:
@@ -2122,6 +2128,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1046458387198015288}
   countText: {fileID: 2273951520389096662}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &81955802132895537
 GameObject:
@@ -3132,6 +3144,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4176603969072328029}
   countText: {fileID: 3733809010989268879}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &263561660189717715
 CanvasRenderer:
@@ -3185,6 +3203,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2901624211562699512}
   countText: {fileID: 6433954934244762109}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &277484122020900339
 RectTransform:
@@ -4528,6 +4552,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7473009904397088031}
   countText: {fileID: 7721446094779620944}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &504011145650718838
 MonoBehaviour:
@@ -4651,6 +4681,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3067559365766171774}
   countText: {fileID: 7831154751942886330}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &507761611951692383
 CanvasRenderer:
@@ -4807,6 +4843,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6255920743674711881}
   countText: {fileID: 8218749886453607105}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &553250299308460974
 CanvasRenderer:
@@ -7014,6 +7056,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7278907695459108258}
   countText: {fileID: 4853735822746481033}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &920625217229858035
 MonoBehaviour:
@@ -7029,6 +7077,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4745119242250442161}
   countText: {fileID: 2534033683886050177}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &926352320118352201
 RectTransform:
@@ -7089,6 +7143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6429659364967900503}
   countText: {fileID: 1060877344870204974}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &936072803952399156
 CanvasRenderer:
@@ -7161,6 +7221,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1313753419740484198}
   countText: {fileID: 1547588877952549822}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &944914757100535545
 GameObject:
@@ -7839,6 +7905,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1097033301794738927}
   countText: {fileID: 3969701719549651251}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1046458387198015288
 MonoBehaviour:
@@ -8208,6 +8280,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2180748139231007168}
   countText: {fileID: 3815330744901724382}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!4 &1080042809697479548
 Transform:
@@ -8709,6 +8787,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2849442400592260456}
   countText: {fileID: 751510119765646781}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1179107355333156847
 MonoBehaviour:
@@ -9120,6 +9204,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3822959217788445788}
   countText: {fileID: 3755224742308137521}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1243545517811321621
 MonoBehaviour:
@@ -9784,6 +9874,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2092169051398716981}
   countText: {fileID: 8916183186583285710}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &1349395388494179349
 GameObject:
@@ -10847,6 +10943,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4246616620287248282}
   countText: {fileID: 3245013985230765594}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1492796478835134012
 MonoBehaviour:
@@ -10989,6 +11091,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6281941806176921397}
   countText: {fileID: 5578736985684178723}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &1500474443370749803
 GameObject:
@@ -12461,6 +12569,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2476157122673513866}
   countText: {fileID: 5621762233377190877}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1746767506625423413
 MonoBehaviour:
@@ -12742,6 +12856,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 626741602246434238}
   countText: {fileID: 7887950846917951308}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1810359834595570751
 MonoBehaviour:
@@ -12855,6 +12975,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2420232779209655391}
   countText: {fileID: 8165561162424827221}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &1825347547766573184
 MonoBehaviour:
@@ -12870,6 +12996,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7860453222899686686}
   countText: {fileID: 8789920055624525631}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &1825766850757262939
 CanvasRenderer:
@@ -13354,6 +13486,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4700006846872498676}
   countText: {fileID: 6527796393190102838}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &1924246649475764838
 RectTransform:
@@ -13948,6 +14086,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 9114227988501002475}
   countText: {fileID: 5333962812373328102}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &1977617333260087272
 GameObject:
@@ -14206,6 +14350,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2234519098710000408}
   countText: {fileID: 7830076563406646769}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &2014240774822452368
 GameObject:
@@ -14388,6 +14538,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8105832905370582678}
   countText: {fileID: 6680569885317949189}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &2054061743448466398
 MonoBehaviour:
@@ -15225,6 +15381,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5264892052194847364}
   countText: {fileID: 8051965187826682789}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &2155211472279516107
 GameObject:
@@ -15694,6 +15856,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7097309667441040483}
   countText: {fileID: 3660434788387093958}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &2228890600137344549
 RectTransform:
@@ -16327,6 +16495,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4541029895600005256}
   countText: {fileID: 7212486694368880133}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &2329271621503708789
 MonoBehaviour:
@@ -16535,6 +16709,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7947614048122404714}
   countText: {fileID: 3201792499166515841}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &2380317032618992559
 RectTransform:
@@ -16974,7 +17154,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uC774\uD15C \uC0AD\uC81C"
+  m_text: "\uD3D0 \uAE30 "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f449a63f7e0236c43a556343d7746b27, type: 2}
   m_sharedMaterial: {fileID: -8860009705997773471, guid: f449a63f7e0236c43a556343d7746b27, type: 2}
@@ -17457,6 +17637,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2054061743448466398}
   countText: {fileID: 5865844270585812095}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &2481401673599063600
 MonoBehaviour:
@@ -18358,6 +18544,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6491427963860959139}
   countText: {fileID: 7318305580104626856}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &2608287563930922838
 CanvasRenderer:
@@ -18419,6 +18611,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 711733335746689289}
   countText: {fileID: 1951014488006210356}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &2623432723340411739
 GameObject:
@@ -18778,6 +18976,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4323555239656237215}
   countText: {fileID: 8837701643917872692}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &2689467784634554746
 MonoBehaviour:
@@ -18919,6 +19123,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5030163661384881121}
   countText: {fileID: 1492796478835134012}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &2704926508893068046
 RectTransform:
@@ -19312,6 +19522,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4952545313576471104}
   countText: {fileID: 8704344101725531460}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &2743307490807065871
 RectTransform:
@@ -20478,6 +20694,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4955893748745026986}
   countText: {fileID: 5041096232735880120}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &2965593867888589289
 RectTransform:
@@ -21118,6 +21340,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5740462637533297228}
   countText: {fileID: 1401639211579477205}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &3129532814173295340
 MonoBehaviour:
@@ -21508,6 +21736,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5306773356945492018}
   countText: {fileID: 8211770020561392126}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &3188952925426575542
 MonoBehaviour:
@@ -21813,6 +22047,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5749968710884956204}
   countText: {fileID: 2711882681207257071}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &3213723383416554307
 GameObject:
@@ -22288,6 +22528,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8907923515326690043}
   countText: {fileID: 1652270892314924813}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &3265013188469647539
 CanvasRenderer:
@@ -22367,6 +22613,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5801332720243414235}
   countText: {fileID: 8401592335889687199}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &3286706340558196929
 CanvasRenderer:
@@ -22749,6 +23001,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1927280816492232614}
   countText: {fileID: 3448549065514384105}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &3371173892453224735
 GameObject:
@@ -23049,6 +23307,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4588320539481960728}
   countText: {fileID: 4313091630768034964}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &3414857382018239603
 MonoBehaviour:
@@ -23200,6 +23464,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 586742863307801147}
   countText: {fileID: 5142294517848616736}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &3444178210900581234
 RectTransform:
@@ -23672,6 +23942,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5404252363859589002}
   countText: {fileID: 708430079691285938}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &3515323275390653274
 GameObject:
@@ -23818,6 +24094,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6561419075773361243}
   countText: {fileID: 1024828036705592506}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &3534733762045917672
 MonoBehaviour:
@@ -24976,6 +25258,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3807142331314726924}
   countText: {fileID: 4155160107259122403}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &3700375908146476111
 CanvasRenderer:
@@ -25058,6 +25346,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7213411221514043052}
   countText: {fileID: 1058085916683536504}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &3733237411074853705
 MonoBehaviour:
@@ -25221,6 +25515,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6612608733393224209}
   countText: {fileID: 1522497069767108092}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &3749841162810724546
 RectTransform:
@@ -25775,6 +26075,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7461093435725207730}
   countText: {fileID: 1978503253281554071}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &3831898337148625513
 RectTransform:
@@ -27186,6 +27492,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6041956183786885403}
   countText: {fileID: 6391936261193876134}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4053505994299075628
 MonoBehaviour:
@@ -28609,6 +28921,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7492380996393516492}
   countText: {fileID: 8041803892367559687}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &4318349220547446905
 GameObject:
@@ -29324,6 +29642,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 9180953781975750497}
   countText: {fileID: 1015506280596313028}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &4410868220383626067
 CanvasRenderer:
@@ -29453,6 +29777,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8875643800991237358}
   countText: {fileID: 1557392655078182382}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4441042769381413976
 MonoBehaviour:
@@ -29702,6 +30032,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5055391440150990553}
   countText: {fileID: 2720858134291839678}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4497724094550956338
 MonoBehaviour:
@@ -30462,6 +30798,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3427540638449002290}
   countText: {fileID: 7621418619319451538}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4618960629888682267
 MonoBehaviour:
@@ -30477,6 +30819,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3097898300994331973}
   countText: {fileID: 7824672854505988175}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4623269703188168204
 MonoBehaviour:
@@ -30878,6 +31226,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4804826851884180324}
   countText: {fileID: 394984108004795057}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4704398743662225010
 MonoBehaviour:
@@ -31150,6 +31504,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3188952925426575542}
   countText: {fileID: 1179107355333156847}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &4761856707757329877
 RectTransform:
@@ -31184,6 +31544,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1257330917456711369}
   countText: {fileID: 1330353909617596008}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &4781537394418049157
 CanvasRenderer:
@@ -31407,6 +31773,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7800141186880560824}
   countText: {fileID: 504011145650718838}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4826007875000866905
 MonoBehaviour:
@@ -31479,6 +31851,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 125829140667810037}
   countText: {fileID: 1640348195078820044}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &4841338219460869550
 MonoBehaviour:
@@ -32117,6 +32495,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2536013276533034017}
   countText: {fileID: 2385922838069668203}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &4907827575935440096
 RectTransform:
@@ -32596,6 +32980,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2564537721677968392}
   countText: {fileID: 5827399416167990783}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &5008434785822325767
 CanvasRenderer:
@@ -32664,6 +33054,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3887636650074728478}
   countText: {fileID: 6860566562884773056}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &5022380920013534235
 GameObject:
@@ -33086,6 +33482,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6170978883244771777}
   countText: {fileID: 3546541964589791875}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &5074914582938318085
 GameObject:
@@ -33367,6 +33769,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3546103349864577929}
   countText: {fileID: 6089017158835345741}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &5136734040531645960
 RectTransform:
@@ -33402,6 +33810,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7284064708702972499}
   countText: {fileID: 5231303924981317544}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &5142294517848616736
 MonoBehaviour:
@@ -33919,14 +34333,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 0.36078432}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -34453,6 +34867,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 821497090394483032}
   countText: {fileID: 3553596448544485794}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &5292478864065710621
 CanvasRenderer:
@@ -34990,6 +35410,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3613602032597013476}
   countText: {fileID: 6832915139418158844}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &5372417157563001639
 MonoBehaviour:
@@ -35239,6 +35665,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1427712878518384293}
   countText: {fileID: 1459229549503554641}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &5409724993558408847
 GameObject:
@@ -36307,6 +36739,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7725251207308875776}
   countText: {fileID: 5757050894813896060}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &5560191100914158212
 CanvasRenderer:
@@ -36571,6 +37009,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6952192522125731935}
   countText: {fileID: 8123832010633470527}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &5581403847962795394
 GameObject:
@@ -37093,6 +37537,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 9057481104369105613}
   countText: {fileID: 1965521256313838801}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &5682900526981412145
 MonoBehaviour:
@@ -37108,6 +37558,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4411657277382834108}
   countText: {fileID: 2425074163538796210}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &5684698556787424010
 CanvasRenderer:
@@ -37831,6 +38287,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6483576293056637926}
   countText: {fileID: 2222544598053448001}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &5813092394523728077
 RectTransform:
@@ -38173,6 +38635,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8691336788543900559}
   countText: {fileID: 1157586448987560213}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &5847152382313662073
 GameObject:
@@ -38848,6 +39316,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5005146362384536297}
   countText: {fileID: 7008565341457318926}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &5959821281182505701
 RectTransform:
@@ -39112,6 +39586,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6653116333582954331}
   countText: {fileID: 3161347160856382896}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &6002197021029183337
 GameObject:
@@ -41031,6 +41511,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1495573520607268519}
   countText: {fileID: 3918673580192516049}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &6271963950915888116
 CanvasRenderer:
@@ -41413,6 +41899,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5444685494812956623}
   countText: {fileID: 7073235112982911040}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &6333717416615189495
 RectTransform:
@@ -41789,6 +42281,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8796188441943674871}
   countText: {fileID: 897763921762197071}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &6383484576261710925
 GameObject:
@@ -42276,6 +42774,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3223767081989654833}
   countText: {fileID: 5119406885591356597}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &6452196607602981158
 MonoBehaviour:
@@ -42971,6 +43475,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7154829587634996419}
   countText: {fileID: 5592650378667847496}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &6584979384470200888
 CanvasRenderer:
@@ -43339,6 +43849,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1746767506625423413}
   countText: {fileID: 6763092661702278375}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &6677547386377778578
 CanvasRenderer:
@@ -44777,6 +45293,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1085548876216059173}
   countText: {fileID: 3369572162902540924}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &6888737861146281842
 RectTransform:
@@ -44811,6 +45333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5285862766061780513}
   countText: {fileID: 7662968223735444476}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &6890080371467197256
 CanvasRenderer:
@@ -44834,6 +45362,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7403137581307130574}
   countText: {fileID: 9013022095330211710}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &6893326964670405023
 CanvasRenderer:
@@ -45854,6 +46388,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6796803328553718417}
   countText: {fileID: 5501726212395886046}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &7026065721338175924
 GameObject:
@@ -47021,6 +47561,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2311327024861467974}
   countText: {fileID: 4537722708017930971}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &7251351001933632122
 CanvasRenderer:
@@ -47638,6 +48184,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 988801876067243959}
   countText: {fileID: 3201821744143645685}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &7372836269272143059
 GameObject:
@@ -47780,6 +48332,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6213801467423734810}
   countText: {fileID: 6798010973493766790}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &7396594150621443242
 MonoBehaviour:
@@ -47795,6 +48353,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 9129895867442881515}
   countText: {fileID: 6819296476432770571}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &7403137581307130574
 MonoBehaviour:
@@ -48455,6 +49019,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1468273525229800143}
   countText: {fileID: 8785642332862532445}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &7497276002296721600
 CanvasRenderer:
@@ -48508,6 +49078,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1732145561473102458}
   countText: {fileID: 146206457282713622}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &7502595162795120817
 CanvasRenderer:
@@ -49647,6 +50223,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 5506014627095330900}
   countText: {fileID: 6887595859372409447}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &7672725966620787196
 RectTransform:
@@ -49719,6 +50301,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3679572491380210165}
   countText: {fileID: 405227001615081794}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &7687396180707937911
 MonoBehaviour:
@@ -49734,6 +50322,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3477984904291799137}
   countText: {fileID: 8294836569083201971}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &7688219447516384630
 GameObject:
@@ -51319,6 +51913,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8677665658259543309}
   countText: {fileID: 5145598152056708077}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &7791382869485402900
 GameObject:
@@ -52694,6 +53294,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 2144999813821484828}
   countText: {fileID: 8052785828081038406}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &7972789136708948504
 MonoBehaviour:
@@ -52854,6 +53460,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6337147036451092178}
   countText: {fileID: 7875666494463171102}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &8005846771876897695
 RectTransform:
@@ -53464,6 +54076,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 878379758948939650}
   countText: {fileID: 6224835322102757086}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &8067274251744369320
 MonoBehaviour:
@@ -53479,6 +54097,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4973447422257420101}
   countText: {fileID: 1224770086219738007}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8078271085110733988
 CanvasRenderer:
@@ -53782,6 +54406,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1577926967656879276}
   countText: {fileID: 3375860919489173950}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8129407632501900457
 CanvasRenderer:
@@ -54147,6 +54777,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6133775916467228631}
   countText: {fileID: 3473205491826947589}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8170948016901557009
 CanvasRenderer:
@@ -54170,6 +54806,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6103933696211688310}
   countText: {fileID: 2965925180960628961}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8177057062845444248
 CanvasRenderer:
@@ -54304,6 +54946,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 8565798779167579356}
   countText: {fileID: 7523583851485228391}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8194835730363122043
 CanvasRenderer:
@@ -54327,6 +54975,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4121809492248145355}
   countText: {fileID: 7725439590259216829}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &8199189545370371937
 RectTransform:
@@ -54922,6 +55576,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3533739446929837662}
   countText: {fileID: 4007687930893153507}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!1 &8255905687219868682
 GameObject:
@@ -55940,6 +56600,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6365024248109882886}
   countText: {fileID: 9218122110420064239}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &8381067664350813060
 MonoBehaviour:
@@ -55955,6 +56621,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1810359834595570751}
   countText: {fileID: 3965586115610097845}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8382615073098977929
 CanvasRenderer:
@@ -56893,6 +57565,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 3817503350580686066}
   countText: {fileID: 5451714708052342858}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &8557779471079590099
 MonoBehaviour:
@@ -56908,6 +57586,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4344842488155286723}
   countText: {fileID: 5273870724345213293}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &8565798779167579356
 MonoBehaviour:
@@ -59253,6 +59937,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6315983192719335723}
   countText: {fileID: 4623269703188168204}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!222 &8889261187470361433
 CanvasRenderer:
@@ -59335,6 +60025,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 7429644822071856549}
   countText: {fileID: 596006298151781227}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &8906336366244590956
 MonoBehaviour:
@@ -59350,6 +60046,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 430872422669911743}
   countText: {fileID: 1975826017561400205}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &8907228777255995549
 RectTransform:
@@ -59679,6 +60381,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 6213844468683618481}
   countText: {fileID: 4504726355408535088}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!224 &8948750601411701438
 RectTransform:
@@ -60499,6 +61207,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 4127260710593684296}
   countText: {fileID: 7486113123330818502}
+  slotBorderImage: {fileID: 0}
+  normalBorderSprite: {fileID: 0}
+  selectedBorderSprite: {fileID: 0}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &9114227988501002475
 MonoBehaviour:
@@ -60971,6 +61685,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotIcon: {fileID: 1815290899385207619}
   countText: {fileID: 2384517698323946928}
+  slotBorderImage: {fileID: 6078286333694912281}
+  normalBorderSprite: {fileID: 21300000, guid: f4ac51eb3fc597c429c548e784699043, type: 3}
+  selectedBorderSprite: {fileID: 21300000, guid: 1756781b076badb4cbb16423f0752857, type: 3}
+  slotBackground: {fileID: 0}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   dropSuccessful: 1
 --- !u!114 &9209476988167663177
 MonoBehaviour:

@@ -98,7 +98,6 @@ public class MonsterHealth : MonoBehaviour
             {
                 // "방어 중" 페이즈일 때만 설정된 방어력(_defense)을 사용합니다.
                 currentDefense = _defense;
-                Debug.Log("GOLEM BLOCK: 방어 성공! 방어력 " + currentDefense + " 적용.");
             }
             // (else: VulnerableCheck 페이즈나 CounterRush 페이즈일때는 방어력 0)
         }
@@ -108,7 +107,6 @@ public class MonsterHealth : MonoBehaviour
         actualDamage = Mathf.Max(damage - currentDefense, 0f);
         currentHP -= actualDamage;
 
-        Debug.Log($"<color=>[{gameObject.name}] 피해! (입힌 데미지: {damage}, 현재 방어력: {currentDefense}, 실제 피해: {actualDamage}) -> 현재 체력: {currentHP}/{_maxHP}</color>");
 
         if (currentHP <= 0)
         {
@@ -195,13 +193,8 @@ public class MonsterHealth : MonoBehaviour
                 spawnPos.x += randomCircle.x;
                 spawnPos.z += randomCircle.y;
 
-                // 구체 콜라이더 중심이 Y=0.5이므로, 구체 바닥이 groundY에 닿게 됩니다.
                 spawnPos.y = groundY + 0.5f;
-
-                Debug.Log($"<color=cyan>[LootSpawn] 드랍 시작: {entry.item.itemName}, Grade: {entry.item.grade}</color>");
-
                 GameObject spawnedItem = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
-                Debug.Log($"<color=cyan>[LootSpawn] {entry.item.itemName} 드랍! (생성 Y: {spawnPos.y}, 이름: {spawnedItem.name})</color>");
 
 
                 // 4. 생성된 구체에 데이터 주입
@@ -210,7 +203,6 @@ public class MonsterHealth : MonoBehaviour
                 {
                     pickupScript.itemData = entry.item;
                     pickupScript.addToInventoryInstead = true;
-                    Debug.Log($"<color=cyan>[LootSpawn] ItemPickup 데이터 주입 완료.</color>");
                 }
 
                 // 5. VFX 스크립트에 등급 주입 (VFX 위치 제어는 LootOrbVisuals가 전담)
@@ -218,7 +210,6 @@ public class MonsterHealth : MonoBehaviour
                 if (visualScript != null)
                 {
                     visualScript.Initialize(entry.item.grade);
-                    Debug.Log($"<color=cyan>[LootSpawn] LootOrbVisuals.Initialize('{entry.item.grade}') 호출 완료.</color>");
                 }
                 else
                 {

@@ -20,6 +20,9 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
     public InventorySlot currentSlot { get; private set; }
     private Coroutine singleClickCoroutine;
 
+    private ScrollRect parentScrollRect;
+    private bool isScrolling = false;
+
     private static readonly string[] EquippableTypes =
     {
         ItemType.Weapon.ToString().ToLower(),
@@ -28,14 +31,17 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         ItemType.Equipment.ToString().ToLower()
     };
 
-    // 슬롯에 아이템 바인딩
+    void Start()
+    {
+        parentScrollRect = GetComponentInParent<ScrollRect>();
+    }
+
     public void SetBoundItem(InventorySlot newSlot)
     {
         currentSlot = newSlot;
         UpdateSlotVisuals();
     }
 
-    // 슬롯 비주얼 업데이트
     void UpdateSlotVisuals()
     {
         if (slotIcon == null) return;
@@ -51,13 +57,11 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 유효한 아이템이 있는지 확인
     private bool HasValidItem()
     {
         return currentSlot != null && currentSlot.item != null && currentSlot.slotIndex != -1;
     }
 
-    // 아이템 아이콘 표시
     private void DisplayItemIcon()
     {
         Sprite icon = Resources.Load<Sprite>(currentSlot.item.iconPath);
@@ -73,7 +77,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 아이템 개수 표시
     private void DisplayItemCount()
     {
         if (countText != null)
@@ -84,7 +87,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 슬롯 숨기기
     private void HideSlot()
     {
         slotIcon.sprite = null;
@@ -96,7 +98,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 클릭 이벤트 처리
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!HasValidItem()) return;
@@ -111,7 +112,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 왼쪽 클릭 처리
     private void HandleLeftClick(PointerEventData eventData)
     {
         if (eventData.clickCount == 1)
@@ -124,7 +124,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 싱글 클릭 시작
     private void HandleSingleClickStart()
     {
         if (singleClickCoroutine != null)
@@ -134,7 +133,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             singleClickCoroutine = StartCoroutine(HandleSingleClick());
     }
 
-    // 더블 클릭 처리
     private void HandleDoubleClick()
     {
         if (singleClickCoroutine != null)
@@ -149,7 +147,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
             InventoryUIManager.Instance.ClearDetails();
     }
 
-    // 싱글 클릭 처리
     private IEnumerator HandleSingleClick()
     {
         yield return new WaitForSeconds(0.2f);
@@ -160,23 +157,35 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         singleClickCoroutine = null;
     }
 
-    // 드래그 시작
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!HasValidItem() || InventoryUIManager.Instance == null) return;
+        if (parentScrollRect == null) return;
 
-        dropSuccessful = false;
-        Sprite icon = Resources.Load<Sprite>(currentSlot.item.iconPath);
-
-        if (icon != null)
+        if (!HasValidItem())
         {
-            InventoryUIManager.Instance.StartDrag(icon);
-            slotIcon.enabled = false;
-            if (countText != null) countText.gameObject.SetActive(false);
+            // 빈 슬롯: 무조건 스크롤
+            isScrolling = true;
+            parentScrollRect.OnBeginDrag(eventData);
+        }
+        else
+        {
+            // 아이템 있는 슬롯: 무조건 아이템 드래그
+            isScrolling = false;
+
+            if (InventoryUIManager.Instance == null) return;
+
+            dropSuccessful = false;
+            Sprite icon = Resources.Load<Sprite>(currentSlot.item.iconPath);
+
+            if (icon != null)
+            {
+                InventoryUIManager.Instance.StartDrag(icon);
+                slotIcon.enabled = false;
+                if (countText != null) countText.gameObject.SetActive(false);
+            }
         }
     }
 
-    // 드롭 이벤트 처리
     public void OnDrop(PointerEventData eventData)
     {
         if (currentSlot == null || currentSlot.slotIndex == -1) return;
@@ -197,7 +206,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 인벤토리 슬롯 드롭 처리
     private void HandleInventorySlotDrop(Slot_UI sourceSlot)
     {
         if (sourceSlot.currentSlot == null || sourceSlot.currentSlot.slotIndex == -1) return;
@@ -208,7 +216,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         dropSuccessful = true;
     }
 
-    // 장비 슬롯 드롭 처리
     private void HandleEquipmentSlotDrop(EquipmentSlot_UI sourceEquipSlot)
     {
         bool success = EquipmentManager.Instance.UnequipItem(sourceEquipSlot.currentItem, sourceEquipSlot.equipmentSlotIndex);
@@ -219,7 +226,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // Slot_UI 컴포넌트 찾기
     private Slot_UI FindSlotComponent(GameObject obj)
     {
         if (obj == null) return null;
@@ -234,7 +240,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         return slot;
     }
 
-    // EquipmentSlot_UI 컴포넌트 찾기
     private EquipmentSlot_UI FindEquipmentSlotComponent(GameObject obj)
     {
         if (obj == null) return null;
@@ -249,29 +254,45 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         return slot;
     }
 
-    // 드래그 종료
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (InventoryUIManager.Instance != null)
-            InventoryUIManager.Instance.EndDrag();
-
-        // 드롭 실패 시 처리
-        if (!dropSuccessful)
+        if (isScrolling)
         {
-            if (ShouldDropItem(eventData))
+            if (parentScrollRect != null)
             {
-                DropItemOutsideInventory();
+                parentScrollRect.OnEndDrag(eventData);
             }
-            else
+        }
+        else
+        {
+            // 아이템 드래그가 끝났으므로, 슬롯 상태와 관계없이 마우스 아이콘은 무조건 숨김
+            if (InventoryUIManager.Instance != null)
+                InventoryUIManager.Instance.EndDrag();
+
+            if (HasValidItem())
             {
-                UpdateSlotVisuals();
+                if (!dropSuccessful)
+                {
+                    if (ShouldDropItem(eventData))
+                    {
+                        DropItemOutsideInventory();
+                    }
+                    else
+                    {
+                        UpdateSlotVisuals();
+                    }
+                }
+            }
+            else if (!dropSuccessful)
+            {
+                UpdateSlotVisuals(); // 슬롯이 비어있어도 비주얼 업데이트
             }
         }
 
         dropSuccessful = false;
+        isScrolling = false;
     }
 
-    // 아이템을 드롭해야 하는지 확인
     private bool ShouldDropItem(PointerEventData eventData)
     {
         if (eventData.pointerEnter == null)
@@ -281,7 +302,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         return false;
     }
 
-    // 인벤토리 영역 내부인지 확인
     private bool IsInsideInventoryArea(PointerEventData eventData)
     {
         if (eventData.pointerEnter == null) return false;
@@ -298,7 +318,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         return false;
     }
 
-    // 인벤토리 관련 오브젝트인지 확인
     private bool IsInventoryRelatedObject(string objectName)
     {
         return objectName.Contains("Inventory") ||
@@ -309,7 +328,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
                objectName == "Small_Inventory_UI";
     }
 
-    // 인벤토리 밖으로 아이템 드롭
     private void DropItemOutsideInventory()
     {
         if (HasValidItem())
@@ -319,22 +337,30 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 드래그 중
     public void OnDrag(PointerEventData eventData)
     {
-        if (HasValidItem() && InventoryUIManager.Instance != null)
+        if (isScrolling)
         {
-            InventoryUIManager.Instance.UpdateDragIcon(eventData.position);
+            if (parentScrollRect != null)
+            {
+                parentScrollRect.OnDrag(eventData);
+            }
+        }
+        else
+        {
+            // 이 블록은 (isScrolling == false) 일 때만 실행됨 (아이템 드래그 중)
+            if (HasValidItem() && InventoryUIManager.Instance != null)
+            {
+                InventoryUIManager.Instance.UpdateDragIcon(eventData.position);
+            }
         }
     }
 
-    // 드롭 성공 표시
     public void MarkDropSuccessful()
     {
         dropSuccessful = true;
     }
 
-    // 장비 착용 시도
     private void AttemptEquip()
     {
         if (!HasValidItem()) return;
@@ -348,7 +374,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 장착 가능한 타입인지 확인
     private bool IsEquippableType(string itemTypeString)
     {
         foreach (var type in EquippableTypes)
@@ -361,7 +386,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         return false;
     }
 
-    // 마우스 진입
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (hideTooltipCoroutine != null)
@@ -376,7 +400,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         tooltipCoroutine = StartCoroutine(ShowTooltipAfterDelay(currentSlot.item));
     }
 
-    // 마우스 이탈
     public void OnPointerExit(PointerEventData eventData)
     {
         if (tooltipCoroutine != null) StopCoroutine(tooltipCoroutine);
@@ -386,7 +409,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         hideTooltipCoroutine = StartCoroutine(HideTooltipAfterDelay(0.1f));
     }
 
-    // 툴팁 표시 (딜레이 후)
     private IEnumerator ShowTooltipAfterDelay(RelicData item)
     {
         yield return new WaitForSeconds(TooltipDelay);
@@ -396,7 +418,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         }
     }
 
-    // 툴팁 숨기기 (딜레이 후)
     private IEnumerator HideTooltipAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -407,7 +428,6 @@ public class Slot_UI : MonoBehaviour, IPointerClickHandler,
         hideTooltipCoroutine = null;
     }
 
-    // 메인 인벤토리 뷰인지 확인
     private bool IsMainInventoryView()
     {
         return InventoryManager.Instance.currentFilter != InventoryFilterType.Relic;

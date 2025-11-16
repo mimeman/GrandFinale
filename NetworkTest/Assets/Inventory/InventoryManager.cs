@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
 using System.Linq;
+using DG.Tweening;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -29,6 +30,11 @@ public class InventoryManager : MonoBehaviour
     [Header("Player Control References")]
     [SerializeField] private CharacterMove characterMove;
     [SerializeField] private CameraSwitcher cameraSwitcher;
+
+    [Header("DOTween References")]
+    [SerializeField] private CanvasGroup fullCanvasGroup;
+    [SerializeField] private CanvasGroup smallCanvasGroup;
+    [SerializeField] private float fadeDuration = 0.2f;
 
     private Animator playerAnimator;
 
@@ -57,6 +63,26 @@ public class InventoryManager : MonoBehaviour
         if (characterMove != null)
         {
             playerAnimator = characterMove.GetComponent<Animator>();
+        }
+
+        if (fullInventoryUI != null)
+        {
+            fullCanvasGroup = fullInventoryUI.GetComponent<CanvasGroup>();
+            if (fullCanvasGroup == null) fullCanvasGroup = fullInventoryUI.AddComponent<CanvasGroup>();
+
+            fullCanvasGroup.alpha = 0f;
+            fullCanvasGroup.blocksRaycasts = false;
+            fullInventoryUI.SetActive(false);
+        }
+
+        if (smallInventoryUI != null)
+        {
+            smallCanvasGroup = smallInventoryUI.GetComponent<CanvasGroup>();
+            if (smallCanvasGroup == null) smallCanvasGroup = smallInventoryUI.AddComponent<CanvasGroup>();
+
+            smallCanvasGroup.alpha = 0f;
+            smallCanvasGroup.blocksRaycasts = false;
+            smallInventoryUI.SetActive(false);
         }
     }
 
@@ -107,12 +133,20 @@ public class InventoryManager : MonoBehaviour
 
         if (currentActive && IsFocused)
         {
-            smallInventoryUI.SetActive(false);
-            SetFocusState(false);
+            smallCanvasGroup.blocksRaycasts = false;
+            smallCanvasGroup.DOFade(0f, fadeDuration)
+                .OnComplete(() =>
+                {
+                    smallInventoryUI.SetActive(false);
+                    SetFocusState(false);
+                });
         }
         else if (!currentActive)
         {
             smallInventoryUI.SetActive(true);
+            smallCanvasGroup.alpha = 0f;
+            smallCanvasGroup.blocksRaycasts = true;
+            smallCanvasGroup.DOFade(1f, fadeDuration);
             SetFocusState(true);
         }
         else
@@ -135,11 +169,13 @@ public class InventoryManager : MonoBehaviour
 
         if (currentActive && IsFocused)
         {
+            InventoryAnimation_Close();
             fullInventoryUI.SetActive(false);
             SetFocusState(false);
         }
         else if (!currentActive)
         {
+            InventoryAnimation_Open();
             fullInventoryUI.SetActive(true);
             SetFocusState(true);
         }
@@ -153,6 +189,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (!IsUIOpen) return;
 
+        InventoryAnimation_Close();
         if (smallInventoryUI != null) smallInventoryUI.SetActive(false);
         if (fullInventoryUI != null) fullInventoryUI.SetActive(false);
 
@@ -419,6 +456,49 @@ public class InventoryManager : MonoBehaviour
             // 검색어가 변경되면 UI를 업데이트해야 함
             OnInventoryChanged?.Invoke();
         }
+    }
+
+
+    /// <summary>
+    /// Full Inventory UI를 열 때의 애니메이션 (페이드 인)
+    /// </summary>
+    private void InventoryAnimation_Open()
+    {
+        if (fullCanvasGroup == null || fullInventoryUI == null) return;
+
+        // 1. 초기 설정
+        fullInventoryUI.SetActive(true);
+        fullCanvasGroup.alpha = 0f;
+        fullCanvasGroup.blocksRaycasts = true;
+
+        // 2. DOTween 애니메이션 실행 (페이드 인)
+        fullCanvasGroup.DOFade(1f, fadeDuration).SetEase(Ease.OutSine);
+
+        // (테스트용 다른 애니메이션 버전: 스케일 확대)
+        /*
+        fullInventoryUI.transform.localScale = Vector3.one * 0.8f;
+        fullInventoryUI.transform.DOScale(1f, fadeDuration).SetEase(Ease.OutBack);
+        */
+    }
+
+    /// <summary>
+    /// Full Inventory UI를 닫을 때의 애니메이션 (페이드 아웃)
+    /// </summary>
+    private void InventoryAnimation_Close()
+    {
+        if (fullCanvasGroup == null || fullInventoryUI == null) return;
+
+        // 1. DOTween 애니메이션 실행 (페이드 아웃)
+        fullCanvasGroup.blocksRaycasts = false;
+
+        fullCanvasGroup.DOFade(0f, fadeDuration)
+            .SetEase(Ease.InSine)
+            .OnComplete(() =>
+            {
+                // 2. 애니메이션 완료 후 비활성화 및 포커스 해제
+                fullInventoryUI.SetActive(false);
+                SetFocusState(false);
+            });
     }
 
     public List<InventorySlot> GetFilteredInventory()

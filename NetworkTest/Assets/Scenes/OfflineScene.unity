@@ -42354,6 +42354,7 @@ MonoBehaviour:
   itemInfoHeadText: {fileID: 6033520696805178206}
   full_SearchInputField: {fileID: 0}
   tooltipOffset: {x: 20, y: -50}
+  leftInfoContainerRect: {fileID: 8787045865020271167}
 --- !u!4 &1080042809697479548
 Transform:
   m_ObjectHideFlags: 0
@@ -43201,6 +43202,7 @@ GameObject:
   - component: {fileID: 4915884783355607544}
   - component: {fileID: 3002578361598160628}
   - component: {fileID: 9150838094257240352}
+  - component: {fileID: 9150838094257240353}
   m_Layer: 5
   m_Name: Small_Inventory_UI
   m_TagString: Untagged
@@ -45006,6 +45008,9 @@ MonoBehaviour:
   genericLootPrefab: {fileID: 1983626663567947396, guid: 0a645255bf43cd849bbbca1333050a7b, type: 3}
   characterMove: {fileID: 824099796}
   cameraSwitcher: {fileID: 7741374103496102201}
+  fullCanvasGroup: {fileID: 5206328340171228395}
+  smallCanvasGroup: {fileID: 9150838094257240353}
+  fadeDuration: 0.3
 --- !u!224 &2095519208310173823
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49278,6 +49283,7 @@ GameObject:
   - component: {fileID: 803246513500501268}
   - component: {fileID: 1517651754746739261}
   - component: {fileID: 5206328340171228394}
+  - component: {fileID: 5206328340171228395}
   m_Layer: 5
   m_Name: FullInventory_Inventory_UI
   m_TagString: Untagged
@@ -51248,6 +51254,18 @@ MonoBehaviour:
   - {fileID: 398727396}
   - {fileID: 1652423650}
   autoFindSlots: 1
+--- !u!225 &5206328340171228395
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167257146424457158}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5222730379001225257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60206,7 +60224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.21176471}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -61900,6 +61918,18 @@ MonoBehaviour:
   - {fileID: 1502167198}
   - {fileID: 1170781525}
   autoFindSlots: 1
+--- !u!225 &9150838094257240353
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456789259860363225}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &9158043523442164708
 RectTransform:
   m_ObjectHideFlags: 0

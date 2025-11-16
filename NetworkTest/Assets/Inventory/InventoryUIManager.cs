@@ -115,13 +115,18 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
     [Tooltip("Full UI의 검색 입력 필드 (Search Text의 부모)")]
     [SerializeField] private TMPro.TMP_InputField full_SearchInputField; 
 
-    // --- [Common Logic] ---
     private Vector2 dragOffset;
     private Coroutine fadeCoroutine;
     private CanvasGroup currentTooltipCanvasGroup;
     private float currentTargetAlpha = 0f;
     [SerializeField] private Vector2 tooltipOffset = new Vector2(20f, -50f);
     private const float FadeDuration = 0.2f;
+
+    [Header("[Left Info] Container")]
+    [SerializeField] private RectTransform leftInfoContainerRect; // 에디터에서 Left_Info 오브젝트 연결
+    private Vector2 equipPosition;  // Left_Info의 장비 위치
+    private Vector2 statsPosition;  // Left_Info의 스탯 위치
+    private Vector2 itemPosition;
 
     void Awake()
     {
@@ -137,6 +142,7 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         InitializeTooltip(small_TooltipPanel, out _);
         InitializeTooltip(full_TooltipPanel, out _);
+
     }
 
     private void InitializeTooltip(GameObject panel, out CanvasGroup canvasGroup)
@@ -185,6 +191,7 @@ public class InventoryUIManager : MonoBehaviour, IBeginDragHandler, IDragHandler
             OnInventoryTabClick(); // 중앙 탭
             ShowEquipmentInfoPanel(); // 좌측 탭
         }
+
     }
     void OnDestroy()
     {

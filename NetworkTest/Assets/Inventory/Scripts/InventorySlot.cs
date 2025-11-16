@@ -3,43 +3,50 @@ using UnityEngine;
 [System.Serializable]
 public class InventorySlot
 {
-    public RelicData item; // 이 슬롯에 담긴 아이템 데이터
-    public int quantity;   // 이 슬롯에 담긴 아이템의 수량
-
-
-    [System.NonSerialized]
     public int slotIndex;
-    // 기본 생성자 (비어있는 슬롯)
-    public InventorySlot()
+    public RelicData item;
+    public int quantity;
+
+    // 수량 추가
+    public void AddQuantity(int amount)
     {
-        item = null;
-        quantity = 0;
+        quantity += amount;
     }
 
-    // (호출되는 곳은 없지만, 안전을 위해 인덱스도 초기화)
-    public InventorySlot(int index)
+    // 수량 제거
+    public void RemoveQuantity(int amount)
     {
-        item = null;
-        quantity = 0;
-        slotIndex = index;
+        quantity -= amount;
+        if (quantity < 0)
+        {
+            quantity = 0;
+        }
     }
 
+    // 슬롯 초기화
     public void ClearSlot()
     {
         item = null;
         quantity = 0;
     }
 
-    // (선택사항) 아이템을 추가하는 헬퍼 함수
-    public void SetItem(RelicData newItem)
+    // 슬롯이 비어있는지 확인
+    public bool IsEmpty()
     {
-        item = newItem;
-        quantity = 1;
+        return item == null || quantity <= 0;
     }
 
-    // (선택사항) 수량을 증가시키는 헬퍼 함수
-    public void AddQuantity(int amount)
+    // 슬롯이 가득 찼는지 확인
+    public bool IsFull()
     {
-        quantity += amount;
+        if (item == null) return false;
+        return quantity >= item.maxStack;
+    }
+
+    // 추가 가능한 수량 계산
+    public int GetAvailableSpace()
+    {
+        if (item == null) return 0;
+        return item.maxStack - quantity;
     }
 }

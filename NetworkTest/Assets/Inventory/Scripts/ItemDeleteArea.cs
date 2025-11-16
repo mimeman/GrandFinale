@@ -1,27 +1,37 @@
 using UnityEngine;
-using UnityEngine.EventSystems; // IDropHandler를 사용하기 위해 필요
-
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(RectTransform))]
 public class ItemDeleteArea : MonoBehaviour, IDropHandler
 {
+    // 드롭 이벤트 처리
     public void OnDrop(PointerEventData eventData)
     {
         Slot_UI sourceSlot = eventData.pointerDrag.GetComponent<Slot_UI>();
 
-        if (sourceSlot != null &&
-            sourceSlot.currentSlot != null &&
-            sourceSlot.currentSlot.item != null &&
-            sourceSlot.currentSlot.slotIndex != -1) // 인덱스가 유효한지 확인
+        if (IsValidSlot(sourceSlot))
         {
-            Debug.Log($"[ItemDeleteArea] {sourceSlot.currentSlot.slotIndex}번 슬롯의 아이템 '{sourceSlot.currentSlot.item.itemName}' (수량: {sourceSlot.currentSlot.quantity})을(를) 삭제합니다.");
+            DeleteItem(sourceSlot);
+        }
+    }
 
-            bool success = InventoryManager.Instance.RemoveItem(sourceSlot.currentSlot.slotIndex);
+    // 유효한 슬롯인지 확인
+    private bool IsValidSlot(Slot_UI slot)
+    {
+        return slot != null &&
+               slot.currentSlot != null &&
+               slot.currentSlot.item != null &&
+               slot.currentSlot.slotIndex != -1;
+    }
 
-            if (success)
-            {
-                sourceSlot.dropSuccessful = true;
-            }
+    // 아이템 삭제
+    private void DeleteItem(Slot_UI sourceSlot)
+    {
+        bool success = InventoryManager.Instance.RemoveItem(sourceSlot.currentSlot.slotIndex);
+
+        if (success)
+        {
+            sourceSlot.dropSuccessful = true;
         }
     }
 }

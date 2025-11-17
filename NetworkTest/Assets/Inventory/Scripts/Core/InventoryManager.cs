@@ -1,9 +1,10 @@
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using System;
-using System.Linq;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class InventoryManager : MonoBehaviour
 
     private string currentSearchQuery = string.Empty;
 
+    //private PlayerInputs playerInputs;
     public List<InventorySlot> inventorySlots;
+    
 
     public static event Action OnInventoryChanged;
     public static event Action<bool> OnInventoryToggle;
@@ -43,6 +46,7 @@ public class InventoryManager : MonoBehaviour
 
     void Awake()
     {
+        //PlayerInputs = GetComponent<PlayerInputs>();
         if (Instance == null)
         {
             Instance = this;
@@ -88,6 +92,19 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
+        /*if (playerInput != null && playerInput.GetInventory())
+        {
+            Debug.Log("인벤토리 키 입력 감지 (by PlayerInputs)!");
+            // ToggleSmallInventory(); // (이전에 'O'키에 연결된 ToggleInventory() 대신)
+        }
+
+        if (playerInput != null && playerInput.GetFullInventoryToggle())
+        {
+            Debug.Log("Full 인벤토리 키 입력 감지 (by PlayerInputs)!");
+            ToggleInventory(); // (기존 'O'키에 연결된 함수)
+        }*/
+
+
         // Tab 키: Small 인벤토리 토글
         if (Input.GetKeyDown(KeyCode.Tab))
         {

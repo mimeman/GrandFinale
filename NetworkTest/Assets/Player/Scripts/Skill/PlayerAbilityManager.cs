@@ -1,5 +1,4 @@
-// Assets/Scripts/Managers/PlayerAbilityManager.cs
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,98 +6,94 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerStats))]
 public class PlayerAbilityManager : MonoBehaviour
 {
-    // --- ÇÊ¼ö ÄÄÆ÷³ÍÆ® ÂüÁ¶ ---
+    // --- í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ ì°¸ì¡° ---
     private WeaponController weaponController;
     private PlayerStats playerStats;
-    private CharacterMove characterMove;
 
-    // --- ½ºÅ³ »óÅÂ °ü¸® ---
+    // --- ìŠ¤í‚¬ ìƒíƒœ ê´€ë¦¬ ---
     private Dictionary<string, Coroutine> runningSkillCoroutines = new Dictionary<string, Coroutine>();
     private Dictionary<string, bool> skillCooldowns = new Dictionary<string, bool>();
 
-    //  1. (Ãß°¡) ÇöÀç º¸À¯ÇÑ À¯¹°(ÆĞ½Ãºê) ¸®½ºÆ® 
+    //  1. (ì¶”ê°€) í˜„ì¬ ë³´ìœ í•œ ìœ ë¬¼(íŒ¨ì‹œë¸Œ) ë¦¬ìŠ¤íŠ¸ 
     private List<RelicData> equippedRelics = new List<RelicData>();
-    // (Aura °°Àº ÆĞ½Ãºê ÀÌÆåÆ® °ü¸®¸¦ À§ÇÑ ¸®½ºÆ®)
+    // (Aura ê°™ì€ íŒ¨ì‹œë¸Œ ì´í™íŠ¸ ê´€ë¦¬ë¥¼ ìœ„í•œ ë¦¬ìŠ¤íŠ¸)
     private List<GameObject> passiveEffectInstances = new List<GameObject>();
 
 
     void Awake()
     {
-        // ÇÊ¼ö ÄÄÆ÷³ÍÆ® Ã£¾Æ¿À±â
+        // í•„ìˆ˜ ì»´í¬ë„ŒíŠ¸ ì°¾ì•„ì˜¤ê¸°
         weaponController = GetComponent<WeaponController>();
         playerStats = GetComponent<PlayerStats>();
-        characterMove = GetComponent<CharacterMove>();
 
-
-        if (playerStats == null) Debug.LogError("PlayerStats°¡ ¾ø½À´Ï´Ù. (ÆĞ½Ãºê Àû¿ë ºÒ°¡)");
+        if (playerStats == null) Debug.LogError("PlayerStatsê°€ ì—†ìŠµë‹ˆë‹¤. (íŒ¨ì‹œë¸Œ ì ìš© ë¶ˆê°€)");
     }
 
 
 
-    // [Å×½ºÆ®¿ë] Å° ÀÔ·Â
+    // [í…ŒìŠ¤íŠ¸ìš©] í‚¤ ì…ë ¥
     void Update()
     {
-        // ¡Ú¡Ú¡Ú (Ãß°¡) G/H Å°·Î ¾ÆÀÌÅÛ Ãß°¡/Á¦°Å Å×½ºÆ® ¡Ú¡Ú¡Ú
         if (Input.GetKeyDown(KeyCode.G))
         {
-            Debug.Log("REL_001 ½ÇÇà");
-            AddRelic("REL_001"); // (º»ÀÎ) ÃÖ´ë Ã¼·Â Áõ°¡
+            Debug.Log("REL_001 ì‹¤í–‰");
+            AddRelic("REL_001"); // (ë³¸ì¸) ìµœëŒ€ ì²´ë ¥ ì¦ê°€
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Debug.Log("REL_001 ÇØÁ¦");
-            RemoveRelic("REL_001"); // (º»ÀÎ) ÃÖ´ë Ã¼·Â Áõ°¡ (Á¦°Å)
+            Debug.Log("REL_001 í•´ì œ");
+            RemoveRelic("REL_001"); // (ë³¸ì¸) ìµœëŒ€ ì²´ë ¥ ì¦ê°€ (ì œê±°)
         }
 
-        // KÅ°·Î '¹«ÇÑ ÅºÃ¢' ¹ßµ¿ Å×½ºÆ®
+        // Kí‚¤ë¡œ 'ë¬´í•œ íƒ„ì°½' ë°œë™ í…ŒìŠ¤íŠ¸
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("ABIL_007 ½ÇÇà");
+            Debug.Log("ABIL_007 ì‹¤í–‰");
             TryActivateAbility("ABIL_007");
         }
 
-        // LÅ°·Î '¿¡³ÊÁö ½Çµå' ¹ßµ¿ Å×½ºÆ®
+        // Lí‚¤ë¡œ 'ì—ë„ˆì§€ ì‹¤ë“œ' ë°œë™ í…ŒìŠ¤íŠ¸
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("ABIL_006 ½ÇÇà");
+            Debug.Log("ABIL_006 ì‹¤í–‰");
             TryActivateAbility("ABIL_006");
         }
     }
 
     // ====================================================================
-    // ¡Ú¡Ú¡Ú 2. (½Å±Ô) ¾ÆÀÌÅÛ Ãß°¡ / Á¦°Å (°ø¿ë ÇÔ¼ö) ¡Ú
+    // â˜…â˜…â˜… 2. (ì‹ ê·œ) ì•„ì´í…œ ì¶”ê°€ / ì œê±° (ê³µìš© í•¨ìˆ˜) â˜…
     // ====================================================================
 
     /// <summary>
-    /// (ItemPickup.cs°¡ È£Ãâ)
-    /// ÇÃ·¹ÀÌ¾î¿¡°Ô À¯¹°À» Ãß°¡ÇÏ°í ½ºÅÈÀ» Àç°è»êÇÕ´Ï´Ù.
+    /// (ItemPickup.csê°€ í˜¸ì¶œ)
+    /// í”Œë ˆì´ì–´ì—ê²Œ ìœ ë¬¼ì„ ì¶”ê°€í•˜ê³  ìŠ¤íƒ¯ì„ ì¬ê³„ì‚°í•©ë‹ˆë‹¤.
     /// </summary>
     public void AddRelic(string itemID)
     {
         if (!DataManager.Instance.RelicDB.TryGetValue(itemID, out RelicData relic))
         {
-            Debug.LogWarning($"[AbilityManager] {itemID} RelicData¸¦ Ã£À» ¼ö ¾øÀ½");
+            Debug.LogWarning($"[AbilityManager] {itemID} RelicDataë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŒ");
             return;
         }
 
-        // (Áßº¹ È¹µæ ¹æÁö ·ÎÁ÷ µî... )
+        // (ì¤‘ë³µ íšë“ ë°©ì§€ ë¡œì§ ë“±... )
         if (equippedRelics.Contains(relic))
         {
             equippedRelics.Add(relic);
-            Debug.Log($"[AbilityManager] {relic.itemName}´Â(Àº) ÀÌ¹Ì º¸À¯ ÁßÀÔ´Ï´Ù.");
-            // return; // ¡ÚÂü°í: Áßº¹ Çã¿ë ½Ã ÀÌ ÁÙÀ» ÁÖ¼® Ã³¸® (ÇöÀç´Â Áßº¹ Àû¿ëµÇµµ·Ï µÊ)
+            Debug.Log($"[AbilityManager] {relic.itemName}ëŠ”(ì€) ì´ë¯¸ ë³´ìœ  ì¤‘ì…ë‹ˆë‹¤.");
+            // return; // â˜…ì°¸ê³ : ì¤‘ë³µ í—ˆìš© ì‹œ ì´ ì¤„ì„ ì£¼ì„ ì²˜ë¦¬ (í˜„ì¬ëŠ” ì¤‘ë³µ ì ìš©ë˜ë„ë¡ ë¨)
         }
 
         equippedRelics.Add(relic);
-        Debug.Log($"[AbilityManager] {relic.itemName} È¹µæ.");
+        Debug.Log($"[AbilityManager] {relic.itemName} íšë“.");
 
-        // ½ºÅÈ Àç°è»ê!
+        // ìŠ¤íƒ¯ ì¬ê³„ì‚°!
         RecalculateAllPassiveStats();
     }
 
     /// <summary>
-    /// (¾ÆÀÌÅÛ ¹ö¸®±â ±â´ÉÀÌ È£Ãâ)
-    /// ÇÃ·¹ÀÌ¾î¿¡°Ô¼­ À¯¹°À» Á¦°ÅÇÏ°í ½ºÅÈÀ» Àç°è»êÇÕ´Ï´Ù.
+    /// (ì•„ì´í…œ ë²„ë¦¬ê¸° ê¸°ëŠ¥ì´ í˜¸ì¶œ)
+    /// í”Œë ˆì´ì–´ì—ê²Œì„œ ìœ ë¬¼ì„ ì œê±°í•˜ê³  ìŠ¤íƒ¯ì„ ì¬ê³„ì‚°í•©ë‹ˆë‹¤.
     /// </summary>
     public void RemoveRelic(string itemID)
     {
@@ -106,30 +101,30 @@ public class PlayerAbilityManager : MonoBehaviour
 
         if (equippedRelics.Remove(relic))
         {
-            Debug.Log($"[AbilityManager] {relic.itemName} Á¦°Å.");
-            // ½ºÅÈ Àç°è»ê!
+            Debug.Log($"[AbilityManager] {relic.itemName} ì œê±°.");
+            // ìŠ¤íƒ¯ ì¬ê³„ì‚°!
             RecalculateAllPassiveStats();
         }
     }
 
     // ====================================================================
-    // ¡Ú¡Ú¡Ú 3. (¾÷±×·¹ÀÌµå) ½ºÅÈ Àç°è»ê ·ÎÁ÷ ¡Ú¡Ú¡Ú
-    // (±âÁ¸ ApplyPassiveAbility ÇÔ¼ö¸¦ ´ëÃ¼)
+    // â˜…â˜…â˜… 3. (ì—…ê·¸ë ˆì´ë“œ) ìŠ¤íƒ¯ ì¬ê³„ì‚° ë¡œì§ â˜…â˜…â˜…
+    // (ê¸°ì¡´ ApplyPassiveAbility í•¨ìˆ˜ë¥¼ ëŒ€ì²´)
     // ====================================================================
 
     /// <summary>
-    /// º¸À¯ÇÑ ¸ğµç À¯¹°(Relic)À» ±â¹İÀ¸·Î ÆĞ½Ãºê ½ºÅÈ/´É·ÂÀ» Ã³À½ºÎÅÍ ´Ù½Ã Àû¿ëÇÕ´Ï´Ù.
+    /// ë³´ìœ í•œ ëª¨ë“  ìœ ë¬¼(Relic)ì„ ê¸°ë°˜ìœ¼ë¡œ íŒ¨ì‹œë¸Œ ìŠ¤íƒ¯/ëŠ¥ë ¥ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ì ìš©í•©ë‹ˆë‹¤.
     /// </summary>
     private void RecalculateAllPassiveStats()
     {
-        // --- 1. ±âÁ¸ ÆĞ½Ãºê È¿°ú ¸ğµÎ Á¦°Å ---
+        // --- 1. ê¸°ì¡´ íŒ¨ì‹œë¸Œ íš¨ê³¼ ëª¨ë‘ ì œê±° ---
         StopAndClearAllPassiveEffects();
 
-        // --- 2. PlayerStats¸¦ ±âº»°ªÀ¸·Î ¸®¼Â ---
+        // --- 2. PlayerStatsë¥¼ ê¸°ë³¸ê°’ìœ¼ë¡œ ë¦¬ì…‹ ---
         if (playerStats == null) return;
         playerStats.ResetToBaseStats();
 
-        // --- 3. º¸À¯ÇÑ ¸ğµç À¯¹°À» ¼øÈ¸ÇÏ¸ç ÆĞ½Ãºê Àû¿ë ---
+        // --- 3. ë³´ìœ í•œ ëª¨ë“  ìœ ë¬¼ì„ ìˆœíšŒí•˜ë©° íŒ¨ì‹œë¸Œ ì ìš© ---
         foreach (RelicData relic in equippedRelics)
         {
             AbilityData ability = relic.grantedAbility;
@@ -139,13 +134,13 @@ public class PlayerAbilityManager : MonoBehaviour
             }
         }
 
-        // (ÇÊ¿ä½Ã Ã¼·Â µ¿±âÈ­ - ÃÖ´ë Ã¼·ÂÀÌ ÁÙ¾úÀ» ¶§ ÇöÀç Ã¼·ÂÀÌ ´õ ³ôÀ¸¸é ¾È µÊ)
+        // (í•„ìš”ì‹œ ì²´ë ¥ ë™ê¸°í™” - ìµœëŒ€ ì²´ë ¥ì´ ì¤„ì—ˆì„ ë•Œ í˜„ì¬ ì²´ë ¥ì´ ë” ë†’ìœ¼ë©´ ì•ˆ ë¨)
         playerStats.ValidateHealth();
-        // (PlayerStats.cs¿¡ ValidateHealth() { if (CurrentHealth > CurrentMaxHealth) CurrentHealth = CurrentMaxHealth; } Ãß°¡ ÇÊ¿ä)
+        // (PlayerStats.csì— ValidateHealth() { if (CurrentHealth > CurrentMaxHealth) CurrentHealth = CurrentMaxHealth; } ì¶”ê°€ í•„ìš”)
     }
 
     /// <summary>
-    /// ÆĞ½Ãºê ´É·Â 1°³ÀÇ ·ÎÁ÷À» ½ÇÁ¦·Î Àû¿ëÇÕ´Ï´Ù.
+    /// íŒ¨ì‹œë¸Œ ëŠ¥ë ¥ 1ê°œì˜ ë¡œì§ì„ ì‹¤ì œë¡œ ì ìš©í•©ë‹ˆë‹¤.
     /// </summary>
     private void ApplyPassiveLogic(AbilityData ability)
     {
@@ -163,63 +158,63 @@ public class PlayerAbilityManager : MonoBehaviour
                 playerStats.AddStatPercent(ability.param_Key, float.Parse(ability.param_ValueA));
                 break;
 
-            // ¡Ú¡Ú¡Ú 1. (½Å±Ô) º¹ÇÕ ½ºÅÈ ·ÎÁ÷ ÄÉÀÌ½º Ãß°¡ ¡Ú¡Ú¡Ú
+            // â˜…â˜…â˜… 1. (ì‹ ê·œ) ë³µí•© ìŠ¤íƒ¯ ë¡œì§ ì¼€ì´ìŠ¤ ì¶”ê°€ â˜…â˜…â˜…
             case "Stat_Composite":
-                // ÀÌ ´É·ÂÀº param_Key¸¦ ±âÁØÀ¸·Î ¿©·¯ ½ºÅÈÀ» Àû¿ëÇÕ´Ï´Ù.
+                // ì´ ëŠ¥ë ¥ì€ param_Keyë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì—¬ëŸ¬ ìŠ¤íƒ¯ì„ ì ìš©í•©ë‹ˆë‹¤.
                 ApplyCompositeStat(ability);
                 break;
 
             case "Aura_Heal_Ally":
             case "Aura_Damage_Enemy":
-                Debug.Log($"{ability.abilityName} ¿À¶ó »ı¼º (±¸Çö ÇÊ¿ä)");
+                Debug.Log($"{ability.abilityName} ì˜¤ë¼ ìƒì„± (êµ¬í˜„ í•„ìš”)");
                 if (!string.IsNullOrEmpty(ability.resourcePath))
                 {
-                    // GameObject prefab = ... (µ¥ÀÌÅÍ¿¡¼­ ·Îµå)
+                    // GameObject prefab = ... (ë°ì´í„°ì—ì„œ ë¡œë“œ)
                     // GameObject instance = Instantiate(prefab, transform);
-                    // passiveEffectInstances.Add(instance); // ¡ÚÁ¦°Å¸¦ À§ÇØ ¸®½ºÆ®¿¡ Ãß°¡
+                    // passiveEffectInstances.Add(instance); // â˜…ì œê±°ë¥¼ ìœ„í•´ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
                 }
                 break;
 
             default:
-                Debug.LogWarning($"Á¤ÀÇµÇÁö ¾ÊÀº ÆĞ½Ãºê ·ÎÁ÷: {ability.abilityLogicID}");
+                Debug.LogWarning($"ì •ì˜ë˜ì§€ ì•Šì€ íŒ¨ì‹œë¸Œ ë¡œì§: {ability.abilityLogicID}");
                 break;
         }
     }
 
-    // ¡Ú¡Ú¡Ú 2. (½Å±Ô) º¹ÇÕ ½ºÅÈ Àü¿ë Àû¿ë ÇÔ¼ö ¡Ú¡Ú¡Ú
+    // â˜…â˜…â˜… 2. (ì‹ ê·œ) ë³µí•© ìŠ¤íƒ¯ ì „ìš© ì ìš© í•¨ìˆ˜ â˜…â˜…â˜…
     /// <summary>
-    /// 'Stat_Composite' ·ÎÁ÷ ID¸¦ °¡Áø ´É·ÂÀÇ ¼¼ºÎ ½ºÅÈÀ» Àû¿ëÇÕ´Ï´Ù.
+    /// 'Stat_Composite' ë¡œì§ IDë¥¼ ê°€ì§„ ëŠ¥ë ¥ì˜ ì„¸ë¶€ ìŠ¤íƒ¯ì„ ì ìš©í•©ë‹ˆë‹¤.
     /// </summary>
     private void ApplyCompositeStat(AbilityData ability)
     {
         switch (ability.param_Key)
         {
-            // ABIL_301: S.A.S ÀüÅõ ¸ğµâ
-            // (Ã¼·Â, ¹æ¾î·Â, ÀÌµ¿ ¼Óµµ, °ø°İ·Â ¼ÒÆø Áõ°¡)
+            // ABIL_301: S.A.S ì „íˆ¬ ëª¨ë“ˆ
+            // (ì²´ë ¥, ë°©ì–´ë ¥, ì´ë™ ì†ë„, ê³µê²©ë ¥ ì†Œí­ ì¦ê°€)
             case "SAS_Module":
                 playerStats.AddStat("MaxHealth", 10f);
                 playerStats.AddStat("Defense", 5f);
                 playerStats.AddStat("Power", 5f);
-                playerStats.AddStatPercent("MoveSpeed", 5f); // 5% Áõ°¡
+                playerStats.AddStatPercent("MoveSpeed", 5f); // 5% ì¦ê°€
                 break;
 
-            // ABIL_302: 'ºÒ¿öÅ©' ÁßÀå°©
-            // (ÃÖ´ë Ã¼·Â/¹æ¾î·Â ´ëÆø Áõ°¡, ÀÌµ¿ ¼Óµµ °¨¼Ò)
+            // ABIL_302: 'ë¶ˆì›Œí¬' ì¤‘ì¥ê°‘
+            // (ìµœëŒ€ ì²´ë ¥/ë°©ì–´ë ¥ ëŒ€í­ ì¦ê°€, ì´ë™ ì†ë„ ê°ì†Œ)
             case "Bulwark_Armor":
                 playerStats.AddStat("MaxHealth", 50f);
                 playerStats.AddStat("Defense", 20f);
-                playerStats.AddStatPercent("MoveSpeed", -15f); // 15% °¨¼Ò
+                playerStats.AddStatPercent("MoveSpeed", -15f); // 15% ê°ì†Œ
                 break;
 
             default:
-                Debug.LogWarning($"[ApplyCompositeStat] Á¤ÀÇµÇÁö ¾ÊÀº param_Key: {ability.param_Key}");
+                Debug.LogWarning($"[ApplyCompositeStat] ì •ì˜ë˜ì§€ ì•Šì€ param_Key: {ability.param_Key}");
                 break;
         }
     }
 
 
     /// <summary>
-    /// ½ºÅÈ Àç°è»ê Àü¿¡ ¸ğµç ¿À¶ó/ÀÌÆåÆ®¸¦ ¸ØÃß°í ÆÄ±«ÇÕ´Ï´Ù.
+    /// ìŠ¤íƒ¯ ì¬ê³„ì‚° ì „ì— ëª¨ë“  ì˜¤ë¼/ì´í™íŠ¸ë¥¼ ë©ˆì¶”ê³  íŒŒê´´í•©ë‹ˆë‹¤.
     /// </summary>
     private void StopAndClearAllPassiveEffects()
     {
@@ -228,34 +223,34 @@ public class PlayerAbilityManager : MonoBehaviour
             if (instance != null) Destroy(instance);
         }
         passiveEffectInstances.Clear();
-        // (ÀÌ ¿Ü¿¡ ÆĞ½Ãºê ÄÚ·çÆ¾ÀÌ ÀÖ´Ù¸é StopCoroutine...)
+        // (ì´ ì™¸ì— íŒ¨ì‹œë¸Œ ì½”ë£¨í‹´ì´ ìˆë‹¤ë©´ StopCoroutine...)
     }
 
 
     // ====================================================================
-    // 4. ¾×Æ¼ºê ´É·Â ¹ßµ¿ (±âÁ¸ ÄÚµå¿Í µ¿ÀÏ)
+    // 4. ì•¡í‹°ë¸Œ ëŠ¥ë ¥ ë°œë™ (ê¸°ì¡´ ì½”ë“œì™€ ë™ì¼)
     // ====================================================================
     public void TryActivateAbility(string abilityID)
     {
-        Debug.Log("ABIL_007 '¹«ÇÑÅºÃ¢' ½ºÅ³ ½ÃÀÛ");
+        Debug.Log("ABIL_007 'ë¬´í•œíƒ„ì°½' ìŠ¤í‚¬ ì‹œì‘");
 
 
-        // 1. ÄğÅ¸ÀÓ È®ÀÎ
+        // 1. ì¿¨íƒ€ì„ í™•ì¸
         if (skillCooldowns.TryGetValue(abilityID, out bool onCooldown) && onCooldown)
         {
-            Debug.Log($"[{abilityID}] ½ºÅ³ ÄğÅ¸ÀÓ ÁßÀÔ´Ï´Ù.");
+            Debug.Log($"[{abilityID}] ìŠ¤í‚¬ ì¿¨íƒ€ì„ ì¤‘ì…ë‹ˆë‹¤.");
             return;
         }
 
-        // 2. µ¥ÀÌÅÍ °¡Á®¿À±â
+        // 2. ë°ì´í„° ê°€ì ¸ì˜¤ê¸°
         if (!DataManager.Instance.AbilityDB.TryGetValue(abilityID, out AbilityData ability))
         {
-            Debug.LogWarning($"[{abilityID}] AbilityData¸¦ Ã£À» ¼ö ¾øÀ½.");
+            Debug.LogWarning($"[{abilityID}] AbilityDataë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŒ.");
             return;
         }
         if (ability.activationType != "Active") return;
 
-        // 3. ·ÎÁ÷ ID¿¡ µû¶ó ½ºÅ³ ÄÚ·çÆ¾ ½ÇÇà
+        // 3. ë¡œì§ IDì— ë”°ë¼ ìŠ¤í‚¬ ì½”ë£¨í‹´ ì‹¤í–‰
         IEnumerator skillRoutine = null;
 
         switch (ability.abilityLogicID)
@@ -268,30 +263,30 @@ public class PlayerAbilityManager : MonoBehaviour
                 break;
 
             case "Add_Shield": // (ABIL_006)
-                // ¡Ú¡Ú¡Ú (¼öÁ¤) PlayerStatsÀÇ ÇÔ¼ö¸¦ Á÷Á¢ È£ÃâÇÏµµ·Ï º¯°æ ¡Ú¡Ú¡Ú
+                // â˜…â˜…â˜… (ìˆ˜ì •) PlayerStatsì˜ í•¨ìˆ˜ë¥¼ ì§ì ‘ í˜¸ì¶œí•˜ë„ë¡ ë³€ê²½ â˜…â˜…â˜…
                 float.TryParse(ability.param_Key, out float shieldAmount); // 100
                 float.TryParse(ability.param_ValueA, out float duration); // 10
                 float.TryParse(ability.param_ValueB, out float cooldown); // 20
 
                 if (playerStats != null)
                 {
-                    playerStats.AddTemporaryShield(shieldAmount, duration); // ¡Ú ½Çµå Àû¿ë
-                    StartCoroutine(CooldownRoutine(ability.abilityID, cooldown)); // ¡Ú ÄğÅ¸ÀÓ¸¸ °ü¸®
+                    playerStats.AddTemporaryShield(shieldAmount, duration); // â˜… ì‹¤ë“œ ì ìš©
+                    StartCoroutine(CooldownRoutine(ability.abilityID, cooldown)); // â˜… ì¿¨íƒ€ì„ë§Œ ê´€ë¦¬
                 }
                 break;
 
             case "Cone_Knockback": // (ABIL_005)
-                // (³Ë¹éÀº Áï¹ß¼ºÀÌ¹Ç·Î ÄÚ·çÆ¾ÀÌ ¾Æ´Ò ¼öµµ ÀÖÀ½)
+                // (ë„‰ë°±ì€ ì¦‰ë°œì„±ì´ë¯€ë¡œ ì½”ë£¨í‹´ì´ ì•„ë‹ ìˆ˜ë„ ìˆìŒ)
                 // ExecuteKnockback(ability);
-                Debug.Log("³Ë¹é ½ºÅ³ ¹ßµ¿ (±¸Çö ÇÊ¿ä)");
+                Debug.Log("ë„‰ë°± ìŠ¤í‚¬ ë°œë™ (êµ¬í˜„ í•„ìš”)");
                 break;
 
             default:
-                Debug.LogWarning($"Á¤ÀÇµÇÁö ¾ÊÀº ¾×Æ¼ºê ·ÎÁ÷: {ability.abilityLogicID}");
+                Debug.LogWarning($"ì •ì˜ë˜ì§€ ì•Šì€ ì•¡í‹°ë¸Œ ë¡œì§: {ability.abilityLogicID}");
                 break;
         }
 
-        // 4. ¼±ÅÃµÈ ½ºÅ³ ÄÚ·çÆ¾ ½ÇÇà (Add_Shield´Â Á¦¿Ü)
+        // 4. ì„ íƒëœ ìŠ¤í‚¬ ì½”ë£¨í‹´ ì‹¤í–‰ (Add_ShieldëŠ” ì œì™¸)
         if (skillRoutine != null)
         {
             StartSkillCoroutine(abilityID, skillRoutine);
@@ -299,23 +294,23 @@ public class PlayerAbilityManager : MonoBehaviour
     }
 
     // ====================================================================
-    // 5. ½ºÅ³ ·ÎÁ÷ (ÄÚ·çÆ¾) (±âÁ¸ ÄÚµå¿Í µ¿ÀÏ)
+    // 5. ìŠ¤í‚¬ ë¡œì§ (ì½”ë£¨í‹´) (ê¸°ì¡´ ì½”ë“œì™€ ë™ì¼)
     // ====================================================================
 
     /**
-     * ABIL_007: (º»ÀÎ) ¹«ÇÑ ÅºÃ¢
+     * ABIL_007: (ë³¸ì¸) ë¬´í•œ íƒ„ì°½
      */
     private IEnumerator InfiniteAmmoRoutine(AbilityData ability)
     {
-        // --- 1. µ¥ÀÌÅÍ ÆÄ½Ì ¹× ÄğÅ¸ÀÓ ½ÃÀÛ ---
+        // --- 1. ë°ì´í„° íŒŒì‹± ë° ì¿¨íƒ€ì„ ì‹œì‘ ---
         float.TryParse(ability.param_ValueA, out float duration); // 10
         float.TryParse(ability.param_ValueB, out float cooldown); // 60
-        StartCoroutine(CooldownRoutine(ability.abilityID, cooldown)); // ÄğÅ¸ÀÓ Áï½Ã ½ÃÀÛ
+        StartCoroutine(CooldownRoutine(ability.abilityID, cooldown)); // ì¿¨íƒ€ì„ ì¦‰ì‹œ ì‹œì‘
 
-        Debug.Log($"[{ability.abilityName}] ½ºÅ³ È°¼ºÈ­! (Áö¼Ó: {duration}ÃÊ)");
-        // (ÀÌÆåÆ® »ı¼º: ability.resourcePath)
+        Debug.Log($"[{ability.abilityName}] ìŠ¤í‚¬ í™œì„±í™”! (ì§€ì†: {duration}ì´ˆ)");
+        // (ì´í™íŠ¸ ìƒì„±: ability.resourcePath)
 
-        // --- 2. ½ºÅ³ Áö¼Ó (ÇÙ½É) ---
+        // --- 2. ìŠ¤í‚¬ ì§€ì† (í•µì‹¬) ---
         float timer = 0f;
         while (timer < duration)
         {
@@ -327,20 +322,20 @@ public class PlayerAbilityManager : MonoBehaviour
             }
 
             timer += Time.deltaTime;
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            yield return null; // ë‹¤ìŒ í”„ë ˆì„ê¹Œì§€ ëŒ€ê¸°
         }
 
-        // --- 3. ½ºÅ³ Á¾·á ---
-        Debug.Log($"[{ability.abilityName}] ½ºÅ³ Á¾·á.");
-        // (ÀÌÆåÆ® Á¦°Å)
+        // --- 3. ìŠ¤í‚¬ ì¢…ë£Œ ---
+        Debug.Log($"[{ability.abilityName}] ìŠ¤í‚¬ ì¢…ë£Œ.");
+        // (ì´í™íŠ¸ ì œê±°)
         runningSkillCoroutines.Remove(ability.abilityID);
     }
 
     // ====================================================================
-    // 6. À¯Æ¿¸®Æ¼ (ÄÚ·çÆ¾ °ü¸®) (±âÁ¸ ÄÚµå¿Í µ¿ÀÏ)
+    // 6. ìœ í‹¸ë¦¬í‹° (ì½”ë£¨í‹´ ê´€ë¦¬) (ê¸°ì¡´ ì½”ë“œì™€ ë™ì¼)
     // ====================================================================
 
-    // ½ºÅ³ ÄÚ·çÆ¾ ½ÃÀÛ (Áßº¹ ¹æÁö)
+    // ìŠ¤í‚¬ ì½”ë£¨í‹´ ì‹œì‘ (ì¤‘ë³µ ë°©ì§€)
     private void StartSkillCoroutine(string abilityID, IEnumerator routine)
     {
         if (runningSkillCoroutines.ContainsKey(abilityID))
@@ -351,15 +346,15 @@ public class PlayerAbilityManager : MonoBehaviour
         runningSkillCoroutines.Add(abilityID, StartCoroutine(routine));
     }
 
-    // ÄğÅ¸ÀÓ ÄÚ·çÆ¾
+    // ì¿¨íƒ€ì„ ì½”ë£¨í‹´
     private IEnumerator CooldownRoutine(string abilityID, float cooldownTime)
     {
-        skillCooldowns[abilityID] = true; // ÄğÅ¸ÀÓ ½ÃÀÛ
-        Debug.Log($"[{abilityID}] ÄğÅ¸ÀÓ ½ÃÀÛ: {cooldownTime}ÃÊ");
+        skillCooldowns[abilityID] = true; // ì¿¨íƒ€ì„ ì‹œì‘
+        Debug.Log($"[{abilityID}] ì¿¨íƒ€ì„ ì‹œì‘: {cooldownTime}ì´ˆ");
 
         yield return new WaitForSeconds(cooldownTime);
 
-        skillCooldowns[abilityID] = false; // ÄğÅ¸ÀÓ Á¾·á
-        Debug.Log($"[{abilityID}] ÄğÅ¸ÀÓ Á¾·á.");
+        skillCooldowns[abilityID] = false; // ì¿¨íƒ€ì„ ì¢…ë£Œ
+        Debug.Log($"[{abilityID}] ì¿¨íƒ€ì„ ì¢…ë£Œ.");
     }
 }

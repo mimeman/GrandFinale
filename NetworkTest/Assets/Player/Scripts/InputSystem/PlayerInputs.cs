@@ -67,7 +67,6 @@ public class PlayerInputs : MonoBehaviour
     // Attack
     public bool GetAttack()
     {
-        // [수정] IsFocused로 간단하게 체크
         if (InventoryManager.Instance != null && InventoryManager.Instance.IsFocused)
             return false;
 
@@ -75,7 +74,6 @@ public class PlayerInputs : MonoBehaviour
     }
     public bool GetAimed()
     {
-        // 커서가 보이면 조준 불가 (ESC 눌렀을 때처럼)
         if (Cursor.visible || Cursor.lockState != CursorLockMode.Locked)
             return false;
 
@@ -111,28 +109,24 @@ public class PlayerInputs : MonoBehaviour
         return Input.GetKeyDown(keyData.m_KeySlot4);
     }
 
-    // Interact
     public bool GetInteract()
     {
         return Input.GetKeyDown(keyData.m_KeyInteract);
     }
 
-    // [수정] 기존 GetInventory를 Tab 키로 변경
     public bool GetInventory()
     {
-        return Input.GetKeyDown(keyData.m_KeyInventory); // Tab 키
+        return Input.GetKeyDown(keyData.m_KeyInventory);
     }
 
-    // [추가] Small Inventory 토글 (Tab 키와 동일)
     public bool GetInventoryToggle()
     {
-        return Input.GetKeyDown(keyData.m_KeyInventory); // Tab 키
+        return Input.GetKeyDown(keyData.m_KeyInventory);
     }
 
-    // [추가] Full Inventory 토글 (O 키)
     public bool GetFullInventoryToggle()
     {
-        return Input.GetKeyDown(KeyCode.O);
+        return Input.GetKeyDown(keyData.m_KeyFullInventory);
     }
 
     // UI
@@ -214,4 +208,5 @@ public class OptionKeyData
     public KeyCode m_KeyEscape;
     public KeyCode m_KeyChat;
     public KeyCode m_KeyFullInventory;
+    public KeyCode m_KeySmallInventory;
 }
